@@ -646,10 +646,15 @@ export function getTopicById(id) {
   return TOPICS.find(t => t.id === id) || null;
 }
 
+import { getCustomData } from '../utils/customContent';
+
 // Helper to find a specific mission (supports getMission(missionId) or getMission(topicId, missionId))
 export function getMission(arg1, arg2) {
   let topicId = arg2 ? arg1 : null;
   let missionId = arg2 ? arg2 : arg1;
+
+  const customData = getCustomData();
+  const customMissionData = customData?.missions?.[missionId] || {};
 
   if (topicId) {
     const topic = getTopicById(topicId);
@@ -657,12 +662,21 @@ export function getMission(arg1, arg2) {
       for (const stage of topic.stages) {
         const mission = stage.missions.find(m => m.id === missionId);
         if (mission) {
-          // Normalize puzzle data
+          const defaultPairs = mission.pairs || mission.puzzleData?.pairs || [];
+          const customPairs = customMissionData.pairs || [];
+
+          const defaultWords = mission.puzzleData?.words || [];
+          const customWords = customMissionData.words || [];
+
           const normalizedMission = {
             ...mission,
-            pairs: mission.pairs || mission.puzzleData?.pairs || [],
+            pairs: [...defaultPairs, ...customPairs],
             differences: mission.differences || mission.puzzleData?.differences || [],
-            puzzleData: mission.puzzleData || {},
+            puzzleData: {
+              ...mission.puzzleData,
+              words: [...defaultWords, ...customWords],
+              slideImage: customMissionData.slideImage || mission.puzzleData?.slideImage,
+            },
           };
           return { mission: normalizedMission, topic };
         }
@@ -675,11 +689,21 @@ export function getMission(arg1, arg2) {
     for (const stage of t.stages) {
       const mission = stage.missions.find(m => m.id === missionId);
       if (mission) {
+        const defaultPairs = mission.pairs || mission.puzzleData?.pairs || [];
+        const customPairs = customMissionData.pairs || [];
+
+        const defaultWords = mission.puzzleData?.words || [];
+        const customWords = customMissionData.words || [];
+
         const normalizedMission = {
           ...mission,
-          pairs: mission.pairs || mission.puzzleData?.pairs || [],
+          pairs: [...defaultPairs, ...customPairs],
           differences: mission.differences || mission.puzzleData?.differences || [],
-          puzzleData: mission.puzzleData || {},
+          puzzleData: {
+            ...mission.puzzleData,
+            words: [...defaultWords, ...customWords],
+            slideImage: customMissionData.slideImage || mission.puzzleData?.slideImage,
+          },
         };
         return { mission: normalizedMission, topic: t };
       }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, BookOpen, Trophy, User, Info } from 'lucide-react';
+import { Home, BookOpen, Trophy, User, Settings } from 'lucide-react';
 
 export default function MobileNav({ currentView, navigateTo }) {
   return (
@@ -54,15 +54,15 @@ export default function MobileNav({ currentView, navigateTo }) {
         </button>
 
         <button
-          onClick={() => navigateTo('about')}
+          onClick={() => navigateTo('admin')}
           className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all ${
-            currentView === 'about'
-              ? 'text-teal-300 font-bold'
+            currentView === 'admin'
+              ? 'text-purple-300 font-bold'
               : 'text-gray-400 hover:text-white'
           }`}
         >
-          <Info className="w-5 h-5" />
-          <span className="text-[10px]">About</span>
+          <Settings className="w-5 h-5" />
+          <span className="text-[10px]">Admin</span>
         </button>
       </div>
     </nav>

@@ -270,14 +270,20 @@ export const QUESTIONS = {
   ],
 };
 
-// Helper to get questions for a mission
+import { getCustomData } from '../utils/customContent';
+
+// Helper to get questions for a mission (merges default + professor custom questions)
 export function getQuestions(missionId) {
-  const raw = QUESTIONS[missionId] || [];
-  return raw.map(q => ({
+  const defaultQuestions = QUESTIONS[missionId] || [];
+  const customData = getCustomData();
+  const customQuestions = customData?.questions?.[missionId] || [];
+
+  const combined = [...defaultQuestions, ...customQuestions];
+  return combined.map(q => ({
     q: q.q,
-    options: q.options,
-    a: q.a !== undefined ? q.a : q.correct,
-    exp: q.exp || q.explanation || '',
+    options: q.options || ['Option A', 'Option B', 'Option C', 'Option D'],
+    a: q.a !== undefined ? q.a : (q.correct !== undefined ? q.correct : 0),
+    exp: q.exp || q.explanation || 'Shafer\'s Textbook Reference',
   }));
 }
 

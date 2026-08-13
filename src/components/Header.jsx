@@ -1,5 +1,5 @@
 import React from 'react';
-import { Microscope, BookOpen, Trophy, User, Info, Home } from 'lucide-react';
+import { Microscope, BookOpen, Trophy, User, Info, Home, Settings } from 'lucide-react';
 
 export default function Header({ currentView, navigateTo }) {
   return (
@@ -67,6 +67,17 @@ export default function Header({ currentView, navigateTo }) {
             }`}
           >
             <User className="w-4 h-4" /> Avatar
+          </button>
+
+          <button
+            onClick={() => navigateTo('admin')}
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-all ${
+              currentView === 'admin'
+                ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40'
+                : 'text-gray-400 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            <Settings className="w-4 h-4 text-purple-400" /> Admin / Creator
           </button>
 
           <button

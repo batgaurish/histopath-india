@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import MobileNav from './components/MobileNav';
-import Guide from './components/Guide';
 
 import HomeView from './views/HomeView';
 import TopicsView from './views/TopicsView';
@@ -10,6 +9,7 @@ import MissionView from './views/MissionView';
 import AvatarView from './views/AvatarView';
 import LeaderboardView from './views/LeaderboardView';
 import AboutView from './views/AboutView';
+import AdminView from './views/AdminView';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -65,7 +65,6 @@ export default function App() {
   const [currentView, setCurrentView] = useState('home'); 
   const [selectedTopicId, setSelectedTopicId] = useState('oral_mucosa');
   const [selectedMissionId, setSelectedMissionId] = useState('om_m1');
-  const [guideMessage, setGuideMessage] = useState('Welcome to HistoPath India! Explore topics, play games, and test your histology knowledge.');
 
   // Parse Hash URL on load and hashchange
   useEffect(() => {
@@ -86,14 +85,13 @@ export default function App() {
       } else if (route === 'mission' && param) {
         setSelectedMissionId(param);
         setCurrentView('mission');
-      } else if (['home', 'topics', 'leaderboard', 'avatar', 'about'].includes(route)) {
+      } else if (['home', 'topics', 'leaderboard', 'avatar', 'about', 'admin'].includes(route)) {
         setCurrentView(route);
       } else {
         setCurrentView('home');
       }
     };
 
-    // Initial check
     handleHashChange();
 
     window.addEventListener('hashchange', handleHashChange);
@@ -156,10 +154,11 @@ export default function App() {
           {currentView === 'about' && (
             <AboutView />
           )}
-        </main>
 
-        {/* Guide Assistant */}
-        <Guide message={guideMessage} onClose={() => setGuideMessage('')} />
+          {currentView === 'admin' && (
+            <AdminView navigateTo={navigateTo} />
+          )}
+        </main>
 
         {/* Mobile Bottom Navbar for Phone Browsers */}
         <MobileNav currentView={currentView} navigateTo={navigateTo} />
