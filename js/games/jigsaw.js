@@ -31,7 +31,9 @@ const JigsawGame = (() => {
     _pieces = [];
 
     _container.innerHTML = '';
-    _container.className = 'game-area jigsaw-container';
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'jigsaw-container';
 
     // Generate procedural histology-style image colors
     _imageColors = _generateHistologyColors(options.imageDesc || 'tissue');
@@ -39,7 +41,7 @@ const JigsawGame = (() => {
     // Board
     const boardWrapper = document.createElement('div');
     boardWrapper.className = 'jigsaw-board';
-    _boardSize = Math.min(460, _container.clientWidth - 48);
+    _boardSize = Math.min(460, (_container.clientWidth || 500) - 48);
     boardWrapper.style.width = _boardSize + 'px';
     boardWrapper.style.height = _boardSize + 'px';
 
@@ -56,12 +58,13 @@ const JigsawGame = (() => {
         boardWrapper.appendChild(slot);
       }
     }
-    _container.appendChild(boardWrapper);
+    wrapper.appendChild(boardWrapper);
 
     // Tray for pieces
     const tray = document.createElement('div');
     tray.className = 'jigsaw-tray';
-    _container.appendChild(tray);
+    wrapper.appendChild(tray);
+    _container.appendChild(wrapper);
 
     // Generate pieces
     const indices = [];

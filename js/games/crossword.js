@@ -123,7 +123,9 @@ const CrosswordGame = (() => {
 
   function _render() {
     _container.innerHTML = '';
-    _container.className = 'game-area crossword-container';
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'crossword-container';
 
     // Grid
     const gridEl = document.createElement('div');
@@ -172,7 +174,7 @@ const CrosswordGame = (() => {
       }
     }
 
-    _container.appendChild(gridEl);
+    wrapper.appendChild(gridEl);
 
     // Clues
     const cluesEl = document.createElement('div');
@@ -215,7 +217,8 @@ const CrosswordGame = (() => {
       });
     }
 
-    _container.appendChild(cluesEl);
+    wrapper.appendChild(cluesEl);
+    _container.appendChild(wrapper);
   }
 
   function _selectCell(r, c) {

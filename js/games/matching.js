@@ -24,7 +24,9 @@ const MatchingGame = (() => {
     _onComplete = options.onComplete || null;
 
     _container.innerHTML = '';
-    _container.className = 'game-area match-container';
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'match-container';
 
     // Left column - descriptions/images
     const leftCol = document.createElement('div');
@@ -63,9 +65,10 @@ const MatchingGame = (() => {
       rightCol.appendChild(rightItem);
     });
 
-    _container.appendChild(leftCol);
-    _container.appendChild(divider);
-    _container.appendChild(rightCol);
+    wrapper.appendChild(leftCol);
+    wrapper.appendChild(divider);
+    wrapper.appendChild(rightCol);
+    _container.appendChild(wrapper);
   }
 
   function _selectItem(side, idx, el) {

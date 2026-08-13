@@ -24,7 +24,9 @@ const DifferencesGame = (() => {
     _onComplete = options.onComplete || null;
 
     _container.innerHTML = '';
-    _container.className = 'game-area diff-container';
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'diff-container';
 
     // Score
     const score = document.createElement('div');
@@ -52,9 +54,10 @@ const DifferencesGame = (() => {
     rightImg.appendChild(_canvasR);
     rightWrap.insertBefore(rightImg, rightWrap.firstChild);
 
-    _container.appendChild(leftWrap);
-    _container.appendChild(rightWrap);
-    _container.appendChild(score);
+    wrapper.appendChild(leftWrap);
+    wrapper.appendChild(rightWrap);
+    wrapper.appendChild(score);
+    _container.appendChild(wrapper);
 
     // Draw after layout
     requestAnimationFrame(() => {

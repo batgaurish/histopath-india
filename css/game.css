@@ -48,18 +48,76 @@
   animation: pulseGlow 1s infinite;
 }
 
+/* ---------- Mission Tabs & Toolbar ---------- */
+.mission-tabs {
+  display: flex;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-4);
+  background: var(--glass-bg);
+  padding: 4px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  width: fit-content;
+}
+
+.mission-tab {
+  padding: var(--sp-3) var(--sp-6);
+  border: none;
+  background: transparent;
+  color: var(--clr-text-secondary);
+  font-family: var(--font-heading);
+  font-weight: var(--fw-semi);
+  font-size: var(--fs-sm);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-smooth);
+}
+
+.mission-tab:hover:not(:disabled) {
+  color: var(--clr-text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.mission-tab.active {
+  background: linear-gradient(135deg, var(--clr-accent-teal), var(--clr-accent-teal-d));
+  color: hsl(245, 55%, 10%);
+  font-weight: var(--fw-bold);
+  box-shadow: var(--shadow-glow-teal);
+}
+
+.mission-tab:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.game-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-4);
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+}
+
+.game-timer {
+  font-family: var(--font-heading);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-md);
+  color: var(--clr-accent-teal);
+}
+
 /* ---------- Game Canvas Area ---------- */
 .game-area {
   position: relative;
   width: 100%;
-  min-height: 400px;
+  min-height: 480px;
   background: var(--clr-bg-base);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-xl);
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: var(--sp-6);
+  box-shadow: var(--shadow-md);
 }
 
 .game-area canvas {

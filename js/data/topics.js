@@ -8,7 +8,7 @@ const TOPICS = [
   {
     id: 'oral_mucosa',
     title: 'Oral Mucosa',
-    icon: '🫦',
+    icon: '🔬',
     description: 'Microscopic structure of lining, masticatory, and specialized mucosa',
     shaferRef: "Shafer's Ch. 12 — Oral Mucous Membrane",
     accentColor: 'hsl(330, 70%, 55%)',

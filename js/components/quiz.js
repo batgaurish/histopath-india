@@ -29,7 +29,9 @@ const Quiz = (() => {
 
   function _render() {
     _container.innerHTML = '';
-    _container.className = 'game-area quiz-container';
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'quiz-container';
 
     // Progress steps
     const progress = document.createElement('div');
@@ -56,16 +58,17 @@ const Quiz = (() => {
       progress.appendChild(step);
     });
 
-    _container.appendChild(progress);
+    wrapper.appendChild(progress);
 
     // Score
     const scoreEl = document.createElement('div');
     scoreEl.style.cssText = 'text-align:right;font-size:var(--fs-sm);color:var(--clr-text-muted);margin-bottom:var(--sp-4);';
     scoreEl.textContent = `Score: ${_score} / ${_questions.length}`;
-    _container.appendChild(scoreEl);
+    wrapper.appendChild(scoreEl);
 
     if (_currentIdx >= _questions.length) {
-      _showResults();
+      _showResults(wrapper);
+      _container.appendChild(wrapper);
       return;
     }
 
@@ -93,7 +96,8 @@ const Quiz = (() => {
     });
 
     questionEl.appendChild(optionsEl);
-    _container.appendChild(questionEl);
+    wrapper.appendChild(questionEl);
+    _container.appendChild(wrapper);
   }
 
   function _selectAnswer(idx, question, optionsEl, questionEl) {
@@ -145,7 +149,8 @@ const Quiz = (() => {
     questionEl.appendChild(nextBtn);
   }
 
-  function _showResults() {
+  function _showResults(targetContainer) {
+    const parent = targetContainer || _container;
     const stars = _score >= 5 ? 3 : _score >= 3 ? 2 : _score >= 1 ? 1 : 0;
 
     const results = document.createElement('div');
@@ -201,7 +206,7 @@ const Quiz = (() => {
     actions.appendChild(nextBtn);
     results.appendChild(actions);
 
-    _container.appendChild(results);
+    parent.appendChild(results);
 
     // Dantika feedback
     setTimeout(() => Guide.sayMissionComplete(stars), 1500);
