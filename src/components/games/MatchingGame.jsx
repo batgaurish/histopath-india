@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Audio } from '../../utils/audio';
 import { Check, Sparkles, Trophy } from 'lucide-react';
 
@@ -6,19 +6,21 @@ export default function MatchingGame({ pairs = [], onComplete, giveHintRef }) {
   const [leftSelected, setLeftSelected] = useState(null);
   const [rightSelected, setRightSelected] = useState(null);
   const [matched, setMatched] = useState([]);
-  const [shuffledRight, setShuffledRight] = useState([]);
   const [incorrectPair, setIncorrectPair] = useState(null);
   const [hintIndex, setHintIndex] = useState(null);
   const [isCompleted, setIsCompleted] = useState(false);
 
+  // Stable shuffled right side: ONLY shuffle when pairs array changes structurally!
+  const shuffledRight = useMemo(() => {
+    return pairs.map((p, idx) => ({ ...p, origIdx: idx })).sort(() => Math.random() - 0.5);
+  }, [pairs.length, pairs[0]?.image]);
+
   useEffect(() => {
-    const right = pairs.map((p, idx) => ({ ...p, origIdx: idx })).sort(() => Math.random() - 0.5);
-    setShuffledRight(right);
     setMatched([]);
     setLeftSelected(null);
     setRightSelected(null);
     setIsCompleted(false);
-  }, [pairs]);
+  }, [pairs.length]);
 
   useEffect(() => {
     if (giveHintRef) {
@@ -131,7 +133,7 @@ export default function MatchingGame({ pairs = [], onComplete, giveHintRef }) {
                 disabled={isMatched}
                 className={`p-4 rounded-xl text-xs md:text-sm font-medium text-center border transition-all cursor-pointer min-h-[56px] flex items-center justify-between gap-2 relative ${
                   isMatched
-                    ? 'bg-emerald-950/60 border-emerald-500 text-emerald-300 font-bold shadow-md'
+                    ? 'bg-emerald-950/60 border-emerald-500 text-emerald-300 font-bold shadow-md opacity-75 cursor-default'
                     : isIncorrect
                     ? 'bg-rose-950/60 border-rose-500 text-rose-300 animate-bounce'
                     : isSelected
@@ -170,12 +172,12 @@ export default function MatchingGame({ pairs = [], onComplete, giveHintRef }) {
 
             return (
               <button
-                key={`right-${idx}`}
+                key={`right-${item.origIdx}`}
                 onClick={() => handleSelectRight(item.origIdx)}
                 disabled={isMatched}
                 className={`p-4 rounded-xl text-xs md:text-sm font-medium text-center border transition-all cursor-pointer min-h-[56px] flex items-center justify-between gap-2 relative ${
                   isMatched
-                    ? 'bg-emerald-950/60 border-emerald-500 text-emerald-300 font-bold shadow-md'
+                    ? 'bg-emerald-950/60 border-emerald-500 text-emerald-300 font-bold shadow-md opacity-75 cursor-default'
                     : isIncorrect
                     ? 'bg-rose-950/60 border-rose-500 text-rose-300 animate-bounce'
                     : isSelected

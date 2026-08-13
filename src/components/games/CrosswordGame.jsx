@@ -19,7 +19,6 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
   const [isCompleted, setIsCompleted] = useState(false);
 
   useEffect(() => {
-    // Generate valid positions for words
     const processedWords = [];
 
     rawWords.forEach((item, i) => {
@@ -30,7 +29,6 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
       let row = item.row !== undefined ? item.row : Math.min(i * 2, gridSize - 1);
       let col = item.col !== undefined ? item.col : 0;
 
-      // Adjust to fit in grid bounds
       if (direction === 'across') {
         if (col + cleanWord.length > gridSize) {
           col = Math.max(0, gridSize - cleanWord.length);
@@ -53,7 +51,6 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
 
     setWords(processedWords);
 
-    // Build grid mapping
     const initialGrid = {};
     processedWords.forEach((w) => {
       const chars = w.word.split('');
@@ -77,14 +74,12 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
     setRevealedCells({});
     setIsCompleted(false);
 
-    // Select first cell of first word
     if (processedWords.length > 0) {
       setSelectedCell({ r: processedWords[0].row, c: processedWords[0].col });
       setSelectedWordNum(1);
     }
   }, [puzzleData]);
 
-  // Hint handling
   useEffect(() => {
     if (giveHintRef) {
       giveHintRef.current = () => {
@@ -126,17 +121,18 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
     const newUserLetters = { ...userLetters, [key]: letter.toUpperCase() };
     setUserLetters(newUserLetters);
 
-    // Advance selection to next cell in current word
+    // Advance selection to next grid cell in active word direction
     const activeWord = words.find(w => w.number === selectedWordNum);
     if (activeWord) {
-      if (activeWord.direction === 'across' && selectedCell.c + 1 < activeWord.col + activeWord.word.length) {
-        setSelectedCell({ r: selectedCell.r, c: selectedCell.c + 1 });
-      } else if (activeWord.direction === 'down' && selectedCell.r + 1 < activeWord.row + activeWord.word.length) {
-        setSelectedCell({ r: selectedCell.r + 1, c: selectedCell.c });
+      const nextR = activeWord.direction === 'across' ? selectedCell.r : selectedCell.r + 1;
+      const nextC = activeWord.direction === 'across' ? selectedCell.c + 1 : selectedCell.c;
+      const nextKey = `${nextR}-${nextC}`;
+      if (grid[nextKey]) {
+        setSelectedCell({ r: nextR, c: nextC });
       }
     }
 
-    // Check overall crossword completion
+    // Check completion
     let allCorrect = true;
     Object.keys(grid).forEach((gridKey) => {
       if (newUserLetters[gridKey] !== grid[gridKey].char && !revealedCells[gridKey]) {
@@ -155,13 +151,13 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
     const key = `${selectedCell.r}-${selectedCell.c}`;
     setUserLetters(prev => ({ ...prev, [key]: '' }));
 
-    // Move back to previous cell
     const activeWord = words.find(w => w.number === selectedWordNum);
     if (activeWord) {
-      if (activeWord.direction === 'across' && selectedCell.c > activeWord.col) {
-        setSelectedCell({ r: selectedCell.r, c: selectedCell.c - 1 });
-      } else if (activeWord.direction === 'down' && selectedCell.r > activeWord.row) {
-        setSelectedCell({ r: selectedCell.r - 1, c: selectedCell.c });
+      const prevR = activeWord.direction === 'across' ? selectedCell.r : selectedCell.r - 1;
+      const prevC = activeWord.direction === 'across' ? selectedCell.c - 1 : selectedCell.c;
+      const prevKey = `${prevR}-${prevC}`;
+      if (grid[prevKey]) {
+        setSelectedCell({ r: prevR, c: prevC });
       }
     }
   };
@@ -228,7 +224,7 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
                 onClick={() => handleCellClick(r, c)}
                 className={`aspect-square rounded-md border flex flex-col items-center justify-center relative font-extrabold text-sm md:text-base cursor-pointer transition-all ${
                   isSelected
-                    ? 'border-amber-400 bg-amber-400/30 text-white ring-2 ring-amber-400/60 shadow-lg'
+                    ? 'border-amber-400 bg-amber-400/30 text-white ring-2 ring-amber-400/60 shadow-lg scale-105 z-10'
                     : isRevealed
                     ? 'border-emerald-500/80 bg-emerald-950/60 text-emerald-300'
                     : userChar
@@ -247,28 +243,28 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
           })}
         </div>
 
-        {/* Touch Keyboard with Backspace */}
+        {/* Touch Keyboard */}
         <div className="w-full max-w-[380px] md:max-w-[440px] flex flex-col gap-1.5 glass-panel p-2.5 rounded-xl border border-white/10">
           <div className="text-[10px] uppercase font-semibold text-gray-400 text-center mb-0.5">
             Touch Keyboard (Tap cell above or clue on right, then type letter)
           </div>
           <div className="grid grid-cols-10 gap-1 text-center">
             {['Q','W','E','R','T','Y','U','I','O','P'].map(l => (
-              <button key={l} onClick={() => handleKeyPress(l)} className="p-2 rounded bg-slate-800 hover:bg-teal-600 active:scale-95 text-xs font-bold text-white border border-white/10 transition-transform">{l}</button>
+              <button key={l} onClick={() => handleKeyPress(l)} className="p-2 rounded bg-slate-800 hover:bg-teal-600 active:scale-95 text-xs font-bold text-white border border-white/10 transition-transform cursor-pointer">{l}</button>
             ))}
           </div>
           <div className="grid grid-cols-9 gap-1 text-center px-2">
             {['A','S','D','F','G','H','J','K','L'].map(l => (
-              <button key={l} onClick={() => handleKeyPress(l)} className="p-2 rounded bg-slate-800 hover:bg-teal-600 active:scale-95 text-xs font-bold text-white border border-white/10 transition-transform">{l}</button>
+              <button key={l} onClick={() => handleKeyPress(l)} className="p-2 rounded bg-slate-800 hover:bg-teal-600 active:scale-95 text-xs font-bold text-white border border-white/10 transition-transform cursor-pointer">{l}</button>
             ))}
           </div>
           <div className="grid grid-cols-8 gap-1 text-center px-4">
             {['Z','X','C','V','B','N','M'].map(l => (
-              <button key={l} onClick={() => handleKeyPress(l)} className="p-2 rounded bg-slate-800 hover:bg-teal-600 active:scale-95 text-xs font-bold text-white border border-white/10 transition-transform">{l}</button>
+              <button key={l} onClick={() => handleKeyPress(l)} className="p-2 rounded bg-slate-800 hover:bg-teal-600 active:scale-95 text-xs font-bold text-white border border-white/10 transition-transform cursor-pointer">{l}</button>
             ))}
             <button 
               onClick={handleBackspace}
-              className="p-2 rounded bg-rose-600/80 hover:bg-rose-500 active:scale-95 text-xs font-bold text-white border border-white/10 flex items-center justify-center"
+              className="p-2 rounded bg-rose-600/80 hover:bg-rose-500 active:scale-95 text-xs font-bold text-white border border-white/10 flex items-center justify-center cursor-pointer"
             >
               <Delete className="w-4 h-4" />
             </button>
