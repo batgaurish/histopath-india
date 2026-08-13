@@ -4,16 +4,17 @@ import { Check, Sparkles, Trophy, Delete } from 'lucide-react';
 
 export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
   const rawWords = puzzleData?.words || [
-    { word: 'ENAMEL', clue: 'Hardest calcified tissue in human body' },
-    { word: 'DENTIN', clue: 'Main body of the tooth surrounding pulp' },
-    { word: 'PULP', clue: 'Vascular and nerve central soft tissue' },
+    { word: 'KERATIN', clue: 'Fibrous protein that strengthens the cornified layer' },
+    { word: 'DESMOSOME', clue: 'Cell junction giving the prickle appearance in stratum spinosum' },
+    { word: 'MELANOCYTE', clue: 'Dendritic cell in basal layer producing pigment' },
+    { word: 'MERKEL', clue: 'Tactile mechanoreceptor found in basal layer' },
   ];
 
   const gridSize = 10;
   const [words, setWords] = useState([]);
   const [grid, setGrid] = useState({});
-  const [selectedCell, setSelectedCell] = useState(null);
   const [selectedWordNum, setSelectedWordNum] = useState(1);
+  const [selectedWordCharIdx, setSelectedWordCharIdx] = useState(0);
   const [userLetters, setUserLetters] = useState({});
   const [revealedCells, setRevealedCells] = useState({});
   const [isCompleted, setIsCompleted] = useState(false);
@@ -39,6 +40,14 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
         }
       }
 
+      // Build cell coordinate list for this word
+      const cellKeys = [];
+      for (let idx = 0; idx < cleanWord.length; idx++) {
+        const r = direction === 'across' ? row : row + idx;
+        const c = direction === 'across' ? col + idx : col;
+        cellKeys.push(`${r}-${c}`);
+      }
+
       processedWords.push({
         number: i + 1,
         word: cleanWord,
@@ -46,6 +55,7 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
         row,
         col,
         direction,
+        cellKeys,
       });
     });
 
@@ -53,18 +63,13 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
 
     const initialGrid = {};
     processedWords.forEach((w) => {
-      const chars = w.word.split('');
-      chars.forEach((char, idx) => {
-        const r = w.direction === 'across' ? w.row : w.row + idx;
-        const c = w.direction === 'across' ? w.col + idx : w.col;
-        if (r < gridSize && c < gridSize) {
-          const key = `${r}-${c}`;
-          if (!initialGrid[key]) {
-            initialGrid[key] = { char, number: idx === 0 ? w.number : null, wordNums: [w.number] };
-          } else {
-            if (idx === 0) initialGrid[key].number = w.number;
-            initialGrid[key].wordNums.push(w.number);
-          }
+      w.cellKeys.forEach((key, idx) => {
+        const char = w.word[idx];
+        if (!initialGrid[key]) {
+          initialGrid[key] = { char, number: idx === 0 ? w.number : null, wordNums: [w.number] };
+        } else {
+          if (idx === 0) initialGrid[key].number = w.number;
+          initialGrid[key].wordNums.push(w.number);
         }
       });
     });
@@ -75,10 +80,13 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
     setIsCompleted(false);
 
     if (processedWords.length > 0) {
-      setSelectedCell({ r: processedWords[0].row, c: processedWords[0].col });
       setSelectedWordNum(1);
+      setSelectedWordCharIdx(0);
     }
   }, [puzzleData]);
+
+  const activeWord = words.find(w => w.number === selectedWordNum) || words[0];
+  const activeKey = activeWord?.cellKeys?.[selectedWordCharIdx] || null;
 
   useEffect(() => {
     if (giveHintRef) {
@@ -100,39 +108,35 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
     const key = `${r}-${c}`;
     if (!grid[key]) return;
     Audio.playClick();
-    setSelectedCell({ r, c });
 
-    const matchingWord = words.find(w => w.number === grid[key].wordNums[0]);
-    if (matchingWord) setSelectedWordNum(matchingWord.number);
+    // Find word containing this cell
+    const matchingWord = words.find(w => w.cellKeys.includes(key));
+    if (matchingWord) {
+      setSelectedWordNum(matchingWord.number);
+      const charIdx = matchingWord.cellKeys.indexOf(key);
+      setSelectedWordCharIdx(charIdx >= 0 ? charIdx : 0);
+    }
   };
 
   const handleClueClick = (w) => {
     Audio.playClick();
     setSelectedWordNum(w.number);
-    setSelectedCell({ r: w.row, c: w.col });
+    setSelectedWordCharIdx(0);
   };
 
   const handleKeyPress = (letter) => {
-    if (!selectedCell) return;
-    const key = `${selectedCell.r}-${selectedCell.c}`;
-    if (!grid[key]) return;
+    if (!activeWord || !activeKey) return;
 
     Audio.playClick();
-    const newUserLetters = { ...userLetters, [key]: letter.toUpperCase() };
+    const newUserLetters = { ...userLetters, [activeKey]: letter.toUpperCase() };
     setUserLetters(newUserLetters);
 
-    // Advance selection to next grid cell in active word direction
-    const activeWord = words.find(w => w.number === selectedWordNum);
-    if (activeWord) {
-      const nextR = activeWord.direction === 'across' ? selectedCell.r : selectedCell.r + 1;
-      const nextC = activeWord.direction === 'across' ? selectedCell.c + 1 : selectedCell.c;
-      const nextKey = `${nextR}-${nextC}`;
-      if (grid[nextKey]) {
-        setSelectedCell({ r: nextR, c: nextC });
-      }
+    // Advance to next letter in current word
+    if (selectedWordCharIdx + 1 < activeWord.word.length) {
+      setSelectedWordCharIdx(selectedWordCharIdx + 1);
     }
 
-    // Check completion
+    // Check overall crossword completion
     let allCorrect = true;
     Object.keys(grid).forEach((gridKey) => {
       if (newUserLetters[gridKey] !== grid[gridKey].char && !revealedCells[gridKey]) {
@@ -147,18 +151,12 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
   };
 
   const handleBackspace = () => {
-    if (!selectedCell) return;
-    const key = `${selectedCell.r}-${selectedCell.c}`;
-    setUserLetters(prev => ({ ...prev, [key]: '' }));
+    if (!activeWord || !activeKey) return;
 
-    const activeWord = words.find(w => w.number === selectedWordNum);
-    if (activeWord) {
-      const prevR = activeWord.direction === 'across' ? selectedCell.r : selectedCell.r - 1;
-      const prevC = activeWord.direction === 'across' ? selectedCell.c - 1 : selectedCell.c;
-      const prevKey = `${prevR}-${prevC}`;
-      if (grid[prevKey]) {
-        setSelectedCell({ r: prevR, c: prevC });
-      }
+    setUserLetters(prev => ({ ...prev, [activeKey]: '' }));
+
+    if (selectedWordCharIdx > 0) {
+      setSelectedWordCharIdx(selectedWordCharIdx - 1);
     }
   };
 
@@ -198,6 +196,14 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
 
       {/* Grid & Touch Keyboard */}
       <div className="flex-1 w-full flex flex-col items-center gap-4">
+        {/* Active Word Clue Header Banner */}
+        {activeWord && (
+          <div className="w-full max-w-[380px] md:max-w-[440px] px-4 py-2.5 rounded-xl bg-amber-400/10 border border-amber-400/30 text-amber-300 text-xs font-bold flex items-center justify-between">
+            <span>#{activeWord.number} {activeWord.direction.toUpperCase()}: {activeWord.clue}</span>
+            <span className="text-[10px] text-amber-400/80 font-mono">({selectedWordCharIdx + 1}/{activeWord.word.length})</span>
+          </div>
+        )}
+
         {/* Crossword Grid */}
         <div 
           className="grid gap-1 p-3 glass-panel border border-white/10 rounded-2xl w-full max-w-[380px] md:max-w-[440px] aspect-square"
@@ -208,7 +214,8 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
             const c = idx % gridSize;
             const key = `${r}-${c}`;
             const cellData = grid[key];
-            const isSelected = selectedCell?.r === r && selectedCell?.c === c;
+            const isCurrentCell = activeKey === key;
+            const isWordMember = activeWord?.cellKeys?.includes(key);
             const userChar = userLetters[key] || '';
             const isRevealed = revealedCells[key];
 
@@ -223,13 +230,15 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
                 key={key}
                 onClick={() => handleCellClick(r, c)}
                 className={`aspect-square rounded-md border flex flex-col items-center justify-center relative font-extrabold text-sm md:text-base cursor-pointer transition-all ${
-                  isSelected
-                    ? 'border-amber-400 bg-amber-400/30 text-white ring-2 ring-amber-400/60 shadow-lg scale-105 z-10'
+                  isCurrentCell
+                    ? 'border-amber-400 bg-amber-400/40 text-white ring-4 ring-amber-400/60 shadow-xl scale-105 z-10'
+                    : isWordMember
+                    ? 'border-teal-400/80 bg-teal-500/20 text-teal-100 ring-1 ring-teal-400/30'
                     : isRevealed
                     ? 'border-emerald-500/80 bg-emerald-950/60 text-emerald-300'
                     : userChar
-                    ? 'border-teal-400/80 bg-teal-950/60 text-teal-200'
-                    : 'border-white/20 bg-slate-900/90 text-white hover:border-teal-400/60'
+                    ? 'border-teal-400/60 bg-slate-900 text-teal-200'
+                    : 'border-white/20 bg-slate-900 text-white hover:border-teal-400/60'
                 }`}
               >
                 {cellData.number && (
@@ -246,7 +255,7 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
         {/* Touch Keyboard */}
         <div className="w-full max-w-[380px] md:max-w-[440px] flex flex-col gap-1.5 glass-panel p-2.5 rounded-xl border border-white/10">
           <div className="text-[10px] uppercase font-semibold text-gray-400 text-center mb-0.5">
-            Touch Keyboard (Tap cell above or clue on right, then type letter)
+            Touch Keyboard (Tap clue on right, then type letters)
           </div>
           <div className="grid grid-cols-10 gap-1 text-center">
             {['Q','W','E','R','T','Y','U','I','O','P'].map(l => (
@@ -288,7 +297,7 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
                 onClick={() => handleClueClick(w)}
                 className={`p-3 rounded-xl border text-xs flex flex-col gap-1 cursor-pointer transition-all ${
                   isSelectedWord
-                    ? 'border-amber-400 bg-amber-400/10 text-white ring-1 ring-amber-400/40'
+                    ? 'border-amber-400 bg-amber-400/20 text-white ring-2 ring-amber-400/50 shadow-md'
                     : 'bg-slate-900/70 border-white/5 text-gray-300 hover:border-teal-400/40'
                 }`}
               >

@@ -22,9 +22,10 @@ export default function JigsawGame({ gridSize = 3, imageDesc = '', puzzleData, o
 
   const totalPieces = gridSize * gridSize;
 
-  // Realistic H&E Stained Histology Slide Pattern (Eosin pink & Hematoxylin purple stains)
-  const defaultSlideBg = `radial-gradient(circle at 30% 30%, #a855f7 0%, #ec4899 40%, #be185d 70%, #831843 100%)`;
-  const slideImageUrl = puzzleData?.slideImage || null;
+  // Embedded High-Resolution Oral Histology Microscopic Slide Vector SVG (H&E Stain)
+  const defaultHistologySlideSvg = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600"><rect width="600" height="600" fill="%232e0854"/><rect width="600" height="150" fill="%2386198f" opacity="0.9"/><text x="300" y="80" fill="%23f5d0fe" font-family="sans-serif" font-size="28" font-weight="bold" text-anchor="middle">Keratinized Stratum Corneum</text><path d="M 0 150 Q 150 200 300 150 T 600 150 L 600 350 L 0 350 Z" fill="%23c026d3" opacity="0.85"/><circle cx="100" cy="220" r="14" fill="%23581c87"/><circle cx="240" cy="250" r="14" fill="%23581c87"/><circle cx="380" cy="230" r="14" fill="%23581c87"/><circle cx="500" cy="260" r="14" fill="%23581c87"/><text x="300" y="270" fill="%23fae8ff" font-family="sans-serif" font-size="26" font-weight="bold" text-anchor="middle">Stratum Spinosum (Prickle Cells)</text><path d="M 0 350 Q 150 380 300 350 T 600 350 L 600 420 L 0 420 Z" fill="%23701a75"/><text x="300" y="390" fill="%23f0abfc" font-family="sans-serif" font-size="24" font-weight="bold" text-anchor="middle">Stratum Basale &amp; Basement Membrane</text><rect y="420" width="600" height="180" fill="%239d174d" opacity="0.9"/><circle cx="80" cy="480" r="18" fill="%23ec4899"/><circle cx="280" cy="520" r="18" fill="%23ec4899"/><circle cx="480" cy="490" r="18" fill="%23ec4899"/><text x="300" y="530" fill="%23fbcfe8" font-family="sans-serif" font-size="26" font-weight="bold" text-anchor="middle">Lamina Propria &amp; Capillaries</text></svg>`;
+
+  const slideImageUrl = puzzleData?.slideImage || defaultHistologySlideSvg;
 
   useEffect(() => {
     const initialPieces = [];
@@ -33,9 +34,9 @@ export default function JigsawGame({ gridSize = 3, imageDesc = '', puzzleData, o
         const id = r * gridSize + c;
         const label = labels[id % labels.length] || `Layer ${id + 1}`;
         
-        // Calculate background position percentages for 3x3 slicing
-        const bgPosX = c * (100 / (gridSize - 1));
-        const bgPosY = r * (100 / (gridSize - 1));
+        // Calculate slicing background position for 3x3 grid
+        const bgPosX = c * 50; // 0%, 50%, 100%
+        const bgPosY = r * 50; // 0%, 50%, 100%
 
         initialPieces.push({
           id,
@@ -133,10 +134,10 @@ export default function JigsawGame({ gridSize = 3, imageDesc = '', puzzleData, o
             </div>
             <div>
               <h3 className="font-heading font-extrabold text-2xl text-gradient">
-                Microscopic Slide Assembled!
+                Histology Slide Reconstructed!
               </h3>
               <p className="text-xs text-gray-300 mt-1">
-                All histological tissue fragments accurately reconstructed!
+                All microscopic tissue slide sections assembled accurately!
               </p>
             </div>
             <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-400/10 border border-amber-400/30 text-amber-300 font-bold text-sm">
@@ -155,11 +156,11 @@ export default function JigsawGame({ gridSize = 3, imageDesc = '', puzzleData, o
       {/* Assembly Grid Frame */}
       <div className="w-full flex flex-col items-center gap-2">
         <div className="text-xs uppercase font-bold tracking-wider text-teal-400 text-center">
-          Histology Slide Frame — Tap a fragment below, then tap its grid slot
+          Histology Slide Frame — Tap fragment below, then tap matching slot
         </div>
 
         <div 
-          className="grid gap-1.5 p-3 glass-panel border-2 border-teal-500/40 rounded-2xl aspect-square w-full max-w-[360px] md:max-w-[420px] shadow-2xl shadow-teal-500/20 relative"
+          className="grid gap-1.5 p-3 glass-panel border-2 border-teal-500/40 rounded-2xl aspect-square w-full max-w-[360px] md:max-w-[420px] shadow-2xl shadow-teal-500/20 relative overflow-hidden"
           style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}
         >
           {Array.from({ length: totalPieces }).map((_, idx) => {
@@ -173,22 +174,24 @@ export default function JigsawGame({ gridSize = 3, imageDesc = '', puzzleData, o
                 onClick={() => handleSlotClick(r, c)}
                 className={`aspect-square rounded-xl border flex flex-col items-center justify-center relative transition-all cursor-pointer overflow-hidden p-1 ${
                   placedPiece
-                    ? 'border-teal-300 shadow-lg'
+                    ? 'border-teal-300 shadow-xl'
                     : selectedPiece
                     ? 'border-dashed border-amber-400 bg-amber-400/20 hover:bg-amber-400/30'
                     : 'border-dashed border-white/20 bg-slate-900/90'
                 }`}
                 style={
                   placedPiece
-                    ? slideImageUrl
-                      ? { backgroundImage: `url(${slideImageUrl})`, backgroundSize: `${gridSize * 100}%`, backgroundPosition: `${placedPiece.bgPosX} ${placedPiece.bgPosY}` }
-                      : { background: defaultSlideBg, backgroundSize: '300% 300%', backgroundPosition: `${placedPiece.bgPosX} ${placedPiece.bgPosY}` }
+                    ? { 
+                        backgroundImage: `url("${slideImageUrl}")`, 
+                        backgroundSize: '300% 300%', 
+                        backgroundPosition: `${placedPiece.bgPosX} ${placedPiece.bgPosY}` 
+                      }
                     : undefined
                 }
               >
                 {placedPiece ? (
                   <div className="flex flex-col items-center justify-center text-center bg-slate-950/70 p-1 rounded-lg border border-white/10 w-full h-full">
-                    <span className="text-[10px] font-extrabold text-white leading-tight">
+                    <span className="text-[10px] font-extrabold text-white leading-tight drop-shadow-md">
                       {placedPiece.label}
                     </span>
                   </div>
@@ -207,7 +210,7 @@ export default function JigsawGame({ gridSize = 3, imageDesc = '', puzzleData, o
       {/* Piece Tray Container */}
       <div className="w-full glass-panel border border-white/10 p-4 rounded-2xl flex flex-col items-center gap-3">
         <div className="text-xs uppercase tracking-wider font-bold text-gray-300">
-          Unplaced Histology Fragments ({pieces.filter(p => !p.placed).length} remaining)
+          Unplaced Histology Slide Fragments ({pieces.filter(p => !p.placed).length} remaining)
         </div>
 
         <div className="grid grid-cols-3 gap-2.5 w-full max-w-[420px]">
@@ -223,14 +226,14 @@ export default function JigsawGame({ gridSize = 3, imageDesc = '', puzzleData, o
                     ? 'border-amber-400 ring-4 ring-amber-400/50 scale-105 shadow-xl font-bold'
                     : 'border-white/20 hover:scale-105 hover:border-teal-400/60'
                 }`}
-                style={
-                  slideImageUrl
-                    ? { backgroundImage: `url(${slideImageUrl})`, backgroundSize: `${gridSize * 100}%`, backgroundPosition: `${piece.bgPosX} ${piece.bgPosY}` }
-                    : { background: defaultSlideBg, backgroundSize: '300% 300%', backgroundPosition: `${piece.bgPosX} ${piece.bgPosY}` }
-                }
+                style={{ 
+                  backgroundImage: `url("${slideImageUrl}")`, 
+                  backgroundSize: '300% 300%', 
+                  backgroundPosition: `${piece.bgPosX} ${piece.bgPosY}` 
+                }}
               >
                 <div className="bg-slate-950/80 p-1.5 rounded-lg border border-white/10 w-full h-full flex items-center justify-center">
-                  <span className="text-[10px] font-extrabold text-white text-center leading-tight">
+                  <span className="text-[10px] font-extrabold text-white text-center leading-tight drop-shadow-md">
                     {piece.label}
                   </span>
                 </div>
@@ -240,7 +243,7 @@ export default function JigsawGame({ gridSize = 3, imageDesc = '', puzzleData, o
 
           {pieces.filter(p => !p.placed).length === 0 && (
             <div className="col-span-3 text-sm font-bold text-teal-300 text-center py-2 flex items-center justify-center gap-2">
-              🎉 All histology fragments assembled cleanly!
+              🎉 All histology slide fragments assembled cleanly!
             </div>
           )}
         </div>
