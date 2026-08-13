@@ -46,6 +46,7 @@ class ErrorBoundary extends React.Component {
             <button
               onClick={() => {
                 localStorage.clear();
+                window.location.hash = '';
                 window.location.reload();
               }}
               className="px-4 py-2 rounded-xl bg-rose-500/20 border border-rose-400/40 text-rose-300 text-xs font-bold cursor-pointer"
@@ -61,15 +62,52 @@ class ErrorBoundary extends React.Component {
 }
 
 export default function App() {
-  const [currentView, setCurrentView] = useState('home'); // 'home' | 'topics' | 'topic' | 'mission' | 'leaderboard' | 'avatar' | 'about'
+  const [currentView, setCurrentView] = useState('home'); 
   const [selectedTopicId, setSelectedTopicId] = useState('oral_mucosa');
   const [selectedMissionId, setSelectedMissionId] = useState('om_m1');
   const [guideMessage, setGuideMessage] = useState('Welcome to HistoPath India! Explore topics, play games, and test your histology knowledge.');
 
+  // Parse Hash URL on load and hashchange
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (!hash) {
+        setCurrentView('home');
+        return;
+      }
+
+      const parts = hash.split('/');
+      const route = parts[0];
+      const param = parts[1];
+
+      if (route === 'topic' && param) {
+        setSelectedTopicId(param);
+        setCurrentView('topic');
+      } else if (route === 'mission' && param) {
+        setSelectedMissionId(param);
+        setCurrentView('mission');
+      } else if (['home', 'topics', 'leaderboard', 'avatar', 'about'].includes(route)) {
+        setCurrentView(route);
+      } else {
+        setCurrentView('home');
+      }
+    };
+
+    // Initial check
+    handleHashChange();
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
   const navigateTo = (view, topicId = null, missionId = null) => {
-    if (topicId) setSelectedTopicId(topicId);
-    if (missionId) setSelectedMissionId(missionId);
-    setCurrentView(view);
+    if (view === 'topic' && (topicId || selectedTopicId)) {
+      window.location.hash = `#topic/${topicId || selectedTopicId}`;
+    } else if (view === 'mission' && (missionId || selectedMissionId)) {
+      window.location.hash = `#mission/${missionId || selectedMissionId}`;
+    } else {
+      window.location.hash = `#${view}`;
+    }
     window.scrollTo(0, 0);
   };
 
