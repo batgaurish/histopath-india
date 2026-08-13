@@ -272,7 +272,13 @@ export const QUESTIONS = {
 
 // Helper to get questions for a mission
 export function getQuestions(missionId) {
-  return QUESTIONS[missionId] || [];
+  const raw = QUESTIONS[missionId] || [];
+  return raw.map(q => ({
+    q: q.q,
+    options: q.options,
+    a: q.a !== undefined ? q.a : q.correct,
+    exp: q.exp || q.explanation || '',
+  }));
 }
 
 // Shuffle an array in place (Fisher-Yates)

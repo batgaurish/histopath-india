@@ -646,13 +646,44 @@ export function getTopicById(id) {
   return TOPICS.find(t => t.id === id) || null;
 }
 
-// Helper to find a specific mission
-export function getMission(topicId, missionId) {
-  const topic = getTopicById(topicId);
-  if (!topic) return null;
-  for (const stage of topic.stages) {
-    const mission = stage.missions.find(m => m.id === missionId);
-    if (mission) return mission;
+// Helper to find a specific mission (supports getMission(missionId) or getMission(topicId, missionId))
+export function getMission(arg1, arg2) {
+  let topicId = arg2 ? arg1 : null;
+  let missionId = arg2 ? arg2 : arg1;
+
+  if (topicId) {
+    const topic = getTopicById(topicId);
+    if (topic) {
+      for (const stage of topic.stages) {
+        const mission = stage.missions.find(m => m.id === missionId);
+        if (mission) {
+          // Normalize puzzle data
+          const normalizedMission = {
+            ...mission,
+            pairs: mission.pairs || mission.puzzleData?.pairs || [],
+            differences: mission.differences || mission.puzzleData?.differences || [],
+            puzzleData: mission.puzzleData || {},
+          };
+          return { mission: normalizedMission, topic };
+        }
+      }
+    }
+  }
+
+  // Search across all topics
+  for (const t of TOPICS) {
+    for (const stage of t.stages) {
+      const mission = stage.missions.find(m => m.id === missionId);
+      if (mission) {
+        const normalizedMission = {
+          ...mission,
+          pairs: mission.pairs || mission.puzzleData?.pairs || [],
+          differences: mission.differences || mission.puzzleData?.differences || [],
+          puzzleData: mission.puzzleData || {},
+        };
+        return { mission: normalizedMission, topic: t };
+      }
+    }
   }
   return null;
 }
