@@ -24,7 +24,7 @@ const DifferencesGame = (() => {
     _onComplete = options.onComplete || null;
 
     _container.innerHTML = '';
-    _container.className = 'diff-container';
+    _container.className = 'game-area diff-container';
 
     // Score
     const score = document.createElement('div');

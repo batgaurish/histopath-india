@@ -24,7 +24,7 @@ const MatchingGame = (() => {
     _onComplete = options.onComplete || null;
 
     _container.innerHTML = '';
-    _container.className = 'match-container';
+    _container.className = 'game-area match-container';
 
     // Left column - descriptions/images
     const leftCol = document.createElement('div');

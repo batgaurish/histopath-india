@@ -316,7 +316,7 @@ const App = (() => {
 
         <div class="mission-tabs">
           <button class="mission-tab active" id="tab-game">🎮 Game</button>
-          <button class="mission-tab" id="tab-quiz" disabled>📝 Quiz</button>
+          <button class="mission-tab" id="tab-quiz">📝 Quiz</button>
         </div>
 
         <div class="game-toolbar">
@@ -357,11 +357,12 @@ const App = (() => {
     document.getElementById('tab-game')?.addEventListener('click', () => {
       document.getElementById('tab-game').classList.add('active');
       document.getElementById('tab-quiz')?.classList.remove('active');
-      // Re-show game area
+      const toolbar = document.querySelector('.game-toolbar');
+      if (toolbar) toolbar.style.display = 'flex';
+      _startGame(mission, gameArea, timer, topicId);
     });
 
     document.getElementById('tab-quiz')?.addEventListener('click', () => {
-      if (document.getElementById('tab-quiz').disabled) return;
       document.getElementById('tab-quiz').classList.add('active');
       document.getElementById('tab-game').classList.remove('active');
       _startQuiz(topicId, mission.id, gameArea);
@@ -371,16 +372,21 @@ const App = (() => {
   }
 
   function _startGame(mission, container, timer, topicId) {
+    if (_currentGame && _currentGame.destroy) {
+      _currentGame.destroy();
+      _currentGame = null;
+    }
+    container.innerHTML = '';
+
     timer.start();
 
     const onComplete = (stats) => {
       timer.stop();
       Audio.playMissionComplete();
 
-      // Enable quiz tab
+      // Highlight quiz tab
       const quizTab = document.getElementById('tab-quiz');
       if (quizTab) {
-        quizTab.disabled = false;
         quizTab.classList.add('pulse');
       }
 
@@ -411,21 +417,24 @@ const App = (() => {
       case 'jigsaw':
         _currentGame = JigsawGame;
         JigsawGame.init(container, {
-          gridSize: 3,
-          imageDesc: mission.title,
+          gridSize: mission.puzzleData?.gridSize || 3,
+          imageDesc: mission.puzzleData?.imageDesc || mission.title,
           onComplete,
         });
         break;
 
       case 'differences':
         _currentGame = DifferencesGame;
-        DifferencesGame.init(container, { onComplete });
+        DifferencesGame.init(container, {
+          differences: mission.puzzleData?.differences || [],
+          onComplete,
+        });
         break;
 
       case 'matching':
         _currentGame = MatchingGame;
         MatchingGame.init(container, {
-          pairs: mission.matchPairs || _generateMatchPairs(mission),
+          pairs: mission.puzzleData?.pairs || mission.matchPairs || _generateMatchPairs(mission),
           onComplete,
         });
         break;
@@ -433,7 +442,7 @@ const App = (() => {
       case 'crossword':
         _currentGame = CrosswordGame;
         CrosswordGame.init(container, {
-          words: mission.crosswordWords || _generateCrosswordWords(mission),
+          words: mission.puzzleData?.words || mission.crosswordWords || _generateCrosswordWords(mission),
           onComplete,
         });
         break;

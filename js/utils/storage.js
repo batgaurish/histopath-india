@@ -185,6 +185,24 @@ const Storage = (() => {
     };
   }
 
+  function saveMissionProgress(missionId, data = {}) {
+    const player = getCurrentPlayer();
+    if (!player) return;
+    const topicId = data.topicId || _findTopicForMission(missionId);
+    return saveMissionResult(topicId, missionId, data.stars || 0, data.score || 0);
+  }
+
+  function _findTopicForMission(missionId) {
+    if (typeof TOPICS !== 'undefined') {
+      for (const t of TOPICS) {
+        for (const s of t.stages) {
+          if (s.missions.some(m => m.id === missionId)) return t.id;
+        }
+      }
+    }
+    return missionId.split('_')[0];
+  }
+
   // ---------- Leaderboard ----------
   function getLeaderboard() {
     return getAllPlayers().map((p, i) => ({
@@ -219,9 +237,11 @@ const Storage = (() => {
     saveAvatar,
     getAvatar,
     saveMissionResult,
+    saveMissionProgress,
     getMissionProgress,
     getTopicProgress,
     getOverallStats,
     getLeaderboard,
   };
 })();
+

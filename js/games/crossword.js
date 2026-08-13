@@ -123,7 +123,7 @@ const CrosswordGame = (() => {
 
   function _render() {
     _container.innerHTML = '';
-    _container.className = 'crossword-container';
+    _container.className = 'game-area crossword-container';
 
     // Grid
     const gridEl = document.createElement('div');

@@ -29,7 +29,7 @@ const Quiz = (() => {
 
   function _render() {
     _container.innerHTML = '';
-    _container.className = 'quiz-container';
+    _container.className = 'game-area quiz-container';
 
     // Progress steps
     const progress = document.createElement('div');

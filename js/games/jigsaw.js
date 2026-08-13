@@ -31,7 +31,7 @@ const JigsawGame = (() => {
     _pieces = [];
 
     _container.innerHTML = '';
-    _container.className = 'jigsaw-container';
+    _container.className = 'game-area jigsaw-container';
 
     // Generate procedural histology-style image colors
     _imageColors = _generateHistologyColors(options.imageDesc || 'tissue');
