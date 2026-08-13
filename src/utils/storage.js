@@ -97,13 +97,18 @@ export function getCurrentPlayerId() {
 
 export function getCurrentPlayer() {
   const id = getCurrentPlayerId();
-  return id ? getPlayer(id) : null;
+  let player = id ? getPlayer(id) : null;
+  if (!player) {
+    player = createPlayer('Dental Student');
+  }
+  if (!player.progress) player.progress = {};
+  return player;
 }
 
 export function saveAvatar(avatarData) {
-  const id = getCurrentPlayerId();
-  if (!id) return;
-  updatePlayer(id, { avatar: avatarData });
+  const player = getCurrentPlayer();
+  if (!player) return;
+  updatePlayer(player.id, { avatar: avatarData });
 }
 
 export function getAvatar() {
@@ -113,12 +118,10 @@ export function getAvatar() {
 
 export function saveMissionResult(topicId, missionId, stars, timeMs = 0) {
   let player = getCurrentPlayer();
-  if (!player) {
-    player = createPlayer('Dental Student');
-  }
   const players = _getPlayers();
-  const p = players[player.id];
+  const p = players[player.id] || player;
 
+  if (!p.progress) p.progress = {};
   if (!p.progress[topicId]) {
     p.progress[topicId] = {};
   }
@@ -137,11 +140,13 @@ export function saveMissionResult(topicId, missionId, stars, timeMs = 0) {
   let totalStars = 0;
   let missionsCompleted = 0;
   for (const tid of Object.keys(p.progress)) {
-    for (const mid of Object.keys(p.progress[tid])) {
-      const m = p.progress[tid][mid];
-      if (m.completed) {
-        missionsCompleted++;
-        totalStars += m.stars;
+    if (p.progress[tid]) {
+      for (const mid of Object.keys(p.progress[tid])) {
+        const m = p.progress[tid][mid];
+        if (m && m.completed) {
+          missionsCompleted++;
+          totalStars += (m.stars || 0);
+        }
       }
     }
   }
@@ -170,13 +175,13 @@ function _findTopicForMission(missionId) {
 
 export function getMissionProgress(topicId, missionId) {
   const player = getCurrentPlayer();
-  if (!player || !player.progress[topicId]) return null;
+  if (!player || !player.progress || !player.progress[topicId]) return null;
   return player.progress[topicId][missionId] || null;
 }
 
 export function getTopicProgress(topicId) {
   const player = getCurrentPlayer();
-  if (!player || !player.progress[topicId]) return {};
+  if (!player || !player.progress || !player.progress[topicId]) return {};
   return player.progress[topicId];
 }
 
