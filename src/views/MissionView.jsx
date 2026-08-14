@@ -32,6 +32,8 @@ export default function MissionView({ missionId, onBack, onCompleteMission }) {
   const { mission, topic } = missionInfo;
   const questions = getQuestions(missionId);
 
+  const useLabelling = mission.gameType === 'labelling' || mission.gameType === 'jigsaw';
+
   const handleGameComplete = (result) => {
     setIsTimerRunning(false);
     // Automatically switch to Quiz tab upon completing the game!
@@ -126,18 +128,18 @@ export default function MissionView({ missionId, onBack, onCompleteMission }) {
       <div className="card w-full p-4 md:p-7 min-h-[460px] flex flex-col justify-center items-center relative overflow-hidden">
         {activeTab === 'game' ? (
           <>
-            {mission.gameType === 'matching' && (
-              <MatchingGame
-                pairs={mission.pairs}
-                onComplete={handleGameComplete}
-                giveHintRef={giveHintRef}
-              />
-            )}
-
-            {(mission.gameType === 'labelling' || mission.gameType === 'jigsaw') && (
+            {useLabelling ? (
               <LabellingGame
                 missionId={missionId}
                 exercise={mission.labelling}
+                onComplete={handleGameComplete}
+                giveHintRef={giveHintRef}
+              />
+            ) : (
+              <>
+            {mission.gameType === 'matching' && (
+              <MatchingGame
+                pairs={mission.pairs}
                 onComplete={handleGameComplete}
                 giveHintRef={giveHintRef}
               />
@@ -157,6 +159,8 @@ export default function MissionView({ missionId, onBack, onCompleteMission }) {
                 onComplete={handleGameComplete}
                 giveHintRef={giveHintRef}
               />
+            )}
+              </>
             )}
           </>
         ) : (

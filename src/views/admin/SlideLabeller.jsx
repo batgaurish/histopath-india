@@ -21,11 +21,24 @@ import {
 function missionsOf(topicId) {
   const topic = TOPICS.find(t => t.id === topicId);
   if (!topic) return [];
-  return (topic.stages || []).flatMap(s => (s.missions || []).map(m => ({
-    id: m.id,
-    title: m.title,
-    stage: s.title,
-  })));
+  // Only labelling missions are offered: saving a slide against a matching
+  // or crossword mission would store it where no game ever reads it.
+  return (topic.stages || []).flatMap(s =>
+    (s.missions || [])
+      .filter(m => isLabellingMission(m.gameType))
+      .map(m => ({ id: m.id, title: m.title, stage: s.title, gameType: m.gameType }))
+  );
+}
+
+export const isLabellingMission = (t) => t === 'labelling' || t === 'jigsaw';
+
+/** Exercises saved against missions that no longer accept them. */
+function findOrphans() {
+  const valid = new Set(
+    TOPICS.flatMap(t => (t.stages || []).flatMap(s =>
+      (s.missions || []).filter(m => isLabellingMission(m.gameType)).map(m => m.id)))
+  );
+  return Object.keys(getAllExercises()).filter(id => !valid.has(id));
 }
 
 export default function SlideLabeller() {
@@ -193,9 +206,38 @@ export default function SlideLabeller() {
   const named = markers.filter(m => m.label.trim()).length;
   const ready = image && named >= 2 && named === markers.length;
   const footprintKb = Math.round(storageFootprint() / 1024);
+  const orphans = findOrphans();
+
+  const clearOrphans = () => {
+    orphans.forEach(deleteExercise);
+    flash('ok', `Removed ${orphans.length} stranded exercise(s).`);
+  };
 
   return (
     <div className="flex flex-col gap-5">
+      {orphans.length > 0 && (
+        <div className="flex items-start gap-2.5 px-3.5 py-3 rounded-lg bg-[var(--gold-soft)] border border-[var(--gold)]/40 text-[var(--text-primary)] text-xs">
+          <AlertTriangle className="w-4 h-4 shrink-0 mt-px text-[var(--gold-ink)]" />
+          <div className="flex-1">
+            <p>
+              <strong className="font-semibold">
+                {orphans.length} slide{orphans.length === 1 ? '' : 's'} saved to a
+                non-labelling mission
+              </strong>{' '}
+              ({orphans.join(', ')}). Those missions run a different game, so the
+              slide never appears. Only labelling missions are listed below —
+              re-upload the slide against one of those.
+            </p>
+            <button
+              onClick={clearOrphans}
+              className="mt-1.5 font-semibold underline text-[var(--danger-ink)] cursor-pointer"
+            >
+              Discard stranded slide{orphans.length === 1 ? '' : 's'}
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Target mission */}
       <div className="grid sm:grid-cols-2 gap-3">
         <label className="flex flex-col gap-1.5">
@@ -218,7 +260,7 @@ export default function SlideLabeller() {
           >
             {missions.map(m => (
               <option key={m.id} value={m.id}>
-                {m.id} — {m.title}{getExercise(m.id) ? '  ✓' : ''}
+                {m.title}{getExercise(m.id) ? '   · has slide' : ''}
               </option>
             ))}
           </select>
