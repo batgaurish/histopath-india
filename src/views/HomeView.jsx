@@ -1,12 +1,12 @@
 import React from 'react';
 import { Microscope, Play, Star, BookOpen, Puzzle, Award, CheckCircle2 } from 'lucide-react';
-import { getCurrentPlayer, getOverallStats, getAvatar } from '../utils/storage';
-import { AvatarSVG } from '../components/AvatarEditor';
+import AvatarSVG from '../components/avatar/AvatarSVG';
+import { usePlayer, useStats } from '../hooks/usePlayer';
 
 export default function HomeView({ navigateTo }) {
-  const player = getCurrentPlayer() || { name: 'Dental Student' };
-  const avatar = getAvatar() || { skinTone: 0, hairStyle: 0, hairColor: 0, accessory: 0, eyeStyle: 0 };
-  const stats = getOverallStats();
+  const player = usePlayer();
+  const avatar = player.avatar;
+  const stats = useStats();
 
   return (
     <div className="w-full max-w-6xl mx-auto px-4 py-6 md:py-10 flex flex-col gap-10">
@@ -28,7 +28,7 @@ export default function HomeView({ navigateTo }) {
             </h1>
 
             <p className="text-sm sm:text-base text-gray-300 max-w-2xl leading-relaxed">
-              Master Oral &amp; Maxillofacial Pathology for 3rd &amp; Final Year BDS, Dental Interns (CRRI), and MDS / PG Residents through interactive histological matching games, microscopic jigsaw puzzles, challenging crosswords, and high-yield Neville-aligned MCQs.
+              Master Oral &amp; Maxillofacial Pathology for 3rd &amp; Final Year BDS, Dental Interns (CRRI), and MDS / PG Residents through interactive histological matching games, slide-labelling exercises, challenging crosswords, and high-yield Neville-aligned MCQs.
             </p>
 
             {/* Quick Action Button */}
@@ -45,19 +45,12 @@ export default function HomeView({ navigateTo }) {
           {/* Player Quick Stats Profile Card */}
           <div className="lg:col-span-4 glass-panel border border-white/10 p-6 rounded-2xl flex flex-col gap-4 bg-slate-900/60">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-slate-800 border border-teal-400/40 flex items-center justify-center overflow-hidden shadow-inner p-1">
-                <AvatarSVG
-                  skinTone={avatar.skinTone || 0}
-                  hairStyle={avatar.hairStyle || avatar.hair || 0}
-                  hairColor={avatar.hairColor || 0}
-                  accessory={avatar.accessory || 0}
-                  eyeStyle={avatar.eyeStyle || 0}
-                  size={44}
-                />
+              <div className="w-12 h-12 rounded-full overflow-hidden ring-2 ring-teal-400/40 shrink-0">
+                <AvatarSVG {...avatar} size={48} />
               </div>
               <div>
                 <h3 className="font-heading font-bold text-base text-white">{player.name}</h3>
-                <span className="text-xs text-teal-400 font-medium">{player.role || '3rd / Final Year BDS Candidate'}</span>
+                <span className="text-xs text-teal-400 font-medium">{player.role}</span>
               </div>
             </div>
 

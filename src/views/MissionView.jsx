@@ -6,7 +6,7 @@ import { Timer } from '../utils/timer';
 import { ArrowLeft, Lightbulb, Gamepad2, FileText, Clock, RotateCcw } from 'lucide-react';
 
 import MatchingGame from '../components/games/MatchingGame';
-import JigsawGame from '../components/games/JigsawGame';
+import LabellingGame from '../components/games/LabellingGame';
 import DifferencesGame from '../components/games/DifferencesGame';
 import CrosswordGame from '../components/games/CrosswordGame';
 import Quiz from '../components/Quiz';
@@ -65,14 +65,14 @@ export default function MissionView({ missionId, onBack, onCompleteMission }) {
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
-            className="p-2.5 rounded-xl glass-panel border border-white/10 text-gray-300 hover:text-white cursor-pointer transition-all"
+            className="btn-ghost p-2.5 cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
           </button>
 
           <div>
-            <span className="text-xs font-semibold text-teal-400 tracking-wide uppercase">
-              {topic.title} Mission
+            <span className="text-xs font-bold tracking-widest uppercase" style={{ color: 'var(--accent)' }}>
+              {topic.title}
             </span>
             <h2 className="font-heading font-extrabold text-xl md:text-2xl text-white">
               {mission.title}
@@ -82,7 +82,7 @@ export default function MissionView({ missionId, onBack, onCompleteMission }) {
 
         {/* Timer & Hint Toolbar */}
         <div className="flex items-center gap-3 self-end md:self-auto">
-          <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl glass-panel border border-white/10 text-xs font-mono font-bold text-amber-300">
+          <div className="btn-ghost flex items-center gap-2 px-3 py-2 text-xs font-mono font-bold" style={{ color: 'var(--gold)' }}>
             <Clock className="w-4 h-4 text-amber-400" />
             <span>{Timer.format(seconds)}</span>
           </div>
@@ -90,7 +90,8 @@ export default function MissionView({ missionId, onBack, onCompleteMission }) {
           {activeTab === 'game' && (
             <button
               onClick={handleHintClick}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-400/10 border border-amber-400/30 text-amber-300 hover:bg-amber-400/20 font-semibold text-xs cursor-pointer transition-all active:scale-95"
+              className="flex items-center gap-2 px-3.5 py-2 rounded-lg font-semibold text-xs cursor-pointer transition-all active:scale-95"
+              style={{ background: 'rgba(251,191,36,.12)', border: '1px solid rgba(251,191,36,.3)', color: 'var(--gold)' }}
             >
               <Lightbulb className="w-4 h-4 text-amber-400 animate-pulse" /> Hint
             </button>
@@ -99,32 +100,30 @@ export default function MissionView({ missionId, onBack, onCompleteMission }) {
       </div>
 
       {/* Mission Mode Tabs */}
-      <div className="flex items-center gap-2 glass-panel p-1.5 rounded-2xl border border-white/10 w-fit">
+      <div className="flex items-center gap-1 p-1 rounded-xl w-fit" style={{ background: 'var(--surface-raised)', border: '1px solid var(--border-subtle)' }}>
         <button
           onClick={() => setActiveTab('game')}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all cursor-pointer ${
-            activeTab === 'game'
-              ? 'bg-gradient-to-r from-teal-400 to-purple-600 text-slate-950 shadow-lg shadow-teal-500/20'
-              : 'text-gray-400 hover:text-white hover:bg-white/5'
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition-all cursor-pointer ${
+            activeTab === 'game' ? 'btn-primary' : 'hover:text-white'
           }`}
+          style={activeTab !== 'game' ? { color: 'var(--text-secondary)' } : undefined}
         >
-          <Gamepad2 className="w-4 h-4" /> 1. Interactive Game
+          <Gamepad2 className="w-4 h-4" /> Exercise
         </button>
 
         <button
           onClick={() => setActiveTab('quiz')}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all cursor-pointer ${
-            activeTab === 'quiz'
-              ? 'bg-gradient-to-r from-teal-400 to-purple-600 text-slate-950 shadow-lg shadow-teal-500/20'
-              : 'text-gray-400 hover:text-white hover:bg-white/5'
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition-all cursor-pointer ${
+            activeTab === 'quiz' ? 'btn-primary' : 'hover:text-white'
           }`}
+          style={activeTab !== 'quiz' ? { color: 'var(--text-secondary)' } : undefined}
         >
-          <FileText className="w-4 h-4" /> 2. Neville's Quiz ({questions.length} MCQs)
+          <FileText className="w-4 h-4" /> Quiz ({questions.length})
         </button>
       </div>
 
       {/* Main Interactive Game/Quiz Canvas Area */}
-      <div className="w-full glass-panel border border-white/10 rounded-3xl p-4 md:p-8 min-h-[480px] flex flex-col justify-center items-center relative shadow-2xl overflow-hidden">
+      <div className="card w-full p-4 md:p-7 min-h-[460px] flex flex-col justify-center items-center relative overflow-hidden">
         {activeTab === 'game' ? (
           <>
             {mission.gameType === 'matching' && (
@@ -135,10 +134,10 @@ export default function MissionView({ missionId, onBack, onCompleteMission }) {
               />
             )}
 
-            {mission.gameType === 'jigsaw' && (
-              <JigsawGame
-                gridSize={3}
-                imageDesc={mission.subtitle}
+            {(mission.gameType === 'labelling' || mission.gameType === 'jigsaw') && (
+              <LabellingGame
+                missionId={missionId}
+                exercise={mission.labelling}
                 onComplete={handleGameComplete}
                 giveHintRef={giveHintRef}
               />

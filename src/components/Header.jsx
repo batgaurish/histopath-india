@@ -1,96 +1,100 @@
 import React from 'react';
-import { Microscope, BookOpen, Trophy, User, Info, Home, Settings } from 'lucide-react';
+import { Microscope, BookOpen, Trophy, Info, Home, Settings } from 'lucide-react';
+import AvatarSVG from './avatar/AvatarSVG';
+import { usePlayer, useStats } from '../hooks/usePlayer';
+
+const NAV = [
+  { id: 'home', label: 'Home', icon: Home, matches: ['home'] },
+  { id: 'topics', label: 'Topics', icon: BookOpen, matches: ['topics', 'topic', 'mission'] },
+  { id: 'leaderboard', label: 'Leaderboard', icon: Trophy, matches: ['leaderboard'] },
+  { id: 'about', label: 'About', icon: Info, matches: ['about'] },
+];
 
 export default function Header({ currentView, navigateTo }) {
+  const player = usePlayer();
+  const stats = useStats();
+
   return (
-    <header className="sticky top-0 z-50 bg-[#0d0f17]/90 backdrop-blur-md border-b border-white/10 px-4 md:px-8 py-3">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Brand Logo */}
-        <button 
+    <header
+      className="sticky top-0 z-50 border-b backdrop-blur-xl"
+      style={{ background: 'rgba(11,13,20,.82)', borderColor: 'var(--border-subtle)' }}
+    >
+      <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between gap-4">
+        {/* Brand */}
+        <button
           onClick={() => navigateTo('home')}
-          className="flex items-center gap-3 text-left group cursor-pointer focus:outline-none"
+          className="flex items-center gap-2.5 shrink-0 cursor-pointer group"
         >
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-400 to-purple-600 flex items-center justify-center text-gray-950 font-bold shadow-lg shadow-teal-500/20 group-hover:scale-105 transition-transform">
-            <Microscope className="w-6 h-6" />
-          </div>
-          <div>
-            <div className="font-heading font-extrabold text-lg text-gradient leading-tight">
-              HistoPath
-            </div>
-            <div className="text-xs font-semibold text-amber-400 tracking-wider">
-              India Edition
-            </div>
-          </div>
+          <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-400 to-fuchsia-500 flex items-center justify-center text-slate-950 shadow-lg group-hover:scale-105 transition-transform">
+            <Microscope className="w-5 h-5" />
+          </span>
+          <span className="hidden sm:flex flex-col items-start leading-none">
+            <span className="font-heading font-extrabold text-base text-white">HistoPath</span>
+            <span className="text-[10px] font-semibold tracking-widest uppercase" style={{ color: 'var(--text-muted)' }}>
+              India
+            </span>
+          </span>
         </button>
 
-        {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-2">
-          <button
-            onClick={() => navigateTo('home')}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-all ${
-              currentView === 'home'
-                ? 'bg-white/10 text-teal-300'
-                : 'text-gray-400 hover:text-white hover:bg-white/5'
-            }`}
+        {/* Primary nav */}
+        <nav className="hidden md:flex items-center gap-1">
+          {NAV.map(({ id, label, icon: Icon, matches }) => {
+            const active = matches.includes(currentView);
+            return (
+              <button
+                key={id}
+                onClick={() => navigateTo(id)}
+                aria-current={active ? 'page' : undefined}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors cursor-pointer ${
+                  active ? 'text-white' : 'hover:text-white'
+                }`}
+                style={{
+                  background: active ? 'var(--accent-soft)' : 'transparent',
+                  color: active ? 'var(--accent)' : 'var(--text-secondary)',
+                }}
+              >
+                <Icon className="w-4 h-4" /> {label}
+              </button>
+            );
+          })}
+        </nav>
+
+        {/* Player summary */}
+        <div className="flex items-center gap-2 shrink-0">
+          <div
+            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold"
+            style={{ background: 'rgba(251,191,36,.10)', color: 'var(--gold)' }}
+            title={`${stats.totalStars} stars · ${stats.missionsCompleted} of ${stats.totalMissions} missions`}
           >
-            <Home className="w-4 h-4" /> Home
-          </button>
+            <Trophy className="w-3.5 h-3.5" />
+            <span className="tabular-nums">{stats.totalStars}</span>
+          </div>
 
           <button
-            onClick={() => navigateTo('topics')}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-all ${
-              currentView === 'topics' || currentView === 'topic' || currentView === 'mission'
-                ? 'bg-white/10 text-teal-300'
-                : 'text-gray-400 hover:text-white hover:bg-white/5'
-            }`}
+            onClick={() => navigateTo('admin')}
+            aria-label="Admin"
+            className={`p-2 rounded-lg transition-colors cursor-pointer ${currentView === 'admin' ? 'text-fuchsia-300' : 'hover:text-white'}`}
+            style={{
+              background: currentView === 'admin' ? 'rgba(192,132,252,.14)' : 'transparent',
+              color: currentView === 'admin' ? 'var(--accent-2)' : 'var(--text-muted)',
+            }}
           >
-            <BookOpen className="w-4 h-4" /> Topics
-          </button>
-
-          <button
-            onClick={() => navigateTo('leaderboard')}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-all ${
-              currentView === 'leaderboard'
-                ? 'bg-white/10 text-teal-300'
-                : 'text-gray-400 hover:text-white hover:bg-white/5'
-            }`}
-          >
-            <Trophy className="w-4 h-4" /> Leaderboard
+            <Settings className="w-4.5 h-4.5" />
           </button>
 
           <button
             onClick={() => navigateTo('avatar')}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-all ${
-              currentView === 'avatar'
-                ? 'bg-white/10 text-teal-300'
-                : 'text-gray-400 hover:text-white hover:bg-white/5'
-            }`}
+            aria-label="Edit your profile"
+            className="rounded-full overflow-hidden transition-transform hover:scale-105 cursor-pointer shrink-0"
+            style={{
+              boxShadow: currentView === 'avatar'
+                ? '0 0 0 2px var(--accent)'
+                : '0 0 0 1px var(--border-default)',
+            }}
           >
-            <User className="w-4 h-4" /> Avatar
+            <AvatarSVG {...player.avatar} size={34} />
           </button>
-
-          <button
-            onClick={() => navigateTo('admin')}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-all ${
-              currentView === 'admin'
-                ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40'
-                : 'text-gray-400 hover:text-white hover:bg-white/5'
-            }`}
-          >
-            <Settings className="w-4 h-4 text-purple-400" /> Admin / Creator
-          </button>
-
-          <button
-            onClick={() => navigateTo('about')}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold transition-all ${
-              currentView === 'about'
-                ? 'bg-white/10 text-teal-300'
-                : 'text-gray-400 hover:text-white hover:bg-white/5'
-            }`}
-          >
-            <Info className="w-4 h-4" /> About
-          </button>
-        </nav>
+        </div>
       </div>
     </header>
   );
