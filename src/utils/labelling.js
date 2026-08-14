@@ -67,6 +67,24 @@ export function deleteExercise(missionId) {
   saveCustomData(data);
 }
 
+/**
+ * Reassign an exercise to a different mission, keeping the slide, markers
+ * and metadata intact. Used to rescue exercises saved against a mission
+ * that does not run a labelling game.
+ */
+export function moveExercise(fromId, toId) {
+  if (fromId === toId) return null;
+  const data = _root();
+  const ex = data.labelling[fromId];
+  if (!ex) throw new Error(`No exercise stored for ${fromId}`);
+  if (data.labelling[toId]) throw new Error(`${toId} already has a slide — delete it first`);
+
+  data.labelling[toId] = { ...ex, updatedAt: Date.now() };
+  delete data.labelling[fromId];
+  saveCustomData(data);
+  return data.labelling[toId];
+}
+
 /** An exercise is playable once it has an image and at least two labelled markers. */
 export function isPlayable(ex) {
   return Boolean(

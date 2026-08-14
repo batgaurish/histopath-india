@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 import { TOPICS } from '../../data/topics';
 import {
-  getExercise, saveExercise, deleteExercise, isPlayable,
+  getExercise, saveExercise, deleteExercise, moveExercise, isPlayable,
   processImageFile, exportExercises, importExercises,
   storageFootprint, getAllExercises,
 } from '../../utils/labelling';
@@ -32,13 +32,63 @@ function missionsOf(topicId) {
 
 export const isLabellingMission = (t) => t === 'labelling' || t === 'jigsaw';
 
+/** Every mission that can hold a labelling exercise, across all topics. */
+function allLabellingMissions() {
+  return TOPICS.flatMap(t => (t.stages || []).flatMap(s =>
+    (s.missions || [])
+      .filter(m => isLabellingMission(m.gameType))
+      .map(m => ({ id: m.id, title: m.title, topic: t.title, topicId: t.id }))));
+}
+
 /** Exercises saved against missions that no longer accept them. */
 function findOrphans() {
-  const valid = new Set(
-    TOPICS.flatMap(t => (t.stages || []).flatMap(s =>
-      (s.missions || []).filter(m => isLabellingMission(m.gameType)).map(m => m.id)))
-  );
+  const valid = new Set(allLabellingMissions().map(m => m.id));
   return Object.keys(getAllExercises()).filter(id => !valid.has(id));
+}
+
+/**
+ * Best destination for a stranded exercise: the first free labelling
+ * mission in the same topic, since a slide saved to otc_m1 was almost
+ * certainly meant for an otc_* labelling slot.
+ */
+function suggestTarget(orphanId) {
+  const prefix = String(orphanId).split('_')[0];
+  const candidates = allLabellingMissions();
+  const sameTopic = candidates.filter(m => m.id.startsWith(prefix + '_'));
+  const free = sameTopic.find(m => !getExercise(m.id));
+  return (free || sameTopic[0] || candidates[0])?.id || '';
+}
+
+/** One stranded exercise, with a destination picker. */
+function OrphanRow({ orphanId, missions, onMove }) {
+  const [target, setTarget] = useState(() => suggestTarget(orphanId));
+
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <code className="px-1.5 py-0.5 rounded bg-[var(--surface-card)] border border-[var(--border-default)] font-mono text-[11px]">
+        {orphanId}
+      </code>
+      <span className="text-[11px]">→</span>
+      <select
+        value={target}
+        onChange={(e) => setTarget(e.target.value)}
+        className="px-2 py-1 rounded-md bg-[var(--surface-card)] border border-[var(--border-default)] text-[11px] cursor-pointer max-w-[260px]"
+      >
+        {missions.map(m => (
+          <option key={m.id} value={m.id} disabled={Boolean(getExercise(m.id))}>
+            {m.title}{getExercise(m.id) ? ' — occupied' : ''}
+          </option>
+        ))}
+      </select>
+      <button
+        onClick={() => onMove(orphanId, target)}
+        disabled={!target}
+        className="px-2.5 py-1 rounded-md bg-[var(--accent)] text-[var(--text-on-accent)] text-[11px] font-bold cursor-pointer disabled:opacity-40 hover:brightness-110"
+      >
+        Move
+      </button>
+    </div>
+  );
 }
 
 export default function SlideLabeller() {
@@ -207,6 +257,17 @@ export default function SlideLabeller() {
   const ready = image && named >= 2 && named === markers.length;
   const footprintKb = Math.round(storageFootprint() / 1024);
   const orphans = findOrphans();
+  const labellingMissions = allLabellingMissions();
+
+  const handleMove = (from, to) => {
+    try {
+      moveExercise(from, to);
+      setMissionId(to);
+      flash('ok', `Moved ${from} → ${to}. Slide and markers preserved.`);
+    } catch (err) {
+      flash('err', err.message);
+    }
+  };
 
   const clearOrphans = () => {
     orphans.forEach(deleteExercise);
@@ -218,21 +279,31 @@ export default function SlideLabeller() {
       {orphans.length > 0 && (
         <div className="flex items-start gap-2.5 px-3.5 py-3 rounded-lg bg-[var(--gold-soft)] border border-[var(--gold)]/40 text-[var(--text-primary)] text-xs">
           <AlertTriangle className="w-4 h-4 shrink-0 mt-px text-[var(--gold-ink)]" />
-          <div className="flex-1">
+          <div className="flex-1 flex flex-col gap-2">
             <p>
               <strong className="font-semibold">
                 {orphans.length} slide{orphans.length === 1 ? '' : 's'} saved to a
-                non-labelling mission
+                non-labelling mission.
               </strong>{' '}
-              ({orphans.join(', ')}). Those missions run a different game, so the
-              slide never appears. Only labelling missions are listed below —
-              re-upload the slide against one of those.
+              Those missions run a different game, so the slide never appears.
+              Move each one to a labelling mission — the image and markers are
+              carried over.
             </p>
+
+            {orphans.map(id => (
+              <OrphanRow
+                key={id}
+                orphanId={id}
+                missions={labellingMissions}
+                onMove={handleMove}
+              />
+            ))}
+
             <button
               onClick={clearOrphans}
-              className="mt-1.5 font-semibold underline text-[var(--danger-ink)] cursor-pointer"
+              className="self-start text-[11px] font-semibold underline text-[var(--danger-ink)] cursor-pointer"
             >
-              Discard stranded slide{orphans.length === 1 ? '' : 's'}
+              Discard instead
             </button>
           </div>
         </div>
