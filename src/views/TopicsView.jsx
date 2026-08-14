@@ -8,7 +8,7 @@ export default function TopicsView({ onSelectTopic }) {
     <div className="w-full max-w-6xl mx-auto px-4 py-6 md:py-8 flex flex-col gap-6">
       <div className="flex flex-col gap-2">
         <div className="inline-flex items-center gap-2 text-xs font-semibold text-teal-400 uppercase tracking-wider">
-          <BookOpen className="w-4 h-4" /> Shafer's Pathology Modules
+          <BookOpen className="w-4 h-4" /> Neville's Pathology Modules
         </div>
         <h2 className="font-heading font-extrabold text-2xl sm:text-3xl text-gradient">
           Oral Pathology Curriculum
@@ -64,7 +64,7 @@ export default function TopicsView({ onSelectTopic }) {
 
               <div className="flex flex-col gap-2 pt-2 border-t border-white/5">
                 <div className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider flex items-center justify-between">
-                  <span>{topic.shaferRef}</span>
+                  <span>{topic.textbookRef}</span>
                   <span className="text-teal-400">{completedMissions}/{totalTopicMissions}</span>
                 </div>
 

@@ -15,7 +15,7 @@ export default function Leaderboard() {
           BDS Leaderboard
         </h2>
         <p className="text-xs md:text-sm text-gray-400 mt-1">
-          Top scores across Shafer's Oral Pathology curriculum
+          Top scores across Neville's Oral Pathology curriculum
         </p>
       </div>
 

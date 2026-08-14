@@ -63,7 +63,7 @@ export function parseTextDocumentToMCQs(text) {
         q: match[2],
         options: [],
         correct: 0,
-        explanation: 'Shafer\'s Pathology Reference',
+        explanation: 'Neville\'s Pathology Reference',
       };
     } else if (line.match(/^([A-D])[\.\)]\s*(.+)/i) && currentQ) {
       const match = line.match(/^([A-D])[\.\)]\s*(.+)/i);

@@ -1,6 +1,6 @@
 // ============================================================
 // HistoPath India — Topic Definitions
-// 6 topics from Shafer's Textbook of Oral Pathology
+// 6 topics from Neville's Oral & Maxillofacial Pathology
 // Each topic: 2 stages × 3 missions = 6 missions per topic
 // ============================================================
 
@@ -10,7 +10,7 @@ export const TOPICS = [
     title: 'Oral Mucosa',
     icon: '🔬',
     description: 'Microscopic structure of lining, masticatory, and specialized mucosa',
-    shaferRef: "Shafer's Ch. 12 — Oral Mucous Membrane",
+    textbookRef: "Neville Ch. 1 — Developmental Defects of the Oral Region",
     accentColor: 'hsl(330, 70%, 55%)',
     stages: [
       {
@@ -117,7 +117,7 @@ export const TOPICS = [
     title: 'Tooth Development',
     icon: '🦷',
     description: 'Odontogenesis from bud stage through root formation',
-    shaferRef: "Shafer's Ch. 1 — Development & Growth of Teeth",
+    textbookRef: "Neville Ch. 2 — Abnormalities of Teeth",
     accentColor: 'hsl(200, 70%, 55%)',
     stages: [
       {
@@ -224,7 +224,7 @@ export const TOPICS = [
     title: 'Tooth Structure',
     icon: '🔎',
     description: 'Histology of enamel, dentin, pulp, and cementum',
-    shaferRef: "Shafer's Ch. 2–5 — Enamel, Dentin, Pulp, Cementum",
+    textbookRef: "Neville Ch. 2–3 — Tooth Structure & Pulp",
     accentColor: 'hsl(170, 70%, 45%)',
     stages: [
       {
@@ -331,7 +331,7 @@ export const TOPICS = [
     title: 'Salivary Glands',
     icon: '💧',
     description: 'Major and minor salivary gland histology and duct systems',
-    shaferRef: "Shafer's Ch. 7 — Salivary Glands",
+    textbookRef: "Neville Ch. 11 — Salivary Gland Pathology",
     accentColor: 'hsl(210, 70%, 55%)',
     stages: [
       {
@@ -437,7 +437,7 @@ export const TOPICS = [
     title: 'Periodontium',
     icon: '🦴',
     description: 'PDL, alveolar bone, gingiva, and junctional epithelium',
-    shaferRef: "Shafer's Ch. 8–10 — Periodontium",
+    textbookRef: "Neville Ch. 5 — Periodontal Diseases",
     accentColor: 'hsl(25, 70%, 55%)',
     stages: [
       {
@@ -543,7 +543,7 @@ export const TOPICS = [
     title: 'TMJ & Bone',
     icon: '💀',
     description: 'TMJ histology, bone biology, and cartilage types',
-    shaferRef: "Shafer's Ch. 11 — Bone, TMJ",
+    textbookRef: "Neville Ch. 23 — Bone Pathology & TMJ",
     accentColor: 'hsl(270, 60%, 55%)',
     stages: [
       {

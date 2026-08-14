@@ -119,7 +119,7 @@ export default function MissionView({ missionId, onBack, onCompleteMission }) {
               : 'text-gray-400 hover:text-white hover:bg-white/5'
           }`}
         >
-          <FileText className="w-4 h-4" /> 2. Shafer's Quiz ({questions.length} MCQs)
+          <FileText className="w-4 h-4" /> 2. Neville's Quiz ({questions.length} MCQs)
         </button>
       </div>
 

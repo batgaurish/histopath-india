@@ -30,7 +30,7 @@ export default function TopicDetailView({ topicId, onBack, onSelectMission }) {
               {topic.title}
             </h2>
             <p className="text-xs md:text-sm text-gray-400">
-              {topic.shaferRef} — {topic.description}
+              {topic.textbookRef} — {topic.description}
             </p>
           </div>
         </div>

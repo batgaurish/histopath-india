@@ -12,7 +12,7 @@ export default function AboutView() {
           About HistoPath India
         </h2>
         <p className="text-sm text-gray-400 max-w-xl">
-          An interactive, game-based learning platform for Indian Dental Students (BDS / MDS) aligned with Shafer's Textbook of Oral Pathology.
+          An interactive, game-based learning platform for Indian Dental Students (BDS / MDS) aligned with Neville's Textbook of Oral & Maxillofacial Pathology.
         </p>
       </div>
 
@@ -41,7 +41,7 @@ export default function AboutView() {
               <Award className="w-4 h-4 text-amber-400" /> Standard Reference
             </h4>
             <p className="text-xs text-gray-400">
-              Based on Shafer's Textbook of Oral Pathology (9th & 10th South Asia Edition).
+              Based on Neville's Oral & Maxillofacial Pathology (6th Edition).
             </p>
           </div>
         </div>

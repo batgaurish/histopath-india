@@ -10,16 +10,79 @@ import {
   getCustomData 
 } from '../utils/customContent';
 import { Audio } from '../utils/audio';
-import { Settings, PlusCircle, Upload, Check, FileText, Image as ImageIcon, Sparkles, BookOpen } from 'lucide-react';
+import { Settings, PlusCircle, Upload, Check, FileText, Image as ImageIcon, Sparkles, BookOpen, Lock, ShieldCheck, LogOut } from 'lucide-react';
+
+const ADMIN_PASSPHRASE = 'histopath-admin-2026';
+
+function AdminLogin({ onLogin }) {
+  const [passphrase, setPassphrase] = useState('');
+  const [error, setError] = useState('');
+  const [shake, setShake] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (passphrase === ADMIN_PASSPHRASE) {
+      sessionStorage.setItem('adminAuthed', 'true');
+      onLogin();
+    } else {
+      setError('Invalid credentials. Contact your professor for access.');
+      setShake(true);
+      setTimeout(() => setShake(false), 600);
+    }
+  };
+
+  return (
+    <div className="w-full max-w-md mx-auto px-4 py-16 flex flex-col items-center gap-8">
+      <div className="flex flex-col items-center gap-4 text-center">
+        <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-purple-600 to-rose-500 flex items-center justify-center shadow-2xl shadow-purple-500/30">
+          <Lock className="w-10 h-10 text-white" />
+        </div>
+        <h2 className="font-heading font-extrabold text-3xl text-gradient">
+          Admin Access Required
+        </h2>
+        <p className="text-sm text-gray-400 max-w-sm">
+          This portal is restricted to professors and administrators. Enter your passphrase to continue.
+        </p>
+      </div>
+
+      <form onSubmit={handleSubmit} className={`w-full glass-panel border border-white/10 p-8 rounded-3xl flex flex-col gap-5 shadow-2xl ${shake ? 'animate-shake' : ''}`}>
+        <div className="flex flex-col gap-2">
+          <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider">Admin Passphrase</label>
+          <input
+            type="password"
+            value={passphrase}
+            onChange={(e) => { setPassphrase(e.target.value); setError(''); }}
+            placeholder="Enter admin passphrase..."
+            autoFocus
+            className="w-full px-5 py-4 rounded-2xl bg-slate-900 border border-white/10 text-white text-sm font-medium focus:outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-400/30 transition-all"
+          />
+        </div>
+
+        {error && (
+          <div className="p-3 rounded-xl bg-rose-950/80 border border-rose-500/50 text-rose-300 text-xs font-bold flex items-center gap-2">
+            ⚠️ {error}
+          </div>
+        )}
+
+        <button
+          type="submit"
+          className="w-full py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-rose-500 hover:from-purple-500 hover:to-rose-400 text-white font-extrabold text-sm shadow-xl shadow-purple-500/20 cursor-pointer transition-all hover:scale-[1.01] flex items-center justify-center gap-2"
+        >
+          <ShieldCheck className="w-5 h-5" /> Authenticate & Enter Portal
+        </button>
+      </form>
+    </div>
+  );
+}
 
 export default function AdminView({ navigateTo }) {
-  const [activeTab, setActiveTab] = useState('creator'); // 'creator' | 'uploader' | 'manage'
+  const [isAuthed, setIsAuthed] = useState(() => sessionStorage.getItem('adminAuthed') === 'true');
+  const [activeTab, setActiveTab] = useState('creator');
   const [selectedTopicId, setSelectedTopicId] = useState(TOPICS[0].id);
   const missions = getTopicMissions(selectedTopicId);
   const [selectedMissionId, setSelectedMissionId] = useState(missions[0]?.id || 'om_m1');
 
-  // Creator state
-  const [contentType, setContentType] = useState('mcq'); // 'mcq' | 'matching' | 'crossword'
+  const [contentType, setContentType] = useState('mcq');
   const [mcqData, setMcqData] = useState({
     q: '',
     options: ['', '', '', ''],
@@ -29,12 +92,10 @@ export default function AdminView({ navigateTo }) {
   const [matchData, setMatchData] = useState({ image: '', label: '' });
   const [crosswordData, setCrosswordData] = useState({ word: '', clue: '' });
 
-  // Uploader state
   const [uploadedText, setUploadedText] = useState('');
   const [parsedPreview, setParsedPreview] = useState(null);
   const [slidePreview, setSlidePreview] = useState(null);
 
-  // Success toast
   const [statusMessage, setStatusMessage] = useState('');
 
   const showStatus = (msg) => {
@@ -43,7 +104,16 @@ export default function AdminView({ navigateTo }) {
     setTimeout(() => setStatusMessage(''), 3000);
   };
 
-  // Handle Manual Add MCQ
+  const handleLogout = () => {
+    sessionStorage.removeItem('adminAuthed');
+    setIsAuthed(false);
+  };
+
+  // ——— If not authenticated, show login gate ———
+  if (!isAuthed) {
+    return <AdminLogin onLogin={() => setIsAuthed(true)} />;
+  }
+
   const handleAddMcq = (e) => {
     e.preventDefault();
     if (!mcqData.q || mcqData.options.some(o => !o)) return;
@@ -52,14 +122,13 @@ export default function AdminView({ navigateTo }) {
       q: mcqData.q,
       options: mcqData.options,
       correct: parseInt(mcqData.correct, 10),
-      explanation: mcqData.explanation || 'Shafer\'s Pathology Reference',
+      explanation: mcqData.explanation || 'Neville\'s Pathology Reference',
     });
 
     setMcqData({ q: '', options: ['', '', '', ''], correct: 0, explanation: '' });
     showStatus('✓ Added new MCQ question successfully!');
   };
 
-  // Handle Manual Add Matching Pair
   const handleAddMatching = (e) => {
     e.preventDefault();
     if (!matchData.image || !matchData.label) return;
@@ -73,7 +142,6 @@ export default function AdminView({ navigateTo }) {
     showStatus('✓ Added new Matching Pair successfully!');
   };
 
-  // Handle Manual Add Crossword Word
   const handleAddCrossword = (e) => {
     e.preventDefault();
     if (!crosswordData.word || !crosswordData.clue) return;
@@ -87,7 +155,6 @@ export default function AdminView({ navigateTo }) {
     showStatus('✓ Added new Crossword Word successfully!');
   };
 
-  // File Upload Handlers
   const handleDocFileUpload = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -116,7 +183,6 @@ export default function AdminView({ navigateTo }) {
       const dataUrl = event.target.result;
       setSlidePreview(dataUrl);
 
-      // Save custom slide image to mission
       const custom = getCustomData();
       if (!custom.missions[selectedMissionId]) {
         custom.missions[selectedMissionId] = {};
@@ -157,8 +223,16 @@ export default function AdminView({ navigateTo }) {
     <div className="w-full max-w-5xl mx-auto px-4 py-6 md:py-8 flex flex-col gap-8">
       {/* Portal Header */}
       <div className="flex flex-col gap-2">
-        <div className="inline-flex items-center gap-2 text-xs font-semibold text-purple-400 uppercase tracking-wider">
-          <Settings className="w-4 h-4" /> Professor & Admin Game Creator Portal
+        <div className="flex items-center justify-between">
+          <div className="inline-flex items-center gap-2 text-xs font-semibold text-purple-400 uppercase tracking-wider">
+            <Settings className="w-4 h-4" /> Professor & Admin Game Creator Portal
+          </div>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 hover:bg-rose-500/20 text-xs font-bold cursor-pointer transition-all"
+          >
+            <LogOut className="w-3.5 h-3.5" /> Sign Out
+          </button>
         </div>
         <h2 className="font-heading font-extrabold text-2xl sm:text-3xl text-gradient">
           Content & Game Authoring Engine
@@ -209,7 +283,7 @@ export default function AdminView({ navigateTo }) {
               className="px-4 py-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs font-semibold focus:outline-none focus:border-purple-400"
             >
               {TOPICS.map(t => (
-                <option key={t.id} value={t.id}>{t.title} ({t.shaferRef})</option>
+                <option key={t.id} value={t.id}>{t.title} ({t.textbookRef})</option>
               ))}
             </select>
           </div>
@@ -318,7 +392,7 @@ export default function AdminView({ navigateTo }) {
                 </div>
 
                 <div className="flex flex-col gap-1 flex-2">
-                  <label className="text-xs font-semibold text-gray-300">Shafer's Textbook Explanation</label>
+                  <label className="text-xs font-semibold text-gray-300">Neville's Textbook Explanation</label>
                   <input
                     type="text"
                     value={mcqData.explanation}
@@ -467,7 +541,7 @@ export default function AdminView({ navigateTo }) {
                 <span>Upload Histopathological Slide Image</span>
               </div>
               <p className="text-xs text-gray-400">
-                Upload a microscopic tissue slide image (.jpg, .png) to convert it into a sliced 3x3 interactive Jigsaw Puzzle!
+                Upload a microscopic tissue slide image (.jpg, .png) to convert it into a sliced 3×3 interactive Jigsaw Puzzle!
               </p>
 
               <input

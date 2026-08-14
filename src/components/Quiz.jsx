@@ -74,7 +74,7 @@ export default function Quiz({ questions = [], onComplete }) {
             {stars === 3 ? 'Perfect Score!' : stars === 2 ? 'Great Job!' : stars === 1 ? 'Good Effort!' : 'Keep Practicing!'}
           </h2>
           <p className="text-sm text-gray-400">
-            You completed Shafer's Oral Pathology Quiz
+            You completed Neville's Oral Pathology Quiz
           </p>
         </div>
 
@@ -117,7 +117,7 @@ export default function Quiz({ questions = [], onComplete }) {
       {/* Progress & Header */}
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between text-xs font-semibold text-gray-400">
-          <span>Shafer's MCQ {currentIdx + 1} of {questions.length}</span>
+          <span>Neville's MCQ {currentIdx + 1} of {questions.length}</span>
           <span className="text-teal-400 font-bold">Score: {score}</span>
         </div>
 
@@ -188,7 +188,7 @@ export default function Quiz({ questions = [], onComplete }) {
         {showExplanation && (
           <div className="mt-2 p-4 rounded-xl bg-purple-950/40 border border-purple-500/30 text-xs md:text-sm text-purple-200 flex flex-col gap-2 animate-in fade-in duration-200">
             <div className="flex items-center gap-2 font-bold text-amber-300 text-xs uppercase tracking-wider">
-              <BookOpen className="w-4 h-4" /> Shafer's Pathology Explanation
+              <BookOpen className="w-4 h-4" /> Neville's Pathology Explanation
             </div>
             <p className="leading-relaxed">{currentQ?.exp}</p>
           </div>

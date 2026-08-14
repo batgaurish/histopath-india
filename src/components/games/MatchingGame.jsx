@@ -97,7 +97,7 @@ export default function MatchingGame({ pairs = [], onComplete, giveHintRef }) {
                 Stage Completed!
               </h3>
               <p className="text-xs text-gray-300 mt-1">
-                All histological features correctly matched with Shafer's pathology classifications!
+                All histological features correctly matched with Neville's pathology classifications!
               </p>
             </div>
             <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-400/10 border border-amber-400/30 text-amber-300 font-bold text-sm">
@@ -107,7 +107,7 @@ export default function MatchingGame({ pairs = [], onComplete, giveHintRef }) {
               onClick={handleFinish}
               className="w-full py-3.5 rounded-xl bg-gradient-to-r from-teal-400 to-purple-600 text-slate-950 font-extrabold text-sm shadow-xl shadow-teal-500/20 cursor-pointer hover:scale-[1.02] transition-transform"
             >
-              Proceed to Shafer's MCQs Quiz →
+              Proceed to Neville's MCQs Quiz →
             </button>
           </div>
         </div>

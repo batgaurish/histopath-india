@@ -1,6 +1,6 @@
 // ============================================================
 // HistoPath India — Question Bank
-// 5 MCQs per mission, aligned with Shafer's Textbook
+// 5 MCQs per mission, aligned with Neville's Oral & Maxillofacial Pathology
 // 36 missions × 5 questions = 180 questions
 // ============================================================
 
@@ -283,7 +283,7 @@ export function getQuestions(missionId) {
     q: q.q,
     options: q.options || ['Option A', 'Option B', 'Option C', 'Option D'],
     a: q.a !== undefined ? q.a : (q.correct !== undefined ? q.correct : 0),
-    exp: q.exp || q.explanation || 'Shafer\'s Textbook Reference',
+    exp: q.exp || q.explanation || 'Neville\'s Oral & Maxillofacial Pathology Reference',
   }));
 }
 

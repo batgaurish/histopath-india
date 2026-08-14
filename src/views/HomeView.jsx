@@ -1,9 +1,11 @@
 import React from 'react';
 import { Microscope, Play, Star, BookOpen, Puzzle, Award, CheckCircle2 } from 'lucide-react';
-import { getCurrentPlayer, getOverallStats } from '../utils/storage';
+import { getCurrentPlayer, getOverallStats, getAvatar } from '../utils/storage';
+import { AvatarSVG } from '../components/AvatarEditor';
 
 export default function HomeView({ navigateTo }) {
   const player = getCurrentPlayer() || { name: 'Dental Student' };
+  const avatar = getAvatar() || { skinTone: 0, hairStyle: 0, hairColor: 0, accessory: 0, eyeStyle: 0 };
   const stats = getOverallStats();
 
   return (
@@ -18,7 +20,7 @@ export default function HomeView({ navigateTo }) {
           <div className="lg:col-span-8 flex flex-col items-start gap-4">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-400/10 border border-teal-400/30 text-teal-300 text-xs font-semibold">
               <Microscope className="w-4 h-4 text-amber-400" />
-              <span>Shafer's Textbook Aligned Curriculum</span>
+              <span>Neville's Textbook Aligned Curriculum</span>
             </div>
 
             <h1 className="font-heading font-black text-3xl sm:text-4xl md:text-5xl tracking-tight text-white leading-tight">
@@ -43,8 +45,15 @@ export default function HomeView({ navigateTo }) {
           {/* Player Quick Stats Profile Card */}
           <div className="lg:col-span-4 glass-panel border border-white/10 p-6 rounded-2xl flex flex-col gap-4 bg-slate-900/60">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-slate-800 border border-teal-400/40 flex items-center justify-center text-2xl shadow-inner">
-                👨‍⚕️
+              <div className="w-12 h-12 rounded-xl bg-slate-800 border border-teal-400/40 flex items-center justify-center overflow-hidden shadow-inner p-1">
+                <AvatarSVG
+                  skinTone={avatar.skinTone || 0}
+                  hairStyle={avatar.hairStyle || avatar.hair || 0}
+                  hairColor={avatar.hairColor || 0}
+                  accessory={avatar.accessory || 0}
+                  eyeStyle={avatar.eyeStyle || 0}
+                  size={44}
+                />
               </div>
               <div>
                 <h3 className="font-heading font-bold text-base text-white">{player.name}</h3>
@@ -89,7 +98,7 @@ export default function HomeView({ navigateTo }) {
           <div className="w-10 h-10 rounded-xl bg-purple-400/10 border border-purple-400/30 flex items-center justify-center text-purple-300">
             <BookOpen className="w-5 h-5" />
           </div>
-          <h4 className="font-heading font-bold text-base text-white">180 Shafer's MCQs</h4>
+          <h4 className="font-heading font-bold text-base text-white">180 Neville's MCQs</h4>
           <p className="text-xs text-gray-400 leading-relaxed">
             Comprehensive quiz bank with instant textbook explanations for every single option.
           </p>
