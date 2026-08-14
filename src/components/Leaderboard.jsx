@@ -12,10 +12,10 @@ export default function Leaderboard() {
           <Trophy className="w-6 h-6" />
         </div>
         <h2 className="font-heading font-extrabold text-2xl md:text-3xl text-gradient">
-          BDS Leaderboard
+          Oral Pathology Leaderboard
         </h2>
         <p className="text-xs md:text-sm text-gray-400 mt-1">
-          Top scores across Neville's Oral Pathology curriculum
+          Top scores across Neville's Oral &amp; Maxillofacial Pathology curriculum (BDS, Interns &amp; PG Residents)
         </p>
       </div>
 

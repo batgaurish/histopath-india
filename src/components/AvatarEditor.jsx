@@ -208,11 +208,21 @@ export function AvatarSVG({ skinTone = 0, hairStyle = 0, hairColor = 0, accessor
   );
 }
 
+const ACADEMIC_ROLES = [
+  '3rd Year BDS Student',
+  'Final Year BDS Student',
+  'Dental Intern (CRRI)',
+  'MDS PG Resident (Oral Pathology)',
+  'MDS PG Resident (OMR / OMFS)',
+  'Oral Pathologist / Faculty',
+];
+
 export default function AvatarEditor({ onSave }) {
-  const player = getCurrentPlayer() || { name: 'Dental Student' };
+  const player = getCurrentPlayer() || { name: 'Dental Scholar', role: '3rd Year BDS Student' };
   const initialAvatar = getAvatar() || { skinTone: 0, hairStyle: 0, hairColor: 0, accessory: 0, eyeStyle: 0 };
 
-  const [name, setName] = useState(player.name || 'Dental Student');
+  const [name, setName] = useState(player.name || 'Dental Scholar');
+  const [role, setRole] = useState(player.role || '3rd Year BDS Student');
   const [avatar, setAvatar] = useState(initialAvatar);
   const [saved, setSaved] = useState(false);
 
@@ -220,11 +230,11 @@ export default function AvatarEditor({ onSave }) {
     Audio.playStar();
     saveAvatar(avatar);
     if (player?.id) {
-      updatePlayer(player.id, { name });
+      updatePlayer(player.id, { name, role });
     }
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
-    if (onSave) onSave({ name, avatar });
+    if (onSave) onSave({ name, role, avatar });
   };
 
   const updateAvatar = (key, value) => {
@@ -238,12 +248,12 @@ export default function AvatarEditor({ onSave }) {
         <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-teal-400/10 border border-teal-400/30 text-teal-300 mb-2">
           <User className="w-5 h-5" />
         </div>
-        <h2 className="font-heading font-extrabold text-2xl text-gradient">Dental Student Profile</h2>
-        <p className="text-xs text-gray-400">Customize your avatar & identity</p>
+        <h2 className="font-heading font-extrabold text-2xl text-gradient">Candidate Profile &amp; Avatar</h2>
+        <p className="text-xs text-gray-400">Oral &amp; Maxillofacial Pathology Academic Identity</p>
       </div>
 
       {/* Avatar Live Interactive Preview */}
-      <div className="flex flex-col items-center gap-2 py-2">
+      <div className="flex flex-col items-center gap-1.5 py-2">
         <div className="rounded-full border-4 border-teal-400/60 shadow-2xl shadow-teal-500/30 p-3 bg-gradient-to-br from-slate-800 to-slate-900 transition-all duration-300 hover:scale-105">
           <AvatarSVG
             skinTone={avatar.skinTone || 0}
@@ -255,11 +265,12 @@ export default function AvatarEditor({ onSave }) {
           />
         </div>
         <span className="text-sm font-bold text-teal-300">{name}</span>
+        <span className="text-xs font-semibold px-3 py-0.5 rounded-full bg-purple-500/20 border border-purple-400/40 text-purple-300">{role}</span>
       </div>
 
-      {/* Student Name Field */}
+      {/* Candidate Name Field */}
       <div className="w-full flex flex-col gap-1.5">
-        <label className="text-xs font-semibold text-gray-300">Student Name</label>
+        <label className="text-xs font-semibold text-gray-300">Full Name</label>
         <input
           type="text"
           value={name}
@@ -267,6 +278,20 @@ export default function AvatarEditor({ onSave }) {
           placeholder="Enter your name"
           className="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-white/10 text-white text-sm focus:outline-none focus:border-teal-400 transition-colors"
         />
+      </div>
+
+      {/* Academic / Clinical Designation Selector */}
+      <div className="w-full flex flex-col gap-1.5">
+        <label className="text-xs font-semibold text-gray-300">Academic / Clinical Level</label>
+        <select
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          className="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-white/10 text-white text-xs font-bold focus:outline-none focus:border-teal-400 cursor-pointer"
+        >
+          {ACADEMIC_ROLES.map(r => (
+            <option key={r} value={r}>{r}</option>
+          ))}
+        </select>
       </div>
 
       {/* Skin Tone Selector */}

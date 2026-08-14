@@ -32,7 +32,7 @@ export default function AboutView() {
               <GraduationCap className="w-4 h-4 text-purple-400" /> Target Audience
             </h4>
             <p className="text-xs text-gray-400">
-              1st & 2nd Year BDS Students, NEET-MDS Aspirants, and Oral Pathology Residents across dental colleges in India.
+              3rd & Final Year BDS Students, Dental Interns (CRRI), NEET-MDS Aspirants, and MDS Postgraduate Residents (Oral Pathology, OMR, OMFS) across dental institutions.
             </p>
           </div>
 

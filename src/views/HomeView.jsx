@@ -28,7 +28,7 @@ export default function HomeView({ navigateTo }) {
             </h1>
 
             <p className="text-sm sm:text-base text-gray-300 max-w-2xl leading-relaxed">
-              Master Oral Histology & Pathology through interactive histological matching games, microscopic jigsaw puzzles, tissue difference spotters, crosswords, and board-exam style MCQs.
+              Master Oral &amp; Maxillofacial Pathology for 3rd &amp; Final Year BDS, Dental Interns (CRRI), and MDS / PG Residents through interactive histological matching games, microscopic jigsaw puzzles, challenging crosswords, and high-yield Neville-aligned MCQs.
             </p>
 
             {/* Quick Action Button */}
@@ -37,7 +37,7 @@ export default function HomeView({ navigateTo }) {
                 onClick={() => navigateTo('topics')}
                 className="flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-teal-400 to-purple-600 hover:from-teal-300 hover:to-purple-500 text-slate-950 font-extrabold text-base shadow-xl shadow-teal-500/25 cursor-pointer transition-all hover:scale-105 active:scale-95"
               >
-                <Play className="w-5 h-5 fill-slate-950" /> Start Learning Now
+                <Play className="w-5 h-5 fill-slate-950" /> Start Pathology Quests
               </button>
             </div>
           </div>
@@ -57,7 +57,7 @@ export default function HomeView({ navigateTo }) {
               </div>
               <div>
                 <h3 className="font-heading font-bold text-base text-white">{player.name}</h3>
-                <span className="text-xs text-teal-400 font-medium">BDS Student Candidate</span>
+                <span className="text-xs text-teal-400 font-medium">{player.role || '3rd / Final Year BDS Candidate'}</span>
               </div>
             </div>
 
