@@ -63,8 +63,8 @@ class ErrorBoundary extends React.Component {
 
 export default function App() {
   const [currentView, setCurrentView] = useState('home'); 
-  const [selectedTopicId, setSelectedTopicId] = useState('oral_mucosa');
-  const [selectedMissionId, setSelectedMissionId] = useState('om_m1');
+  const [selectedTopicId, setSelectedTopicId] = useState('odontogenic_tumors_cysts');
+  const [selectedMissionId, setSelectedMissionId] = useState('otc_m1');
 
   // Parse Hash URL on load and hashchange
   useEffect(() => {

@@ -8,134 +8,232 @@ import { Check, Sparkles, Trophy } from 'lucide-react';
 // ═══════════════════════════════════════════════════════════
 
 const HISTOLOGY_SLIDES = {
-  om: `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
-    <defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fce7f3"/><stop offset="1" stop-color="#831843"/></linearGradient></defs>
-    <rect width="600" height="600" fill="url(#bg)"/>
-    <rect y="0" width="600" height="60" fill="#f9a8d4" opacity=".8"/>
-    <text x="300" y="38" fill="#831843" font-size="16" font-weight="bold" text-anchor="middle" font-family="sans-serif">Stratum Corneum (Keratinized Layer)</text>
-    <path d="M0 60 Q80 90 160 65 T320 75 T480 60 T600 72 L600 140 L0 140Z" fill="#ec4899" opacity=".7"/>
-    <text x="300" y="110" fill="#fff" font-size="14" font-weight="bold" text-anchor="middle" font-family="sans-serif">Stratum Granulosum</text>
-    <rect y="140" width="600" height="120" fill="#be185d" opacity=".8"/>
-    ${[80,180,280,380,500].map(x=>`<ellipse cx="${x}" cy="${185}" rx="18" ry="12" fill="#9d174d" stroke="#f472b6" stroke-width="1.5"/><circle cx="${x}" cy="${185}" r="5" fill="#4a044e"/>`).join('')}
-    <text x="300" y="235" fill="#fbcfe8" font-size="15" font-weight="bold" text-anchor="middle" font-family="sans-serif">Stratum Spinosum (Prickle Cell Layer)</text>
-    <path d="M0 260 Q100 290 200 265 T400 280 T600 260 L600 310 L0 310Z" fill="#9d174d"/>
-    ${[60,150,240,340,440,540].map(x=>`<ellipse cx="${x}" cy="${290}" rx="14" ry="9" fill="#701a75" stroke="#d946ef" stroke-width="1"/><circle cx="${x}" cy="${290}" r="4" fill="#3b0764"/>`).join('')}
-    <text x="300" y="305" fill="#e879f9" font-size="13" font-weight="bold" text-anchor="middle" font-family="sans-serif">Stratum Basale</text>
-    <path d="M0 310 Q50 340 100 315 T200 330 T300 310 T400 325 T500 310 T600 320 L600 320 L0 320Z" fill="#7c3aed" stroke="#a855f7" stroke-width="2"/>
-    <text x="300" y="345" fill="#ddd6fe" font-size="11" text-anchor="middle" font-family="sans-serif">— Basement Membrane —</text>
-    <rect y="355" width="600" height="245" fill="#581c87" opacity=".85"/>
-    ${[100,250,400,520].map(x=>`<circle cx="${x}" cy="${420}" r="22" fill="none" stroke="#c084fc" stroke-width="1.5" stroke-dasharray="4 3"/><circle cx="${x}" cy="${420}" r="8" fill="#f472b6" opacity=".6"/>`).join('')}
-    <text x="300" y="470" fill="#d8b4fe" font-size="15" font-weight="bold" text-anchor="middle" font-family="sans-serif">Lamina Propria</text>
-    ${[80,200,350,480].map(x=>`<path d="M${x} 500 Q${x+20} 480 ${x+40} 510 T${x+80} 500" fill="none" stroke="#f87171" stroke-width="2" opacity=".6"/>`).join('')}
-    <text x="300" y="560" fill="#fca5a5" font-size="12" text-anchor="middle" font-family="sans-serif">Blood Vessels & Capillary Loops</text>
+  otc: `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+    <defs><linearGradient id="bg_otc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e1b4b"/><stop offset="1" stop-color="#312e81"/></linearGradient></defs>
+    <rect width="600" height="600" fill="url(#bg_otc)"/>
+    <text x="300" y="38" fill="#a5b4fc" font-size="18" font-weight="bold" text-anchor="middle" font-family="sans-serif">Ameloblastoma &amp; OKC (Neville Ch. 15)</text>
+    
+    <!-- Ameloblastoma Follicle 1 -->
+    <path d="M 60 80 Q 280 60 280 260 Q 180 340 60 260 Z" fill="#3730a3" stroke="#818cf8" stroke-width="3"/>
+    <!-- Peripheral Tall Columnar Palisading (Vickers-Gorlin) -->
+    ${[80,110,140,170,200,230,260].map(x=>`<rect x="${x}" y="75" width="16" height="28" rx="3" fill="#4338ca" stroke="#a5b4fc" stroke-width="1.5"/><circle cx="${x+8}" cy="85" r="4" fill="#e0e7ff"/>`).join('')}
+    <text x="170" y="140" fill="#c7d2fe" font-size="13" font-weight="bold" text-anchor="middle" font-family="sans-serif">Reversed Nuclear Polarity</text>
+    <!-- Central Stellate Reticulum -->
+    ${[100,150,200,240].map(x=>`<polygon points="${x},180 ${x+12},200 ${x-12},200" fill="#6366f1" opacity=".7"/><circle cx="${x}" cy="195" r="3" fill="#e0e7ff"/>`).join('')}
+    <text x="170" y="240" fill="#e0e7ff" font-size="14" font-weight="bold" text-anchor="middle" font-family="sans-serif">Stellate Reticulum Core</text>
+
+    <!-- OKC Wavy Parakeratin Cyst Wall -->
+    <rect x="330" y="80" width="230" height="240" rx="12" fill="#1e1b4b" stroke="#c084fc" stroke-width="2.5"/>
+    <path d="M 340 110 Q 380 95 420 115 T 500 100 T 550 115" fill="none" stroke="#f472b6" stroke-width="6"/>
+    <text x="445" y="145" fill="#fbcfe8" font-size="13" font-weight="bold" text-anchor="middle" font-family="sans-serif">Wavy Corrugated Parakeratin</text>
+    ${[350,380,410,440,470,500,530].map(x=>`<rect x="${x}" y="160" width="14" height="24" rx="2" fill="#581c87" stroke="#d8b4fe" stroke-width="1"/><circle cx="${x+7}" cy="168" r="3" fill="#fae8ff"/>`).join('')}
+    <text x="445" y="215" fill="#e9d5ff" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">Tombstone Basal Layer (6-8 cells)</text>
+    <text x="445" y="270" fill="#f43f5e" font-size="12" text-anchor="middle" font-family="sans-serif">Satellite Daughter Microcysts</text>
+
+    <!-- Bottom Stroma & Rushton Bodies -->
+    <rect y="360" width="600" height="240" fill="#312e81" opacity=".9"/>
+    <text x="300" y="395" fill="#fbcfe8" font-size="15" font-weight="bold" text-anchor="middle" font-family="sans-serif">Fibrovascular Connective Tissue Stroma</text>
+    ${[100,250,400,520].map(x=>`<path d="M ${x} 440 Q ${x+30} 410 ${x+60} 450 T ${x+100} 430" fill="none" stroke="#fb7185" stroke-width="4"/><text x="${x+50}" y="470" fill="#fda4af" font-size="11" text-anchor="middle" font-family="sans-serif">Rushton Body</text>`).join('')}
+    ${[150,350,500].map(x=>`<circle cx="${x}" cy="${530}" r="22" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 3"/><circle cx="${x}" cy="${530}" r="8" fill="#e11d48" opacity=".7"/>`).join('')}
+    <text x="300" y="575" fill="#bae6fd" font-size="12" text-anchor="middle" font-family="sans-serif">Angiogenesis &amp; Chronic Inflammatory Infiltrate</text>
   </svg>`)}`,
 
-  td: `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
-    <defs><radialGradient id="eg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#dbeafe"/><stop offset="1" stop-color="#1e3a5f"/></radialGradient></defs>
-    <rect width="600" height="600" fill="#0f172a"/>
-    <circle cx="300" cy="280" r="200" fill="url(#eg)" opacity=".9"/>
-    <circle cx="300" cy="280" r="140" fill="#bfdbfe" stroke="#3b82f6" stroke-width="2"/>
-    <text x="300" y="260" fill="#1e3a8a" font-size="16" font-weight="bold" text-anchor="middle" font-family="sans-serif">Inner Enamel</text>
-    <text x="300" y="280" fill="#1e3a8a" font-size="16" font-weight="bold" text-anchor="middle" font-family="sans-serif">Epithelium</text>
-    <circle cx="300" cy="280" r="80" fill="#93c5fd" stroke="#2563eb" stroke-width="2"/>
-    <text x="300" y="275" fill="#1e40af" font-size="14" font-weight="bold" text-anchor="middle" font-family="sans-serif">Stellate</text>
-    <text x="300" y="293" fill="#1e40af" font-size="14" font-weight="bold" text-anchor="middle" font-family="sans-serif">Reticulum</text>
-    <circle cx="300" cy="280" r="40" fill="#60a5fa" stroke="#1d4ed8" stroke-width="2"/>
-    <text x="300" y="284" fill="#fff" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">Dental Papilla</text>
-    <text x="300" y="70" fill="#93c5fd" font-size="18" font-weight="bold" text-anchor="middle" font-family="sans-serif">Bell Stage — Enamel Organ</text>
-    <text x="300" y="520" fill="#60a5fa" font-size="14" text-anchor="middle" font-family="sans-serif">Outer Enamel Epithelium</text>
-    <path d="M300 480 L300 500" stroke="#60a5fa" stroke-width="1.5"/>
-    <text x="300" y="560" fill="#94a3b8" font-size="13" text-anchor="middle" font-family="sans-serif">Dental Follicle (Ectomesenchyme)</text>
-    ${[140,200,260,340,400,460].map(x=>`<circle cx="${x}" cy="${280}" r="3" fill="#1e40af" opacity=".5"/>`).join('')}
+  ep: `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+    <defs><linearGradient id="bg_ep" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#831843"/><stop offset="1" stop-color="#4c0519"/></linearGradient></defs>
+    <rect width="600" height="600" fill="url(#bg_ep)"/>
+    <text x="300" y="38" fill="#fbcfe8" font-size="18" font-weight="bold" text-anchor="middle" font-family="sans-serif">Well-Differentiated OSCC (Neville Ch. 10)</text>
+
+    <!-- Invasive Epithelial Island 1 with Keratin Pearl -->
+    <path d="M 50 80 Q 280 50 280 270 Q 180 330 50 260 Z" fill="#9d174d" stroke="#f472b6" stroke-width="2"/>
+    <!-- Concentric Keratin Pearl -->
+    <circle cx="160" cy="180" r="55" fill="#f43f5e" stroke="#fb7185" stroke-width="3"/>
+    <circle cx="160" cy="180" r="40" fill="#fda4af" stroke="#f43f5e" stroke-width="2"/>
+    <circle cx="160" cy="180" r="25" fill="#ffe4e6" stroke="#fb7185" stroke-width="2"/>
+    <circle cx="160" cy="180" r="10" fill="#fff"/>
+    <text x="160" y="260" fill="#ffe4e6" font-size="13" font-weight="bold" text-anchor="middle" font-family="sans-serif">Concentric Keratin Pearl</text>
+
+    <!-- Cellular Atypia & Mitoses -->
+    <rect x="330" y="80" width="230" height="230" rx="12" fill="#701a75" stroke="#e879f9" stroke-width="2"/>
+    ${[360,420,480,530].map(x=>`<ellipse cx="${x}" cy="120" rx="14" ry="10" fill="#4a044e" stroke="#f0abfc" stroke-width="1.5"/><circle cx="${x}" cy="120" r="4" fill="#fae8ff"/>`).join('')}
+    <text x="445" y="160" fill="#f5d0fe" font-size="13" font-weight="bold" text-anchor="middle" font-family="sans-serif">Nuclear Pleomorphism</text>
+    <!-- Atypical Mitosis -->
+    <polygon points="430,190 460,190 445,215" fill="#f43f5e"/>
+    <polygon points="430,230 460,230 445,205" fill="#f43f5e"/>
+    <text x="445" y="255" fill="#fb7185" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">Atypical Multipolar Mitosis</text>
+
+    <!-- Desmoplastic Stroma & Perineural Invasion -->
+    <rect y="340" width="600" height="260" fill="#500724" opacity=".95"/>
+    <text x="300" y="375" fill="#fbcfe8" font-size="15" font-weight="bold" text-anchor="middle" font-family="sans-serif">Dense Desmoplastic Collagenous Stroma</text>
+    <!-- Nerve Bundle with Tumor Wrapping -->
+    <circle cx="180" cy="480" r="40" fill="#fde047" stroke="#ca8a04" stroke-width="3"/>
+    <text x="180" y="485" fill="#713f12" font-size="13" font-weight="bold" text-anchor="middle" font-family="sans-serif">Nerve Trunk</text>
+    ${Array.from({length:8}).map((_,i)=>{const a=(i/8)*Math.PI*2;return`<ellipse cx="${180+Math.cos(a)*55}" cy="${480+Math.sin(a)*55}" rx="9" ry="7" fill="#e11d48" stroke="#fff" stroke-width="1"/>`;}).join('')}
+    <text x="180" y="565" fill="#fca5a5" font-size="13" font-weight="bold" text-anchor="middle" font-family="sans-serif">Perineural Invasion</text>
+
+    <!-- Intercellular Bridges -->
+    <rect x="350" y="430" width="200" height="100" rx="8" fill="#831843" stroke="#f472b6" stroke-width="1.5"/>
+    <text x="450" y="465" fill="#fbcfe8" font-size="13" font-weight="bold" text-anchor="middle" font-family="sans-serif">Intercellular Prickle Bridges</text>
+    <text x="450" y="495" fill="#f9a8d4" font-size="11" text-anchor="middle" font-family="sans-serif">Dyskeratotic Epithelial Island</text>
   </svg>`)}`,
 
-  en: `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
-    <rect width="600" height="600" fill="#f0f9ff"/>
-    <rect x="0" y="0" width="600" height="80" fill="#e0f2fe"/>
-    <text x="300" y="50" fill="#0c4a6e" font-size="18" font-weight="bold" text-anchor="middle" font-family="sans-serif">Enamel Cross-Section (Ground Section)</text>
-    ${Array.from({length:20}).map((_,i)=>`<line x1="${30+i*28}" y1="100" x2="${30+i*28}" y2="520" stroke="#7dd3fc" stroke-width="2" opacity=".4"/>`).join('')}
-    ${Array.from({length:8}).map((_,i)=>{const y=120+i*50;return`<path d="M20 ${y} Q150 ${y+20} 300 ${y-10} T600 ${y}" fill="none" stroke="#38bdf8" stroke-width="1.5" opacity=".5"/>`;}).join('')}
-    <text x="300" y="140" fill="#0369a1" font-size="14" font-weight="bold" text-anchor="middle" font-family="sans-serif">Enamel Rods (Prisms)</text>
-    <rect x="50" y="200" width="500" height="30" fill="#bae6fd" opacity=".4" rx="4"/>
-    <text x="300" y="222" fill="#075985" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">Hunter-Schreger Bands</text>
-    <rect x="50" y="300" width="500" height="25" fill="#7dd3fc" opacity=".3" rx="4"/>
-    <text x="300" y="320" fill="#0c4a6e" font-size="12" text-anchor="middle" font-family="sans-serif">Lines of Retzius (Growth Lines)</text>
-    <path d="M0 450 L600 450" stroke="#f97316" stroke-width="3" stroke-dasharray="8 4"/>
-    <text x="300" y="475" fill="#ea580c" font-size="15" font-weight="bold" text-anchor="middle" font-family="sans-serif">DEJ (Dentinoenamel Junction)</text>
-    <rect y="490" width="600" height="110" fill="#fef3c7" opacity=".8"/>
-    <text x="300" y="550" fill="#92400e" font-size="14" font-weight="bold" text-anchor="middle" font-family="sans-serif">Dentin (Mantle Dentin Region)</text>
+  sp: `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+    <defs><linearGradient id="bg_sp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#042f2e"/><stop offset="1" stop-color="#134e4a"/></linearGradient></defs>
+    <rect width="600" height="600" fill="url(#bg_sp)"/>
+    <text x="300" y="38" fill="#5eead4" font-size="18" font-weight="bold" text-anchor="middle" font-family="sans-serif">Salivary Gland Neoplasms (Neville Ch. 11)</text>
+
+    <!-- Pleomorphic Adenoma Chondromyxoid Zone -->
+    <rect x="40" y="70" width="240" height="240" rx="14" fill="#115e59" stroke="#2dd4bf" stroke-width="2"/>
+    <text x="160" y="105" fill="#99f6e4" font-size="14" font-weight="bold" text-anchor="middle" font-family="sans-serif">Pleomorphic Adenoma</text>
+    <!-- Ducts -->
+    <circle cx="100" cy="160" r="22" fill="#0d9488" stroke="#ccfbf1" stroke-width="2"/><circle cx="100" cy="160" r="10" fill="#f0fdfa"/>
+    <circle cx="210" cy="160" r="22" fill="#0d9488" stroke="#ccfbf1" stroke-width="2"/><circle cx="210" cy="160" r="10" fill="#f0fdfa"/>
+    <text x="160" y="210" fill="#ccfbf1" font-size="12" text-anchor="middle" font-family="sans-serif">Ducts + Plasmacytoid Myoepithelium</text>
+    <path d="M 60 240 Q 160 210 260 240 L 260 290 L 60 290 Z" fill="#14b8a6" opacity=".5"/>
+    <text x="160" y="275" fill="#f0fdfa" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">Chondromyxoid Matrix</text>
+
+    <!-- Adenoid Cystic Carcinoma Swiss Cheese -->
+    <rect x="320" y="70" width="240" height="240" rx="14" fill="#0f766e" stroke="#14b8a6" stroke-width="2"/>
+    <text x="440" y="105" fill="#99f6e4" font-size="14" font-weight="bold" text-anchor="middle" font-family="sans-serif">Adenoid Cystic Carcinoma</text>
+    <!-- Cribriform Spaces -->
+    ${[{x:370,y:150},{x:440,y:150},{x:510,y:150},{x:400,y:210},{x:480,y:210}].map(p=>`<circle cx="${p.x}" cy="${p.y}" r="18" fill="#ccfbf1" stroke="#042f2e" stroke-width="3"/><circle cx="${p.x}" cy="${p.y}" r="12" fill="#99f6e4" opacity=".6"/>`).join('')}
+    <text x="440" y="275" fill="#ccfbf1" font-size="13" font-weight="bold" text-anchor="middle" font-family="sans-serif">Cribriform Swiss-Cheese</text>
+
+    <!-- Mucoepidermoid Carcinoma & Warthin Below -->
+    <rect y="340" width="600" height="260" fill="#134e4a" opacity=".95"/>
+    <text x="300" y="375" fill="#5eead4" font-size="15" font-weight="bold" text-anchor="middle" font-family="sans-serif">Mucoepidermoid Carcinoma Trilineage Spectrum</text>
+    <!-- Mucous Cells -->
+    <circle cx="120" cy="450" r="32" fill="#cffafe" stroke="#06b6d4" stroke-width="2"/>
+    <text x="120" y="455" fill="#0e7490" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">Mucous Cell</text>
+    <text x="120" y="510" fill="#a5f3fc" font-size="11" text-anchor="middle" font-family="sans-serif">Mucicarmine (+)</text>
+    <!-- Squamoid Epidermoid -->
+    <rect x="230" y="420" width="140" height="70" rx="8" fill="#0d9488" stroke="#5eead4" stroke-width="1.5"/>
+    <text x="300" y="450" fill="#f0fdfa" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">Epidermoid (Squamoid)</text>
+    <text x="300" y="475" fill="#ccfbf1" font-size="11" text-anchor="middle" font-family="sans-serif">Intercellular Bridges</text>
+    <!-- Intermediate Basaloid -->
+    <circle cx="480" cy="450" r="32" fill="#0f766e" stroke="#2dd4bf" stroke-width="2"/>
+    <text x="480" y="455" fill="#f0fdfa" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">Intermediate</text>
+    <text x="480" y="510" fill="#99f6e4" font-size="11" text-anchor="middle" font-family="sans-serif">Progenitor Basaloid</text>
   </svg>`)}`,
 
-  dp: `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
-    <rect width="600" height="600" fill="#fefce8"/>
-    <rect y="0" width="600" height="250" fill="#fef9c3"/>
-    <text x="300" y="40" fill="#713f12" font-size="16" font-weight="bold" text-anchor="middle" font-family="sans-serif">Dentin — Dentinal Tubules</text>
-    ${Array.from({length:30}).map((_,i)=>`<line x1="${20+i*19}" y1="60" x2="${20+i*19}" y2="240" stroke="#ca8a04" stroke-width="1" opacity=".5"/>`).join('')}
-    ${Array.from({length:6}).map((_,i)=>{const y=80+i*25;return`<path d="M0 ${y} Q300 ${y+15} 600 ${y}" fill="none" stroke="#eab308" stroke-width="1" opacity=".4"/>`;}).join('')}
-    <text x="300" y="140" fill="#854d0e" font-size="12" text-anchor="middle" font-family="sans-serif">Peritubular Dentin (Hypermineralized)</text>
-    <text x="300" y="210" fill="#a16207" font-size="12" text-anchor="middle" font-family="sans-serif">Intertubular Dentin Matrix</text>
-    <path d="M0 250 L600 250" stroke="#f59e0b" stroke-width="3"/>
-    <text x="300" y="275" fill="#b45309" font-size="13" font-weight="bold" text-anchor="middle" font-family="sans-serif">Predentin Zone</text>
-    <rect y="290" width="600" height="40" fill="#fde68a" opacity=".6"/>
-    ${[60,140,220,300,380,460,540].map(x=>`<rect x="${x-8}" y="295" width="16" height="30" rx="4" fill="#92400e" opacity=".7"/><circle cx="${x}" cy="300" r="4" fill="#451a03"/>`).join('')}
-    <text x="300" y="355" fill="#78350f" font-size="14" font-weight="bold" text-anchor="middle" font-family="sans-serif">Odontoblast Layer</text>
-    <rect y="370" width="600" height="230" fill="#fef3c7" opacity=".5"/>
-    <text x="300" y="420" fill="#92400e" font-size="16" font-weight="bold" text-anchor="middle" font-family="sans-serif">Dental Pulp</text>
-    ${[120,300,480].map(x=>`<path d="M${x} 440 Q${x+30} 470 ${x+60} 440 T${x+120} 460" fill="none" stroke="#dc2626" stroke-width="2" opacity=".5"/>`).join('')}
-    <text x="300" y="510" fill="#b91c1c" font-size="12" text-anchor="middle" font-family="sans-serif">Blood Vessels & Nerve Fibers</text>
-    ${[100,250,420].map(x=>`<circle cx="${x}" cy="${540}" r="12" fill="none" stroke="#7c3aed" stroke-width="1.5"/><circle cx="${x}" cy="${540}" r="4" fill="#7c3aed" opacity=".5"/>`).join('')}
-    <text x="300" y="575" fill="#6d28d9" font-size="11" text-anchor="middle" font-family="sans-serif">Fibroblasts & Undifferentiated Mesenchymal Cells</text>
+  bf: `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+    <defs><linearGradient id="bg_bf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#451a03"/><stop offset="1" stop-color="#78350f"/></linearGradient></defs>
+    <rect width="600" height="600" fill="url(#bg_bf)"/>
+    <text x="300" y="38" fill="#fde68a" font-size="18" font-weight="bold" text-anchor="middle" font-family="sans-serif">Bone Pathology &amp; Osteosarcoma (Neville Ch. 14)</text>
+
+    <!-- Fibrous Dysplasia Chinese Script -->
+    <rect x="40" y="70" width="240" height="240" rx="14" fill="#92400e" stroke="#f59e0b" stroke-width="2"/>
+    <text x="160" y="105" fill="#fef3c7" font-size="14" font-weight="bold" text-anchor="middle" font-family="sans-serif">Fibrous Dysplasia</text>
+    <!-- C-shaped and V-shaped bone trabeculae -->
+    <path d="M 70 140 Q 120 120 140 160 T 110 210" fill="none" stroke="#fde68a" stroke-width="8" stroke-linecap="round"/>
+    <path d="M 180 140 L 220 180 L 190 220" fill="none" stroke="#fde68a" stroke-width="8" stroke-linecap="round"/>
+    <text x="160" y="260" fill="#fef3c7" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">Chinese Script Woven Bone</text>
+    <text x="160" y="285" fill="#fcd34d" font-size="10" text-anchor="middle" font-family="sans-serif">(No Osteoblastic Rimming)</text>
+
+    <!-- Paget Disease Mosaic Pattern -->
+    <rect x="320" y="70" width="240" height="240" rx="14" fill="#92400e" stroke="#f59e0b" stroke-width="2"/>
+    <text x="440" y="105" fill="#fef3c7" font-size="14" font-weight="bold" text-anchor="middle" font-family="sans-serif">Paget Disease of Bone</text>
+    <!-- Mosaic Jigsaw Reversal Lines -->
+    <rect x="340" y="130" width="200" height="110" fill="#d97706" rx="6"/>
+    <path d="M 350 160 Q 400 145 450 170 T 530 155" fill="none" stroke="#1e1b4b" stroke-width="3"/>
+    <path d="M 390 135 L 410 235" fill="none" stroke="#1e1b4b" stroke-width="3"/>
+    <path d="M 470 135 L 460 235" fill="none" stroke="#1e1b4b" stroke-width="3"/>
+    <text x="440" y="270" fill="#fef3c7" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">Mosaic Jigsaw Reversal Lines</text>
+
+    <!-- Osteosarcoma Malignant Osteoid Below -->
+    <rect y="340" width="600" height="260" fill="#78350f" opacity=".95"/>
+    <text x="300" y="375" fill="#fde68a" font-size="15" font-weight="bold" text-anchor="middle" font-family="sans-serif">Osteosarcoma — Neoplastic Osteoid Synthesis</text>
+    <!-- Malignant Osteoid -->
+    <path d="M 60 450 Q 200 400 350 470 T 550 430 L 550 510 L 60 510 Z" fill="#b45309" stroke="#fbbf24" stroke-width="3"/>
+    <text x="300" y="475" fill="#fffbeb" font-size="14" font-weight="bold" text-anchor="middle" font-family="sans-serif">Malignant Osteoid Matrix</text>
+    ${[100,200,300,400,500].map(x=>`<circle cx="${x}" cy="420" r="14" fill="#451a03" stroke="#f87171" stroke-width="2"/><circle cx="${x}" cy="420" r="5" fill="#fef08a"/>`).join('')}
+    <text x="300" y="555" fill="#fde68a" font-size="13" font-weight="bold" text-anchor="middle" font-family="sans-serif">Atypical Pleomorphic Osteoblasts</text>
   </svg>`)}`,
 
-  sg: `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
-    <rect width="600" height="600" fill="#f0fdf4"/>
-    <text x="300" y="40" fill="#14532d" font-size="17" font-weight="bold" text-anchor="middle" font-family="sans-serif">Salivary Gland — Mixed Acini (H&amp;E)</text>
-    ${[{x:120,y:150,r:55,t:'Serous',c:'#86efac',sc:'#16a34a',tc:'#14532d'},{x:320,y:150,r:55,t:'Mucous',c:'#d1fae5',sc:'#059669',tc:'#064e3b'},{x:500,y:150,r:55,t:'Serous',c:'#86efac',sc:'#16a34a',tc:'#14532d'}].map((a,i)=>`<circle cx="${a.x}" cy="${a.y}" r="${a.r}" fill="${a.c}" stroke="${a.sc}" stroke-width="2"/>${Array.from({length:6}).map((_,j)=>{const angle=(j/6)*Math.PI*2;const cx2=a.x+Math.cos(angle)*25;const cy2=a.y+Math.sin(angle)*25;return`<circle cx="${cx2}" cy="${cy2}" r="6" fill="${a.sc}" opacity=".4"/>`;}).join('')}<text x="${a.x}" y="${a.y+5}" fill="${a.tc}" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">${a.t} Acinus</text>`).join('')}
-    <text x="320" y="230" fill="#065f46" font-size="12" text-anchor="middle" font-family="sans-serif">Serous Demilune (Crescentic Cap)</text>
-    <path d="M265 120 Q320 100 375 120" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-dasharray="4 3"/>
-    <rect x="100" y="290" width="400" height="50" rx="20" fill="#bbf7d0" stroke="#22c55e" stroke-width="2"/>
-    <text x="300" y="320" fill="#15803d" font-size="14" font-weight="bold" text-anchor="middle" font-family="sans-serif">Intercalated Duct</text>
-    <rect x="150" y="370" width="300" height="45" rx="18" fill="#86efac" stroke="#16a34a" stroke-width="2"/>
-    <text x="300" y="398" fill="#166534" font-size="14" font-weight="bold" text-anchor="middle" font-family="sans-serif">Striated Duct</text>
-    <rect x="200" y="445" width="200" height="40" rx="16" fill="#4ade80" stroke="#15803d" stroke-width="2.5"/>
-    <text x="300" y="470" fill="#052e16" font-size="13" font-weight="bold" text-anchor="middle" font-family="sans-serif">Excretory Duct</text>
-    <text x="300" y="530" fill="#14532d" font-size="12" text-anchor="middle" font-family="sans-serif">Myoepithelial Cells (Basket Cells)</text>
-    ${[120,300,480].map(x=>`<path d="M${x-20} 550 Q${x} 535 ${x+20} 550" fill="none" stroke="#15803d" stroke-width="1.5"/>`).join('')}
+  ii: `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+    <defs><linearGradient id="bg_ii" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#064e3b"/><stop offset="1" stop-color="#022c22"/></linearGradient></defs>
+    <rect width="600" height="600" fill="url(#bg_ii)"/>
+    <text x="300" y="38" fill="#6ee7b7" font-size="18" font-weight="bold" text-anchor="middle" font-family="sans-serif">Infectious &amp; Immunopathology (Neville Ch. 5, 6, 16)</text>
+
+    <!-- Pemphigus Vulgaris Suprabasal Split -->
+    <rect x="40" y="70" width="240" height="240" rx="14" fill="#047857" stroke="#10b981" stroke-width="2"/>
+    <text x="160" y="105" fill="#a7f3d0" font-size="14" font-weight="bold" text-anchor="middle" font-family="sans-serif">Pemphigus Vulgaris</text>
+    <rect x="60" y="125" width="200" height="40" rx="4" fill="#065f46"/>
+    <text x="160" y="150" fill="#ecfdf5" font-size="11" text-anchor="middle" font-family="sans-serif">Superficial Spinous Layer</text>
+    <!-- Intraepithelial Cleft with Tzanck Cells -->
+    <rect x="60" y="170" width="200" height="45" fill="#022c22" stroke="#34d399" stroke-width="1.5" stroke-dasharray="3 3"/>
+    ${[90,130,170,210,235].map(x=>`<circle cx="${x}" cy="192" r="9" fill="#a7f3d0" stroke="#064e3b" stroke-width="1"/><circle cx="${x}" cy="192" r="3" fill="#022c22"/>`).join('')}
+    <text x="160" y="235" fill="#6ee7b7" font-size="11" font-weight="bold" text-anchor="middle" font-family="sans-serif">Acantholytic Tzanck Cells</text>
+    <!-- Tombstone Basal Row -->
+    ${[70,95,120,145,170,195,220,245].map(x=>`<rect x="${x}" y="250" width="16" height="25" rx="3" fill="#065f46" stroke="#a7f3d0" stroke-width="1"/>`).join('')}
+    <text x="160" y="295" fill="#d1fae5" font-size="10" text-anchor="middle" font-family="sans-serif">Tombstone Basal Cells</text>
+
+    <!-- Tuberculosis Caseating Granuloma -->
+    <rect x="320" y="70" width="240" height="240" rx="14" fill="#047857" stroke="#10b981" stroke-width="2"/>
+    <text x="440" y="105" fill="#a7f3d0" font-size="14" font-weight="bold" text-anchor="middle" font-family="sans-serif">Oral Tuberculosis</text>
+    <!-- Caseation Core -->
+    <circle cx="440" cy="180" r="45" fill="#fecdd3" stroke="#f43f5e" stroke-width="2"/>
+    <text x="440" y="185" fill="#9f1239" font-size="11" font-weight="bold" text-anchor="middle" font-family="sans-serif">Caseous Necrosis</text>
+    <!-- Langhans Giant Cell -->
+    <path d="M 370 240 Q 400 220 430 240" fill="none" stroke="#f43f5e" stroke-width="5"/>
+    <text x="440" y="275" fill="#ecfdf5" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">Langhans Giant Cells</text>
+
+    <!-- Candida Hyphae & Actinomyces Below -->
+    <rect y="340" width="600" height="260" fill="#064e3b" opacity=".95"/>
+    <text x="300" y="375" fill="#6ee7b7" font-size="15" font-weight="bold" text-anchor="middle" font-family="sans-serif">Microbial Identifiers: Candida &amp; Actinomyces</text>
+    <!-- Candida Pseudohyphae -->
+    ${[100,160,220].map(x=>`<path d="M ${x} 420 Q ${x+20} 450 ${x+40} 490 T ${x+60} 540" fill="none" stroke="#e11d48" stroke-width="3.5"/><circle cx="${x+20}" cy="450" r="4" fill="#fda4af"/><circle cx="${x+40}" cy="490" r="4" fill="#fda4af"/>`).join('')}
+    <text x="170" y="570" fill="#fda4af" font-size="13" font-weight="bold" text-anchor="middle" font-family="sans-serif">PAS (+) Candida Hyphae</text>
+    <!-- Actinomyces Sulfur Granule -->
+    <circle cx="440" cy="470" r="45" fill="#eab308" stroke="#ca8a04" stroke-width="3"/>
+    ${Array.from({length:12}).map((_,i)=>{const a=(i/12)*Math.PI*2;return`<line x1="440" y1="470" x2="${440+Math.cos(a)*65}" y2="${470+Math.sin(a)*65}" stroke="#ca8a04" stroke-width="2"/>`;}).join('')}
+    <text x="440" y="570" fill="#fef08a" font-size="13" font-weight="bold" text-anchor="middle" font-family="sans-serif">Actinomyces Sulfur Granule</text>
   </svg>`)}`,
 
-  pd: `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
-    <rect width="600" height="600" fill="#fff7ed"/>
-    <text x="300" y="40" fill="#7c2d12" font-size="17" font-weight="bold" text-anchor="middle" font-family="sans-serif">Periodontium — PDL Cross-Section</text>
-    <rect x="0" y="60" width="200" height="540" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
-    <text x="100" y="330" fill="#92400e" font-size="15" font-weight="bold" text-anchor="middle" font-family="sans-serif" transform="rotate(-90,100,330)">Cementum</text>
-    <rect x="400" y="60" width="200" height="540" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2"/>
-    <text x="500" y="330" fill="#475569" font-size="15" font-weight="bold" text-anchor="middle" font-family="sans-serif" transform="rotate(90,500,330)">Alveolar Bone</text>
-    <rect x="200" y="60" width="200" height="540" fill="#fed7aa" opacity=".5"/>
-    <text x="300" y="100" fill="#9a3412" font-size="14" font-weight="bold" text-anchor="middle" font-family="sans-serif">PDL Space</text>
-    ${Array.from({length:12}).map((_,i)=>{const y=120+i*38;return`<line x1="210" y1="${y}" x2="390" y2="${y+15}" stroke="#ea580c" stroke-width="1.5" opacity=".5"/>`;}).join('')}
-    <text x="300" y="250" fill="#c2410c" font-size="12" text-anchor="middle" font-family="sans-serif">Principal Fiber Groups</text>
-    ${[250,300,350].map(x=>`<circle cx="${x}" cy="${350}" r="8" fill="none" stroke="#dc2626" stroke-width="1.5"/><circle cx="${x}" cy="${350}" r="3" fill="#dc2626" opacity=".5"/>`).join('')}
-    <text x="300" y="390" fill="#991b1b" font-size="12" text-anchor="middle" font-family="sans-serif">Blood Vessels</text>
-    <text x="300" y="450" fill="#9a3412" font-size="12" text-anchor="middle" font-family="sans-serif">Fibroblasts (Most Abundant)</text>
-    <text x="300" y="520" fill="#7c2d12" font-size="12" text-anchor="middle" font-family="sans-serif">Sharpey's Fibers →</text>
-  </svg>`)}`,
+  st: `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+    <defs><linearGradient id="bg_st" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3b0764"/><stop offset="1" stop-color="#581c87"/></linearGradient></defs>
+    <rect width="600" height="600" fill="url(#bg_st)"/>
+    <text x="300" y="38" fill="#d8b4fe" font-size="18" font-weight="bold" text-anchor="middle" font-family="sans-serif">Soft Tissue &amp; Hematologic Neoplasms (Neville Ch. 12 &amp; 13)</text>
 
-  tb: `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
-    <rect width="600" height="600" fill="#faf5ff"/>
-    <text x="300" y="40" fill="#581c87" font-size="17" font-weight="bold" text-anchor="middle" font-family="sans-serif">Compact Bone — Haversian System</text>
-    ${[{x:180,y:200},{x:420,y:200},{x:300,y:380}].map((c,i)=>`<circle cx="${c.x}" cy="${c.y}" r="100" fill="none" stroke="#a855f7" stroke-width="1" opacity=".3"/><circle cx="${c.x}" cy="${c.y}" r="80" fill="none" stroke="#a855f7" stroke-width="1" opacity=".4"/><circle cx="${c.x}" cy="${c.y}" r="60" fill="none" stroke="#a855f7" stroke-width="1" opacity=".5"/><circle cx="${c.x}" cy="${c.y}" r="40" fill="none" stroke="#a855f7" stroke-width="1.5" opacity=".6"/><circle cx="${c.x}" cy="${c.y}" r="20" fill="#c084fc" opacity=".3"/><circle cx="${c.x}" cy="${c.y}" r="8" fill="#7c3aed"/>${Array.from({length:8}).map((_,j)=>{const angle=(j/8)*Math.PI*2;const ox=c.x+Math.cos(angle)*55;const oy=c.y+Math.sin(angle)*55;return`<ellipse cx="${ox}" cy="${oy}" rx="6" ry="3" fill="#581c87" opacity=".5" transform="rotate(${j*45},${ox},${oy})"/>`;}).join('')}`).join('')}
-    <text x="180" y="120" fill="#6b21a8" font-size="11" text-anchor="middle" font-family="sans-serif">Osteon 1</text>
-    <text x="420" y="120" fill="#6b21a8" font-size="11" text-anchor="middle" font-family="sans-serif">Osteon 2</text>
-    <text x="300" y="500" fill="#7c3aed" font-size="13" font-weight="bold" text-anchor="middle" font-family="sans-serif">Haversian Canal (Central)</text>
-    <text x="300" y="530" fill="#9333ea" font-size="12" text-anchor="middle" font-family="sans-serif">Concentric Lamellae</text>
-    <text x="300" y="555" fill="#a855f7" font-size="11" text-anchor="middle" font-family="sans-serif">Lacunae with Osteocytes</text>
-    <text x="300" y="580" fill="#c084fc" font-size="11" text-anchor="middle" font-family="sans-serif">Canaliculi (Interconnecting)</text>
+    <!-- Schwannoma Antoni A and Verocay Body -->
+    <rect x="40" y="70" width="240" height="240" rx="14" fill="#6b21a8" stroke="#c084fc" stroke-width="2"/>
+    <text x="160" y="105" fill="#f3e8ff" font-size="14" font-weight="bold" text-anchor="middle" font-family="sans-serif">Schwannoma (Neurilemoma)</text>
+    <!-- Top Palisade -->
+    ${[70,95,120,145,170,195,220,245].map(x=>`<rect x="${x}" y="130" width="12" height="24" rx="3" fill="#3b0764" stroke="#e9d5ff" stroke-width="1"/>`).join('')}
+    <!-- Verocay Acellular Zone -->
+    <rect x="60" y="160" width="200" height="35" fill="#c084fc" opacity=".4"/>
+    <text x="160" y="182" fill="#faf5ff" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">Verocay Body (Antoni A)</text>
+    <!-- Bottom Palisade -->
+    ${[70,95,120,145,170,195,220,245].map(x=>`<rect x="${x}" y="200" width="12" height="24" rx="3" fill="#3b0764" stroke="#e9d5ff" stroke-width="1"/>`).join('')}
+    <text x="160" y="275" fill="#e9d5ff" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">S-100 Strongly Positive</text>
+
+    <!-- Burkitt Lymphoma Starry Sky -->
+    <rect x="320" y="70" width="240" height="240" rx="14" fill="#1e1b4b" stroke="#818cf8" stroke-width="2"/>
+    <text x="440" y="105" fill="#c7d2fe" font-size="14" font-weight="bold" text-anchor="middle" font-family="sans-serif">Burkitt Lymphoma</text>
+    <!-- Dark Sea of B Lymphoblasts -->
+    <rect x="340" y="125" width="200" height="120" fill="#312e81" rx="6"/>
+    <!-- Tingible Macrophage Stars -->
+    ${[{x:370,y:150},{x:480,y:145},{x:420,y:185},{x:510,y:200},{x:360,y:220}].map(p=>`<circle cx="${p.x}" cy="${p.y}" r="12" fill="#fef08a" stroke="#ca8a04" stroke-width="1.5"/><circle cx="${p.x}" cy="${p.y}" r="3" fill="#713f12"/>`).join('')}
+    <text x="440" y="275" fill="#fde047" font-size="13" font-weight="bold" text-anchor="middle" font-family="sans-serif">Starry Sky Pattern (t[8;14])</text>
+
+    <!-- Multiple Myeloma & Granular Cell Below -->
+    <rect y="340" width="600" height="260" fill="#581c87" opacity=".95"/>
+    <text x="300" y="375" fill="#e9d5ff" font-size="15" font-weight="bold" text-anchor="middle" font-family="sans-serif">Multiple Myeloma &amp; Plasmacytoma</text>
+    <!-- Atypical Plasma Cells with Clock-face chromatin -->
+    ${[120,240,360,480].map(x=>`<circle cx="${x}" cy="450" r="32" fill="#7e22ce" stroke="#e9d5ff" stroke-width="2"/><circle cx="${x-8}" cy="445" r="16" fill="#3b0764"/><circle cx="${x+12}" cy="455" r="8" fill="#f3e8ff" opacity=".6"/><circle cx="${x}" cy="470" r="6" fill="#e11d48"/>`).join('')}
+    <text x="300" y="525" fill="#faf5ff" font-size="14" font-weight="bold" text-anchor="middle" font-family="sans-serif">Monoclonal Plasma Cells with Clock-Face Chromatin</text>
+    <text x="300" y="560" fill="#fbcfe8" font-size="12" text-anchor="middle" font-family="sans-serif">Russell Bodies &amp; Punched-Out Osteolytic Lesions</text>
   </svg>`)}`,
 };
 
 function getSlideForMission(missionId) {
-  const prefix = missionId?.substring(0, 2) || 'om';
-  return HISTOLOGY_SLIDES[prefix] || HISTOLOGY_SLIDES.om;
+  if (!missionId) return HISTOLOGY_SLIDES.otc;
+  if (missionId.startsWith('otc')) return HISTOLOGY_SLIDES.otc;
+  if (missionId.startsWith('ep')) return HISTOLOGY_SLIDES.ep;
+  if (missionId.startsWith('sp')) return HISTOLOGY_SLIDES.sp;
+  if (missionId.startsWith('bf')) return HISTOLOGY_SLIDES.bf;
+  if (missionId.startsWith('ii')) return HISTOLOGY_SLIDES.ii;
+  if (missionId.startsWith('st')) return HISTOLOGY_SLIDES.st;
+  return HISTOLOGY_SLIDES.otc;
 }
 
 export default function JigsawGame({ gridSize = 3, imageDesc = '', puzzleData, onComplete, giveHintRef }) {
