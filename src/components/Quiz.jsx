@@ -54,7 +54,7 @@ export default function Quiz({ questions = [], onComplete }) {
 
   if (quizFinished) {
     return (
-      <div className="w-full max-w-xl mx-auto p-6 glass-panel border border-teal-500/30 rounded-3xl flex flex-col items-center gap-6 text-center animate-in fade-in zoom-in duration-300">
+      <div className="w-full max-w-xl mx-auto p-6 glass-panel border border-[var(--accent-border)] rounded-3xl flex flex-col items-center gap-6 text-center animate-in fade-in zoom-in duration-300">
         {/* Star Rating Header */}
         <div className="flex gap-3">
           {[1, 2, 3].map((s) => (
@@ -62,8 +62,8 @@ export default function Quiz({ questions = [], onComplete }) {
               key={`star-${s}`}
               className={`w-12 h-12 transition-all duration-500 ${
                 s <= stars
-                  ? 'text-amber-400 fill-amber-400 scale-110 drop-shadow-[0_0_12px_rgba(251,191,36,0.6)]'
-                  : 'text-gray-600 fill-transparent'
+                  ? 'text-[var(--gold-ink)] fill-[var(--gold)] scale-110 drop-shadow-[0_0_12px_rgba(251,191,36,0.6)]'
+                  : 'text-[var(--text-muted)] fill-transparent'
               }`}
             />
           ))}
@@ -73,14 +73,14 @@ export default function Quiz({ questions = [], onComplete }) {
           <h2 className="font-heading font-extrabold text-3xl text-gradient mb-1">
             {stars === 3 ? 'Perfect Score!' : stars === 2 ? 'Great Job!' : stars === 1 ? 'Good Effort!' : 'Keep Practicing!'}
           </h2>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-[var(--text-muted)]">
             You completed Neville's Oral Pathology Quiz
           </p>
         </div>
 
         {/* Score Display */}
-        <div className="text-5xl font-heading font-black text-amber-300 tracking-tight">
-          {score} <span className="text-xl font-medium text-gray-400">/ {questions.length}</span>
+        <div className="text-5xl font-heading font-black text-[var(--gold-ink)] tracking-tight">
+          {score} <span className="text-xl font-medium text-[var(--text-muted)]">/ {questions.length}</span>
         </div>
 
         {/* Action Buttons */}
@@ -94,7 +94,7 @@ export default function Quiz({ questions = [], onComplete }) {
               setShowExplanation(false);
               setQuizFinished(false);
             }}
-            className="flex items-center gap-2 px-5 py-3 rounded-xl border border-white/10 glass-panel hover:bg-white/10 text-gray-200 font-semibold text-sm cursor-pointer transition-all"
+            className="flex items-center gap-2 px-5 py-3 rounded-xl border border-[var(--border-subtle)] glass-panel hover:bg-[var(--surface-sunken)] text-[var(--text-secondary)] font-semibold text-sm cursor-pointer transition-all"
           >
             <RotateCcw className="w-4 h-4" /> Retry Quiz
           </button>
@@ -103,7 +103,7 @@ export default function Quiz({ questions = [], onComplete }) {
             onClick={() => {
               if (onComplete) onComplete({ score, stars, action: 'next' });
             }}
-            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-teal-400 to-purple-600 hover:from-teal-300 hover:to-purple-500 text-slate-950 font-bold text-sm shadow-lg shadow-teal-500/20 cursor-pointer transition-all hover:scale-105"
+            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[var(--accent)] hover:brightness-105 text-[var(--text-primary)] font-bold text-sm shadow-lg  cursor-pointer transition-all hover:scale-105"
           >
             Continue Mission <ArrowRight className="w-4 h-4" />
           </button>
@@ -116,9 +116,9 @@ export default function Quiz({ questions = [], onComplete }) {
     <div className="w-full max-w-2xl mx-auto p-4 md:p-6 flex flex-col gap-6">
       {/* Progress & Header */}
       <div className="flex flex-col gap-3">
-        <div className="flex items-center justify-between text-xs font-semibold text-gray-400">
+        <div className="flex items-center justify-between text-xs font-semibold text-[var(--text-muted)]">
           <span>Neville's MCQ {currentIdx + 1} of {questions.length}</span>
-          <span className="text-teal-400 font-bold">Score: {score}</span>
+          <span className="text-[var(--accent-ink)] font-bold">Score: {score}</span>
         </div>
 
         {/* Step dots */}
@@ -129,11 +129,11 @@ export default function Quiz({ questions = [], onComplete }) {
               className={`h-2 flex-1 rounded-full transition-all ${
                 i < answered.length
                   ? answered[i]
-                    ? 'bg-emerald-400 shadow-sm shadow-emerald-500/50'
-                    : 'bg-rose-500 shadow-sm shadow-rose-500/50'
+                    ? 'bg-[var(--success)] shadow-sm '
+                    : 'bg-[var(--danger)] shadow-sm shadow-rose-500/50'
                   : i === currentIdx
-                  ? 'bg-teal-400 animate-pulse'
-                  : 'bg-white/10'
+                  ? 'bg-[var(--accent)] animate-pulse'
+                  : 'bg-[var(--surface-sunken)]'
               }`}
             />
           ))}
@@ -141,8 +141,8 @@ export default function Quiz({ questions = [], onComplete }) {
       </div>
 
       {/* Question Card */}
-      <div className="glass-panel border border-white/10 p-5 md:p-6 rounded-2xl flex flex-col gap-5 shadow-xl">
-        <h3 className="font-heading font-bold text-base md:text-lg text-gray-100 leading-snug">
+      <div className="glass-panel border border-[var(--border-subtle)] p-5 md:p-6 rounded-2xl flex flex-col gap-5 shadow-xl">
+        <h3 className="font-heading font-bold text-base md:text-lg text-[var(--text-secondary)] leading-snug">
           Q{currentIdx + 1}. {currentQ?.q}
         </h3>
 
@@ -161,24 +161,24 @@ export default function Quiz({ questions = [], onComplete }) {
                 className={`w-full p-4 rounded-xl text-left border flex items-center justify-between text-xs md:text-sm font-medium transition-all cursor-pointer ${
                   showResult
                     ? isCorrect
-                      ? 'bg-emerald-950/60 border-emerald-500 text-emerald-200'
+                      ? 'bg-[var(--success-soft)] border-[var(--success)]/40 text-[var(--success-ink)]'
                       : isSelected
-                      ? 'bg-rose-950/60 border-rose-500 text-rose-200'
-                      : 'bg-slate-900/40 border-white/5 opacity-50'
-                    : 'glass-panel border-white/10 text-gray-200 hover:border-teal-400/50 hover:bg-white/5'
+                      ? 'bg-[var(--danger-soft)] border-[var(--danger)]/40 text-[var(--danger-ink)]'
+                      : 'bg-[var(--surface-sunken)]/40 border-[var(--border-subtle)] opacity-50'
+                    : 'glass-panel border-[var(--border-subtle)] text-[var(--text-secondary)] hover:border-[var(--accent-border)] hover:bg-[var(--surface-sunken)]'
                 }`}
               >
                 <div className="flex items-center gap-3">
                   <div className={`w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs ${
-                    showResult && isCorrect ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 text-gray-300'
+                    showResult && isCorrect ? 'bg-[var(--success)] text-[var(--text-primary)]' : 'bg-[var(--surface-sunken)] text-[var(--text-secondary)]'
                   }`}>
                     {letters[i]}
                   </div>
                   <span>{opt}</span>
                 </div>
 
-                {showResult && isCorrect && <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />}
-                {showResult && isSelected && !isCorrect && <XCircle className="w-5 h-5 text-rose-400 shrink-0" />}
+                {showResult && isCorrect && <CheckCircle2 className="w-5 h-5 text-[var(--success-ink)] shrink-0" />}
+                {showResult && isSelected && !isCorrect && <XCircle className="w-5 h-5 text-[var(--danger-ink)] shrink-0" />}
               </button>
             );
           })}
@@ -186,8 +186,8 @@ export default function Quiz({ questions = [], onComplete }) {
 
         {/* Textbook Explanation */}
         {showExplanation && (
-          <div className="mt-2 p-4 rounded-xl bg-purple-950/40 border border-purple-500/30 text-xs md:text-sm text-purple-200 flex flex-col gap-2 animate-in fade-in duration-200">
-            <div className="flex items-center gap-2 font-bold text-amber-300 text-xs uppercase tracking-wider">
+          <div className="mt-2 p-4 rounded-xl bg-[var(--accent-2-soft)] border border-[var(--accent-2-border)] text-xs md:text-sm text-[var(--accent-2-ink)] flex flex-col gap-2 animate-in fade-in duration-200">
+            <div className="flex items-center gap-2 font-bold text-[var(--gold-ink)] text-xs uppercase tracking-wider">
               <BookOpen className="w-4 h-4" /> Neville's Pathology Explanation
             </div>
             <p className="leading-relaxed">{currentQ?.exp}</p>
@@ -199,7 +199,7 @@ export default function Quiz({ questions = [], onComplete }) {
       {selectedOpt !== null && (
         <button
           onClick={handleNext}
-          className="w-full py-4 rounded-xl bg-gradient-to-r from-teal-400 to-purple-600 hover:from-teal-300 hover:to-purple-500 text-slate-950 font-bold text-sm shadow-xl shadow-teal-500/20 flex items-center justify-center gap-2 cursor-pointer transition-all hover:scale-[1.01]"
+          className="w-full py-4 rounded-xl bg-[var(--accent)] hover:brightness-105 text-[var(--text-primary)] font-bold text-sm shadow-xl  flex items-center justify-center gap-2 cursor-pointer transition-all hover:scale-[1.01]"
         >
           {currentIdx + 1 < questions.length ? 'Next Question' : 'View Final Score'} <ArrowRight className="w-4 h-4" />
         </button>

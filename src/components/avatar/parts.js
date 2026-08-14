@@ -84,11 +84,11 @@ export const FACIAL_HAIR = [
 
 export const OUTFITS = [
   { name: 'Lab Coat', id: 'labcoat', base: '#F1F3F7', trim: '#D3D8E2' },
-  { name: 'Scrubs (Teal)', id: 'scrubs_teal', base: '#2A9D8F', trim: '#218578' },
-  { name: 'Scrubs (Navy)', id: 'scrubs_navy', base: '#33507A', trim: '#284066' },
-  { name: 'Scrubs (Plum)', id: 'scrubs_plum', base: '#7A4A7E', trim: '#653C69' },
-  { name: 'Kurta', id: 'kurta', base: '#D9A441', trim: '#B8862F' },
-  { name: 'Casual', id: 'casual', base: '#3E4256', trim: '#2F3243' },
+  { name: 'Scrubs (Teal)', id: 'scrubs_teal', base: '#6FB3AC', trim: '#5A9A93' },
+  { name: 'Scrubs (Navy)', id: 'scrubs_navy', base: '#5E7BA6', trim: '#4C6890' },
+  { name: 'Scrubs (Plum)', id: 'scrubs_plum', base: '#A385AB', trim: '#8C7094' },
+  { name: 'Kurta', id: 'kurta', base: '#E0B96D', trim: '#C79F55' },
+  { name: 'Casual', id: 'casual', base: '#7C8299', trim: '#666C82' },
 ];
 
 export const ACCESSORIES = [
@@ -102,12 +102,12 @@ export const ACCESSORIES = [
 ];
 
 export const BACKGROUNDS = [
-  { name: 'Teal', from: '#134E4A', to: '#0F766E' },
-  { name: 'Plum', from: '#4A1D52', to: '#6B2C75' },
-  { name: 'Indigo', from: '#1E1B4B', to: '#312E81' },
-  { name: 'Slate', from: '#1E293B', to: '#334155' },
-  { name: 'Rose', from: '#4C1D3D', to: '#7A2E5C' },
-  { name: 'Amber', from: '#4A2E0B', to: '#78500F' },
+  { name: 'Sage', from: '#E0EEE8', to: '#C6DDD2' },
+  { name: 'Cream', from: '#F6EFE2', to: '#EADFCE' },
+  { name: 'Sand', from: '#F2E8C9', to: '#E6D8AE' },
+  { name: 'Blush', from: '#FBE7E7', to: '#F3CFD0' },
+  { name: 'Sky', from: '#E3EDF3', to: '#C9DDE8' },
+  { name: 'Lilac', from: '#EFE8F3', to: '#DCCBE4' },
 ];
 
 export const ACADEMIC_ROLES = [

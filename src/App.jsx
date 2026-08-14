@@ -28,18 +28,18 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="w-full max-w-xl mx-auto my-12 p-8 glass-panel border border-rose-500/40 rounded-3xl flex flex-col items-center gap-4 text-center">
+        <div className="w-full max-w-xl mx-auto my-12 p-8 glass-panel border border-[var(--danger)]/40 rounded-3xl flex flex-col items-center gap-4 text-center">
           <div className="text-4xl mb-2">⚠️</div>
-          <h2 className="font-heading font-bold text-xl text-rose-300">
+          <h2 className="font-heading font-bold text-xl text-[var(--danger-ink)]">
             Something went wrong while rendering
           </h2>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-[var(--text-muted)]">
             {this.state.error?.toString() || 'An unexpected error occurred.'}
           </p>
           <div className="flex gap-4 mt-2">
             <button
               onClick={() => this.setState({ hasError: false })}
-              className="px-4 py-2 rounded-xl bg-teal-500/20 border border-teal-400/40 text-teal-300 text-xs font-bold cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-[var(--accent-soft)] border border-[var(--accent-border)] text-[var(--accent-ink)] text-xs font-bold cursor-pointer"
             >
               Try Again
             </button>
@@ -49,7 +49,7 @@ class ErrorBoundary extends React.Component {
                 window.location.hash = '';
                 window.location.reload();
               }}
-              className="px-4 py-2 rounded-xl bg-rose-500/20 border border-rose-400/40 text-rose-300 text-xs font-bold cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-[var(--danger-soft)] border border-[var(--danger)]/40 text-[var(--danger-ink)] text-xs font-bold cursor-pointer"
             >
               Reset App Data & Reload
             </button>
@@ -111,7 +111,7 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-[#0d0f17] text-gray-100 flex flex-col pb-20 md:pb-8">
+      <div className="min-h-screen flex flex-col pb-24 md:pb-10">
         {/* Top Header */}
         <Header currentView={currentView} navigateTo={navigateTo} />
 

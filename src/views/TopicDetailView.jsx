@@ -4,12 +4,13 @@ import { getTopicProgress } from '../utils/storage';
 import { usePlayer } from '../hooks/usePlayer';
 import { ArrowLeft, Star, Play, Check } from 'lucide-react';
 
+// Each badge pairs an accessible ink for the label with a pale tint behind it.
 const GAME_BADGES = {
-  matching:    { label: 'Matching',   color: '#C084FC' },
-  labelling:   { label: 'Labelling',  color: '#2DD4BF' },
-  jigsaw:      { label: 'Labelling',  color: '#2DD4BF' },
-  differences: { label: 'Spot the difference', color: '#FBBF24' },
-  crossword:   { label: 'Crossword',  color: '#34D399' },
+  matching:    { label: 'Matching',            ink: 'var(--accent-2-ink)', bg: 'var(--accent-2-soft)' },
+  labelling:   { label: 'Labelling',           ink: 'var(--accent-ink)',   bg: 'var(--accent-soft)' },
+  jigsaw:      { label: 'Labelling',           ink: 'var(--accent-ink)',   bg: 'var(--accent-soft)' },
+  differences: { label: 'Spot the difference', ink: 'var(--gold-ink)',     bg: 'var(--gold-soft)' },
+  crossword:   { label: 'Crossword',           ink: 'var(--success-ink)',  bg: 'var(--success-soft)' },
 };
 
 export default function TopicDetailView({ topicId, onBack, onSelectMission }) {
@@ -37,13 +38,13 @@ export default function TopicDetailView({ topicId, onBack, onSelectMission }) {
         <div className="flex items-start gap-4">
           <span
             className="w-14 h-14 shrink-0 rounded-2xl flex items-center justify-center text-3xl"
-            style={{ background: 'var(--surface-overlay)', border: '1px solid var(--border-subtle)' }}
+            style={{ background: 'var(--surface-sunken)', border: '1px solid var(--border-subtle)' }}
           >
             {topic.icon}
           </span>
 
           <div className="min-w-0 flex-1">
-            <h1 className="font-heading font-extrabold text-2xl md:text-3xl text-white">
+            <h1 className="font-heading font-extrabold text-2xl md:text-3xl text-[var(--text-primary)]">
               {topic.title}
             </h1>
             <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
@@ -71,11 +72,11 @@ export default function TopicDetailView({ topicId, onBack, onSelectMission }) {
           <div className="flex items-center gap-3 pb-2" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
             <span
               className="w-7 h-7 rounded-lg font-bold text-xs flex items-center justify-center"
-              style={{ background: 'var(--accent-soft)', color: 'var(--accent)', border: '1px solid var(--accent-border)' }}
+              style={{ background: 'var(--accent-soft)', color: 'var(--accent-ink)', border: '1px solid var(--accent-border)' }}
             >
               {sIdx + 1}
             </span>
-            <h2 className="font-heading font-bold text-base text-white">{stage.title}</h2>
+            <h2 className="font-heading font-bold text-base text-[var(--text-primary)]">{stage.title}</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
@@ -83,7 +84,7 @@ export default function TopicDetailView({ topicId, onBack, onSelectMission }) {
               const p = progress[m.id];
               const stars = p?.stars || 0;
               const isDone = p?.completed;
-              const badge = GAME_BADGES[m.gameType] || { label: 'Game', color: 'var(--text-muted)' };
+              const badge = GAME_BADGES[m.gameType] || { label: 'Game', ink: 'var(--text-secondary)', bg: 'var(--surface-sunken)' };
 
               return (
                 <button
@@ -95,7 +96,7 @@ export default function TopicDetailView({ topicId, onBack, onSelectMission }) {
                   <div className="flex items-center justify-between gap-2">
                     <span
                       className="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide"
-                      style={{ background: `${badge.color}1F`, color: badge.color }}
+                      style={{ background: badge.bg, color: badge.ink }}
                     >
                       {badge.label}
                     </span>
@@ -115,7 +116,7 @@ export default function TopicDetailView({ topicId, onBack, onSelectMission }) {
                   </div>
 
                   <div className="flex-1">
-                    <h3 className="font-heading font-bold text-sm text-white group-hover:text-teal-300 transition-colors">
+                    <h3 className="font-heading font-bold text-sm text-[var(--text-primary)] group-hover:text-[var(--accent-ink)] transition-colors">
                       {m.title}
                     </h3>
                     <p className="text-xs mt-1 leading-relaxed line-clamp-2" style={{ color: 'var(--text-secondary)' }}>
@@ -136,7 +137,7 @@ export default function TopicDetailView({ topicId, onBack, onSelectMission }) {
 
                     <span
                       className="w-7 h-7 rounded-lg flex items-center justify-center transition-transform group-hover:scale-110"
-                      style={{ background: 'var(--accent-soft)', color: 'var(--accent)' }}
+                      style={{ background: 'var(--accent-soft)', color: 'var(--accent-ink)' }}
                     >
                       <Play className="w-3.5 h-3.5 fill-current" />
                     </span>

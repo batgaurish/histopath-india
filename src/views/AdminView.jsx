@@ -35,39 +35,39 @@ function AdminLogin({ onLogin }) {
   return (
     <div className="w-full max-w-md mx-auto px-4 py-16 flex flex-col items-center gap-8">
       <div className="flex flex-col items-center gap-4 text-center">
-        <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-purple-600 to-rose-500 flex items-center justify-center shadow-2xl shadow-purple-500/30">
-          <Lock className="w-10 h-10 text-white" />
+        <div className="w-20 h-20 rounded-3xl bg-[var(--accent-2)] flex items-center justify-center shadow-2xl ">
+          <Lock className="w-10 h-10 text-[var(--text-primary)]" />
         </div>
         <h2 className="font-heading font-extrabold text-3xl text-gradient">
           Admin Access Required
         </h2>
-        <p className="text-sm text-gray-400 max-w-sm">
+        <p className="text-sm text-[var(--text-muted)] max-w-sm">
           This portal is restricted to professors and administrators. Enter your passphrase to continue.
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className={`w-full glass-panel border border-white/10 p-8 rounded-3xl flex flex-col gap-5 shadow-2xl ${shake ? 'animate-shake' : ''}`}>
+      <form onSubmit={handleSubmit} className={`w-full glass-panel border border-[var(--border-subtle)] p-8 rounded-3xl flex flex-col gap-5 shadow-2xl ${shake ? 'animate-shake' : ''}`}>
         <div className="flex flex-col gap-2">
-          <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider">Admin Passphrase</label>
+          <label className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Admin Passphrase</label>
           <input
             type="password"
             value={passphrase}
             onChange={(e) => { setPassphrase(e.target.value); setError(''); }}
             placeholder="Enter admin passphrase..."
             autoFocus
-            className="w-full px-5 py-4 rounded-2xl bg-slate-900 border border-white/10 text-white text-sm font-medium focus:outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-400/30 transition-all"
+            className="w-full px-5 py-4 rounded-2xl bg-[var(--surface-sunken)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-sm font-medium focus:outline-none focus:border-[var(--accent-2-border)] focus:ring-2 focus:ring-[var(--accent-2-border)] transition-all"
           />
         </div>
 
         {error && (
-          <div className="p-3 rounded-xl bg-rose-950/80 border border-rose-500/50 text-rose-300 text-xs font-bold flex items-center gap-2">
+          <div className="p-3 rounded-xl bg-[var(--danger-soft)] border border-[var(--danger)]/40 text-[var(--danger-ink)] text-xs font-bold flex items-center gap-2">
             ⚠️ {error}
           </div>
         )}
 
         <button
           type="submit"
-          className="w-full py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-rose-500 hover:from-purple-500 hover:to-rose-400 text-white font-extrabold text-sm shadow-xl shadow-purple-500/20 cursor-pointer transition-all hover:scale-[1.01] flex items-center justify-center gap-2"
+          className="w-full py-4 rounded-2xl bg-[var(--accent-2)] hover:brightness-110 text-[var(--text-primary)] font-extrabold text-sm shadow-xl  cursor-pointer transition-all hover:scale-[1.01] flex items-center justify-center gap-2"
         >
           <ShieldCheck className="w-5 h-5" /> Authenticate & Enter Portal
         </button>
@@ -225,12 +225,12 @@ export default function AdminView({ navigateTo }) {
       {/* Portal Header */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <div className="inline-flex items-center gap-2 text-xs font-semibold text-purple-400 uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 text-xs font-semibold text-[var(--accent-2-ink)] uppercase tracking-wider">
             <Settings className="w-4 h-4" /> Professor & Admin Game Creator Portal
           </div>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 hover:bg-rose-500/20 text-xs font-bold cursor-pointer transition-all"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--danger-soft)] border border-[var(--danger)]/40 text-[var(--danger-ink)] hover:bg-[var(--danger-soft)] text-xs font-bold cursor-pointer transition-all"
           >
             <LogOut className="w-3.5 h-3.5" /> Sign Out
           </button>
@@ -238,19 +238,19 @@ export default function AdminView({ navigateTo }) {
         <h2 className="font-heading font-extrabold text-2xl sm:text-3xl text-gradient">
           Content & Game Authoring Engine
         </h2>
-        <p className="text-xs sm:text-sm text-gray-400 max-w-2xl">
+        <p className="text-xs sm:text-sm text-[var(--text-muted)] max-w-2xl">
           Create new MCQs, matching cards, crosswords, and upload raw documents or histology slide images to convert them into interactive games automatically.
         </p>
       </div>
 
       {/* Mode Tabs */}
-      <div className="flex items-center gap-2 glass-panel p-1.5 rounded-2xl border border-white/10 w-fit">
+      <div className="flex items-center gap-2 glass-panel p-1.5 rounded-2xl border border-[var(--border-subtle)] w-fit">
         <button
           onClick={() => setActiveTab('creator')}
           className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all cursor-pointer ${
             activeTab === 'creator'
-              ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/25'
-              : 'text-gray-400 hover:text-white hover:bg-white/5'
+              ? 'bg-[var(--accent-2)] text-[var(--text-on-accent)] shadow-sm'
+              : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-sunken)]'
           }`}
         >
           <PlusCircle className="w-4 h-4" /> 1. Manual Form Authoring
@@ -260,8 +260,8 @@ export default function AdminView({ navigateTo }) {
           onClick={() => setActiveTab('uploader')}
           className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all cursor-pointer ${
             activeTab === 'uploader'
-              ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/25'
-              : 'text-gray-400 hover:text-white hover:bg-white/5'
+              ? 'bg-[var(--accent-2)] text-[var(--text-on-accent)] shadow-sm'
+              : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-sunken)]'
           }`}
         >
           <Upload className="w-4 h-4" /> 2. Auto-Document Importer
@@ -271,8 +271,8 @@ export default function AdminView({ navigateTo }) {
           onClick={() => setActiveTab('labeller')}
           className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all cursor-pointer ${
             activeTab === 'labeller'
-              ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/25'
-              : 'text-gray-400 hover:text-white hover:bg-white/5'
+              ? 'bg-[var(--accent-2)] text-[var(--text-on-accent)] shadow-sm'
+              : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-sunken)]'
           }`}
         >
           <Crosshair className="w-4 h-4" /> 3. Slide Labeller
@@ -280,16 +280,16 @@ export default function AdminView({ navigateTo }) {
       </div>
 
       {activeTab === 'labeller' && (
-        <div className="glass-panel border border-white/10 p-5 rounded-2xl">
+        <div className="glass-panel border border-[var(--border-subtle)] p-5 rounded-2xl">
           <SlideLabeller />
         </div>
       )}
 
       {/* Target Mission Selector — the Slide Labeller carries its own. */}
-      <div className={`glass-panel border border-white/10 p-5 rounded-2xl flex-col md:flex-row gap-4 items-center justify-between ${activeTab === 'labeller' ? 'hidden' : 'flex'}`}>
+      <div className={`glass-panel border border-[var(--border-subtle)] p-5 rounded-2xl flex-col md:flex-row gap-4 items-center justify-between ${activeTab === 'labeller' ? 'hidden' : 'flex'}`}>
         <div className="flex flex-col md:flex-row gap-4 items-center w-full">
           <div className="flex flex-col gap-1 flex-1 w-full">
-            <label className="text-xs font-semibold text-gray-300">Target Topic</label>
+            <label className="text-xs font-semibold text-[var(--text-secondary)]">Target Topic</label>
             <select
               value={selectedTopicId}
               onChange={(e) => {
@@ -298,7 +298,7 @@ export default function AdminView({ navigateTo }) {
                 const mList = getTopicMissions(tid);
                 if (mList.length) setSelectedMissionId(mList[0].id);
               }}
-              className="px-4 py-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs font-semibold focus:outline-none focus:border-purple-400"
+              className="px-4 py-2.5 rounded-xl bg-[var(--surface-sunken)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-xs font-semibold focus:outline-none focus:border-[var(--accent-2-border)]"
             >
               {TOPICS.map(t => (
                 <option key={t.id} value={t.id}>{t.title} ({t.textbookRef})</option>
@@ -307,11 +307,11 @@ export default function AdminView({ navigateTo }) {
           </div>
 
           <div className="flex flex-col gap-1 flex-1 w-full">
-            <label className="text-xs font-semibold text-gray-300">Target Mission Module</label>
+            <label className="text-xs font-semibold text-[var(--text-secondary)]">Target Mission Module</label>
             <select
               value={selectedMissionId}
               onChange={(e) => setSelectedMissionId(e.target.value)}
-              className="px-4 py-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs font-semibold focus:outline-none focus:border-purple-400"
+              className="px-4 py-2.5 rounded-xl bg-[var(--surface-sunken)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-xs font-semibold focus:outline-none focus:border-[var(--accent-2-border)]"
             >
               {missions.map(m => (
                 <option key={m.id} value={m.id}>{m.stageTitle} → {m.title} ({m.gameType})</option>
@@ -322,19 +322,19 @@ export default function AdminView({ navigateTo }) {
       </div>
 
       {statusMessage && (
-        <div className="p-4 rounded-xl bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 text-sm font-bold flex items-center gap-2 animate-in fade-in duration-200">
-          <Check className="w-5 h-5 text-emerald-400" /> {statusMessage}
+        <div className="p-4 rounded-xl bg-[var(--success-soft)] border border-[var(--success)]/40 text-[var(--success-ink)] text-sm font-bold flex items-center gap-2 animate-in fade-in duration-200">
+          <Check className="w-5 h-5 text-[var(--success-ink)]" /> {statusMessage}
         </div>
       )}
 
       {/* Tab 1: Manual Creator */}
       {activeTab === 'creator' && (
-        <div className="glass-panel border border-white/10 p-6 rounded-3xl flex flex-col gap-6">
+        <div className="glass-panel border border-[var(--border-subtle)] p-6 rounded-3xl flex flex-col gap-6">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setContentType('mcq')}
               className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
-                contentType === 'mcq' ? 'bg-teal-500/20 border-teal-400 text-teal-300' : 'border-white/10 text-gray-400'
+                contentType === 'mcq' ? 'bg-[var(--accent-soft)] border-[var(--accent-border)] text-[var(--accent-ink)]' : 'border-[var(--border-subtle)] text-[var(--text-muted)]'
               }`}
             >
               📝 Add MCQ Question
@@ -343,7 +343,7 @@ export default function AdminView({ navigateTo }) {
             <button
               onClick={() => setContentType('matching')}
               className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
-                contentType === 'matching' ? 'bg-teal-500/20 border-teal-400 text-teal-300' : 'border-white/10 text-gray-400'
+                contentType === 'matching' ? 'bg-[var(--accent-soft)] border-[var(--accent-border)] text-[var(--accent-ink)]' : 'border-[var(--border-subtle)] text-[var(--text-muted)]'
               }`}
             >
               🔗 Add Matching Pair
@@ -352,7 +352,7 @@ export default function AdminView({ navigateTo }) {
             <button
               onClick={() => setContentType('crossword')}
               className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
-                contentType === 'crossword' ? 'bg-teal-500/20 border-teal-400 text-teal-300' : 'border-white/10 text-gray-400'
+                contentType === 'crossword' ? 'bg-[var(--accent-soft)] border-[var(--accent-border)] text-[var(--accent-ink)]' : 'border-[var(--border-subtle)] text-[var(--text-muted)]'
               }`}
             >
               ✏️ Add Crossword Word
@@ -363,21 +363,21 @@ export default function AdminView({ navigateTo }) {
           {contentType === 'mcq' && (
             <form onSubmit={handleAddMcq} className="flex flex-col gap-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-gray-300">Question Text</label>
+                <label className="text-xs font-semibold text-[var(--text-secondary)]">Question Text</label>
                 <input
                   type="text"
                   value={mcqData.q}
                   onChange={(e) => setMcqData({ ...mcqData, q: e.target.value })}
                   placeholder="e.g. Which cells produce enamel matrix?"
                   required
-                  className="px-4 py-3 rounded-xl bg-slate-900 border border-white/10 text-white text-xs font-medium focus:outline-none focus:border-teal-400"
+                  className="px-4 py-3 rounded-xl bg-[var(--surface-sunken)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-xs font-medium focus:outline-none focus:border-[var(--accent-border)]"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {['A', 'B', 'C', 'D'].map((letter, idx) => (
                   <div key={letter} className="flex flex-col gap-1">
-                    <label className="text-xs font-semibold text-gray-400">Option {letter}</label>
+                    <label className="text-xs font-semibold text-[var(--text-muted)]">Option {letter}</label>
                     <input
                       type="text"
                       value={mcqData.options[idx]}
@@ -388,7 +388,7 @@ export default function AdminView({ navigateTo }) {
                       }}
                       placeholder={`Option ${letter}`}
                       required
-                      className="px-3.5 py-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs focus:outline-none focus:border-teal-400"
+                      className="px-3.5 py-2.5 rounded-xl bg-[var(--surface-sunken)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-xs focus:outline-none focus:border-[var(--accent-border)]"
                     />
                   </div>
                 ))}
@@ -396,11 +396,11 @@ export default function AdminView({ navigateTo }) {
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex flex-col gap-1 flex-1">
-                  <label className="text-xs font-semibold text-gray-300">Correct Option</label>
+                  <label className="text-xs font-semibold text-[var(--text-secondary)]">Correct Option</label>
                   <select
                     value={mcqData.correct}
                     onChange={(e) => setMcqData({ ...mcqData, correct: e.target.value })}
-                    className="px-4 py-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs font-bold"
+                    className="px-4 py-2.5 rounded-xl bg-[var(--surface-sunken)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-xs font-bold"
                   >
                     <option value={0}>Option A</option>
                     <option value={1}>Option B</option>
@@ -410,20 +410,20 @@ export default function AdminView({ navigateTo }) {
                 </div>
 
                 <div className="flex flex-col gap-1 flex-2">
-                  <label className="text-xs font-semibold text-gray-300">Neville's Textbook Explanation</label>
+                  <label className="text-xs font-semibold text-[var(--text-secondary)]">Neville's Textbook Explanation</label>
                   <input
                     type="text"
                     value={mcqData.explanation}
                     onChange={(e) => setMcqData({ ...mcqData, explanation: e.target.value })}
                     placeholder="Reference rationale for students"
-                    className="px-4 py-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs"
+                    className="px-4 py-2.5 rounded-xl bg-[var(--surface-sunken)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-xs"
                   />
                 </div>
               </div>
 
               <button
                 type="submit"
-                className="mt-2 py-3.5 rounded-xl bg-gradient-to-r from-teal-400 to-purple-600 text-slate-950 font-bold text-xs uppercase tracking-wider cursor-pointer hover:scale-[1.01] transition-transform"
+                className="mt-2 py-3.5 rounded-xl bg-[var(--accent)] text-[var(--text-on-accent)] font-bold text-xs uppercase tracking-wider cursor-pointer hover:scale-[1.01] transition-transform"
               >
                 + Add MCQ Question to Quiz Bank
               </button>
@@ -434,32 +434,32 @@ export default function AdminView({ navigateTo }) {
           {contentType === 'matching' && (
             <form onSubmit={handleAddMatching} className="flex flex-col gap-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-gray-300">Histological Structure / Description</label>
+                <label className="text-xs font-semibold text-[var(--text-secondary)]">Histological Structure / Description</label>
                 <input
                   type="text"
                   value={matchData.image}
                   onChange={(e) => setMatchData({ ...matchData, image: e.target.value })}
                   placeholder="e.g. Biconcave fibrocartilaginous structure"
                   required
-                  className="px-4 py-3 rounded-xl bg-slate-900 border border-white/10 text-white text-xs focus:outline-none focus:border-teal-400"
+                  className="px-4 py-3 rounded-xl bg-[var(--surface-sunken)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-xs focus:outline-none focus:border-[var(--accent-border)]"
                 />
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-gray-300">Matching Classification / Label</label>
+                <label className="text-xs font-semibold text-[var(--text-secondary)]">Matching Classification / Label</label>
                 <input
                   type="text"
                   value={matchData.label}
                   onChange={(e) => setMatchData({ ...matchData, label: e.target.value })}
                   placeholder="e.g. Articular Disc (TMJ)"
                   required
-                  className="px-4 py-3 rounded-xl bg-slate-900 border border-white/10 text-white text-xs focus:outline-none focus:border-teal-400"
+                  className="px-4 py-3 rounded-xl bg-[var(--surface-sunken)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-xs focus:outline-none focus:border-[var(--accent-border)]"
                 />
               </div>
 
               <button
                 type="submit"
-                className="mt-2 py-3.5 rounded-xl bg-gradient-to-r from-teal-400 to-purple-600 text-slate-950 font-bold text-xs uppercase tracking-wider cursor-pointer hover:scale-[1.01] transition-transform"
+                className="mt-2 py-3.5 rounded-xl bg-[var(--accent)] text-[var(--text-on-accent)] font-bold text-xs uppercase tracking-wider cursor-pointer hover:scale-[1.01] transition-transform"
               >
                 + Add Matching Pair to Game
               </button>
@@ -470,32 +470,32 @@ export default function AdminView({ navigateTo }) {
           {contentType === 'crossword' && (
             <form onSubmit={handleAddCrossword} className="flex flex-col gap-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-gray-300">Crossword Terminology Word</label>
+                <label className="text-xs font-semibold text-[var(--text-secondary)]">Crossword Terminology Word</label>
                 <input
                   type="text"
                   value={crosswordData.word}
                   onChange={(e) => setCrosswordData({ ...crosswordData, word: e.target.value })}
                   placeholder="e.g. AMELOBLAST"
                   required
-                  className="px-4 py-3 rounded-xl bg-slate-900 border border-white/10 text-white text-xs focus:outline-none focus:border-teal-400"
+                  className="px-4 py-3 rounded-xl bg-[var(--surface-sunken)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-xs focus:outline-none focus:border-[var(--accent-border)]"
                 />
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-gray-300">Clue Description</label>
+                <label className="text-xs font-semibold text-[var(--text-secondary)]">Clue Description</label>
                 <input
                   type="text"
                   value={crosswordData.clue}
                   onChange={(e) => setCrosswordData({ ...crosswordData, clue: e.target.value })}
                   placeholder="e.g. Cell responsible for enamel matrix synthesis"
                   required
-                  className="px-4 py-3 rounded-xl bg-slate-900 border border-white/10 text-white text-xs focus:outline-none focus:border-teal-400"
+                  className="px-4 py-3 rounded-xl bg-[var(--surface-sunken)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-xs focus:outline-none focus:border-[var(--accent-border)]"
                 />
               </div>
 
               <button
                 type="submit"
-                className="mt-2 py-3.5 rounded-xl bg-gradient-to-r from-teal-400 to-purple-600 text-slate-950 font-bold text-xs uppercase tracking-wider cursor-pointer hover:scale-[1.01] transition-transform"
+                className="mt-2 py-3.5 rounded-xl bg-[var(--accent)] text-[var(--text-on-accent)] font-bold text-xs uppercase tracking-wider cursor-pointer hover:scale-[1.01] transition-transform"
               >
                 + Add Crossword Word to Game
               </button>
@@ -506,15 +506,15 @@ export default function AdminView({ navigateTo }) {
 
       {/* Tab 2: Auto Document Importer */}
       {activeTab === 'uploader' && (
-        <div className="glass-panel border border-white/10 p-6 rounded-3xl flex flex-col gap-6">
+        <div className="glass-panel border border-[var(--border-subtle)] p-6 rounded-3xl flex flex-col gap-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Document Parser Box */}
-            <div className="glass-panel border border-white/10 p-5 rounded-2xl flex flex-col gap-4 bg-slate-900/60">
-              <div className="flex items-center gap-2 font-heading font-bold text-sm text-teal-300">
-                <FileText className="w-5 h-5 text-amber-400" />
+            <div className="glass-panel border border-[var(--border-subtle)] p-5 rounded-2xl flex flex-col gap-4 bg-[var(--surface-sunken)]/60">
+              <div className="flex items-center gap-2 font-heading font-bold text-sm text-[var(--accent-ink)]">
+                <FileText className="w-5 h-5 text-[var(--gold-ink)]" />
                 <span>Upload Word / Text Document (.txt, .doc)</span>
               </div>
-              <p className="text-xs text-gray-400">
+              <p className="text-xs text-[var(--text-muted)]">
                 Upload a question bank or crossword text document to automatically parse and import MCQs or Crossword clues into the selected mission!
               </p>
 
@@ -522,19 +522,19 @@ export default function AdminView({ navigateTo }) {
                 type="file"
                 accept=".txt,.doc,.docx,.csv"
                 onChange={handleDocFileUpload}
-                className="text-xs text-gray-300 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-teal-400 file:text-slate-950 hover:file:bg-teal-300 cursor-pointer"
+                className="text-xs text-[var(--text-secondary)] file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[var(--accent)] file:text-[var(--text-primary)] hover:file:bg-[var(--accent)] cursor-pointer"
               />
 
               {parsedPreview && (
-                <div className="mt-2 flex flex-col gap-3 p-3 rounded-xl bg-slate-950 border border-white/10 text-xs">
-                  <div className="font-bold text-amber-300">
+                <div className="mt-2 flex flex-col gap-3 p-3 rounded-xl bg-[var(--surface-sunken)] border border-[var(--border-subtle)] text-xs">
+                  <div className="font-bold text-[var(--gold-ink)]">
                     Detected: {parsedPreview.mcqs.length} MCQs | {parsedPreview.crosswords.length} Crosswords
                   </div>
 
                   {parsedPreview.mcqs.length > 0 && (
                     <button
                       onClick={handleImportParsedMCQs}
-                      className="py-2.5 rounded-xl bg-teal-400 text-slate-950 font-bold text-xs hover:bg-teal-300 cursor-pointer"
+                      className="py-2.5 rounded-xl bg-[var(--accent)] text-[var(--text-on-accent)] font-bold text-xs hover:bg-[var(--accent)] cursor-pointer"
                     >
                       Import {parsedPreview.mcqs.length} MCQs into Quiz Bank
                     </button>
@@ -543,7 +543,7 @@ export default function AdminView({ navigateTo }) {
                   {parsedPreview.crosswords.length > 0 && (
                     <button
                       onClick={handleImportParsedCrosswords}
-                      className="py-2.5 rounded-xl bg-purple-500 text-white font-bold text-xs hover:bg-purple-400 cursor-pointer"
+                      className="py-2.5 rounded-xl bg-[var(--accent-2)] text-[var(--text-on-accent)] font-bold text-xs hover:bg-[var(--accent-2)] cursor-pointer"
                     >
                       Import {parsedPreview.crosswords.length} Crossword Words
                     </button>
@@ -553,12 +553,12 @@ export default function AdminView({ navigateTo }) {
             </div>
 
             {/* Histology Slide Jigsaw Generator */}
-            <div className="glass-panel border border-white/10 p-5 rounded-2xl flex flex-col gap-4 bg-slate-900/60">
-              <div className="flex items-center gap-2 font-heading font-bold text-sm text-purple-300">
-                <ImageIcon className="w-5 h-5 text-purple-400" />
+            <div className="glass-panel border border-[var(--border-subtle)] p-5 rounded-2xl flex flex-col gap-4 bg-[var(--surface-sunken)]/60">
+              <div className="flex items-center gap-2 font-heading font-bold text-sm text-[var(--accent-2-ink)]">
+                <ImageIcon className="w-5 h-5 text-[var(--accent-2-ink)]" />
                 <span>Upload Histopathological Slide Image</span>
               </div>
-              <p className="text-xs text-gray-400">
+              <p className="text-xs text-[var(--text-muted)]">
                 Upload a microscopic tissue slide image (.jpg, .png) to convert it into a sliced 3×3 interactive Jigsaw Puzzle!
               </p>
 
@@ -566,13 +566,13 @@ export default function AdminView({ navigateTo }) {
                 type="file"
                 accept="image/*"
                 onChange={handleSlideImageUpload}
-                className="text-xs text-gray-300 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-purple-500 file:text-white hover:file:bg-purple-400 cursor-pointer"
+                className="text-xs text-[var(--text-secondary)] file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[var(--accent-2)] file:text-[var(--text-primary)] hover:file:bg-[var(--accent-2)] cursor-pointer"
               />
 
               {slidePreview && (
-                <div className="mt-2 flex flex-col items-center gap-2 p-2 rounded-xl bg-slate-950 border border-white/10">
+                <div className="mt-2 flex flex-col items-center gap-2 p-2 rounded-xl bg-[var(--surface-sunken)] border border-[var(--border-subtle)]">
                   <img src={slidePreview} alt="Uploaded Slide" className="w-full max-h-40 object-cover rounded-lg" />
-                  <span className="text-[10px] text-teal-300 font-bold">✓ Slide Ready for Jigsaw Game</span>
+                  <span className="text-[10px] text-[var(--accent-ink)] font-bold">✓ Slide Ready for Jigsaw Game</span>
                 </div>
               )}
             </div>

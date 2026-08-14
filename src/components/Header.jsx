@@ -17,7 +17,7 @@ export default function Header({ currentView, navigateTo }) {
   return (
     <header
       className="sticky top-0 z-50 border-b backdrop-blur-xl"
-      style={{ background: 'rgba(11,13,20,.82)', borderColor: 'var(--border-subtle)' }}
+      style={{ background: 'rgba(255,255,255,.86)', borderColor: 'var(--border-subtle)' }}
     >
       <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between gap-4">
         {/* Brand */}
@@ -25,11 +25,11 @@ export default function Header({ currentView, navigateTo }) {
           onClick={() => navigateTo('home')}
           className="flex items-center gap-2.5 shrink-0 cursor-pointer group"
         >
-          <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-400 to-fuchsia-500 flex items-center justify-center text-slate-950 shadow-lg group-hover:scale-105 transition-transform">
+          <span className="w-9 h-9 rounded-xl bg-[var(--accent)] flex items-center justify-center text-[var(--text-primary)] shadow-lg group-hover:scale-105 transition-transform">
             <Microscope className="w-5 h-5" />
           </span>
           <span className="hidden sm:flex flex-col items-start leading-none">
-            <span className="font-heading font-extrabold text-base text-white">HistoPath</span>
+            <span className="font-heading font-extrabold text-base text-[var(--text-primary)]">HistoPath</span>
             <span className="text-[10px] font-semibold tracking-widest uppercase" style={{ color: 'var(--text-muted)' }}>
               India
             </span>
@@ -46,11 +46,11 @@ export default function Header({ currentView, navigateTo }) {
                 onClick={() => navigateTo(id)}
                 aria-current={active ? 'page' : undefined}
                 className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors cursor-pointer ${
-                  active ? 'text-white' : 'hover:text-white'
+                  active ? 'text-[var(--text-primary)]' : 'hover:text-[var(--text-primary)]'
                 }`}
                 style={{
                   background: active ? 'var(--accent-soft)' : 'transparent',
-                  color: active ? 'var(--accent)' : 'var(--text-secondary)',
+                  color: active ? 'var(--accent-ink)' : 'var(--text-secondary)',
                 }}
               >
                 <Icon className="w-4 h-4" /> {label}
@@ -63,7 +63,7 @@ export default function Header({ currentView, navigateTo }) {
         <div className="flex items-center gap-2 shrink-0">
           <div
             className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold"
-            style={{ background: 'rgba(251,191,36,.10)', color: 'var(--gold)' }}
+            style={{ background: 'var(--gold-soft)', color: 'var(--gold-ink)' }}
             title={`${stats.totalStars} stars · ${stats.missionsCompleted} of ${stats.totalMissions} missions`}
           >
             <Trophy className="w-3.5 h-3.5" />
@@ -73,10 +73,10 @@ export default function Header({ currentView, navigateTo }) {
           <button
             onClick={() => navigateTo('admin')}
             aria-label="Admin"
-            className={`p-2 rounded-lg transition-colors cursor-pointer ${currentView === 'admin' ? 'text-fuchsia-300' : 'hover:text-white'}`}
+            className={`p-2 rounded-lg transition-colors cursor-pointer ${currentView === 'admin' ? 'text-[var(--accent-2-ink)]' : 'hover:text-[var(--text-primary)]'}`}
             style={{
               background: currentView === 'admin' ? 'rgba(192,132,252,.14)' : 'transparent',
-              color: currentView === 'admin' ? 'var(--accent-2)' : 'var(--text-muted)',
+              color: currentView === 'admin' ? 'var(--accent-2-ink)' : 'var(--text-muted)',
             }}
           >
             <Settings className="w-4.5 h-4.5" />

@@ -3,177 +3,224 @@
 /* ═══════════════════════════════════════════════════════════
    Design tokens
 
-   One place for surface, text, and accent values so components
-   stop hardcoding slate-900/white-10 variants that drift apart.
+   Following theindiaproject.net: warm cream paper rather than a
+   cool grey ground, deep India green as the primary, a red used
+   sparingly for emphasis, Anton for display type, pill shapes,
+   and hard offset shadows instead of soft glows.
    ═══════════════════════════════════════════════════════════ */
 
 :root {
-  /* Surfaces, darkest to lightest */
-  --surface-base: #0B0D14;
-  --surface-raised: #12151F;
-  --surface-overlay: #1A1E2B;
-  --surface-hover: rgba(255, 255, 255, 0.05);
+  /* Paper */
+  --surface-page: #F6EFE2;      /* warm cream ground */
+  --surface-card: #FFFDF7;      /* warm white */
+  --surface-sunken: #F2E8C9;    /* sand — wells, tracks */
+  --surface-tint: #E0EEE8;      /* pale green wash */
+  --surface-hover: #FFFAF1;
 
-  /* Hairlines */
-  --border-subtle: rgba(255, 255, 255, 0.07);
-  --border-default: rgba(255, 255, 255, 0.12);
-  --border-strong: rgba(255, 255, 255, 0.20);
+  /* Hairlines — warm, never grey */
+  --border-subtle: #EADFCE;
+  --border-default: #E0D3BC;
+  --border-strong: #C9B99C;
 
-  /* Text hierarchy */
-  --text-primary: #F2F4F8;
-  --text-secondary: #A7AFC0;
-  --text-muted: #6E7688;
+  /* Ink */
+  --text-primary: #0B0B0B;
+  --text-secondary: #49423D;
+  --text-muted: #6B625B;
+  --text-on-accent: #FFFDF7;
 
-  /* Accents */
-  --accent: #2DD4BF;
-  --accent-soft: rgba(45, 212, 191, 0.14);
-  --accent-border: rgba(45, 212, 191, 0.35);
-  --accent-2: #C084FC;
-  --gold: #FBBF24;
-  --success: #34D399;
-  --danger: #FB7185;
+  /* Primary — deep green */
+  --accent: #176845;
+  --accent-ink: #125437;
+  --accent-hover: #0F462E;
+  --accent-soft: #E0EEE8;
+  --accent-border: #B7D5C7;
 
-  --radius: 14px;
-  --shadow-card: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.6);
-  --shadow-lift: 0 2px 4px rgba(0,0,0,.3), 0 16px 40px -16px rgba(0,0,0,.7);
+  /* Secondary — red, for emphasis only */
+  --accent-2: #E21F26;
+  --accent-2-ink: #B8161C;
+  --accent-2-soft: #FBE7E7;
+  --accent-2-border: #F0C4C5;
+
+  /* Gold */
+  --gold: #FFB21A;
+  --gold-ink: #765105;
+  --gold-soft: #FBF0D8;
+
+  --success: #176845;
+  --success-ink: #125437;
+  --success-soft: #E0EEE8;
+
+  --danger: #E21F26;
+  --danger-ink: #B8161C;
+  --danger-soft: #FBE7E7;
+
+  /* Eosin pink, for histology accents */
+  --rose: #D98BA0;
+  --rose-ink: #9E4E64;
+  --rose-soft: #FBEEF2;
+
+  --radius: 16px;
+  --radius-pill: 999px;
+
+  /* Hard offset shadows give the "sticker" feel of the reference. */
+  --shadow-hard: 4px 4px 0 0 var(--text-primary);
+  --shadow-hard-sand: 6px 6px 0 0 #EADFCE;
+  --shadow-soft: 0 8px 24px 0 rgba(11, 11, 11, .06);
+  --shadow-sm: 0 1px 2px rgba(11, 11, 11, .06);
 }
 
 @layer base {
+  html { background: var(--surface-page); }
+
   body {
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: var(--surface-base);
+    background: var(--surface-page);
     color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Outfit', system-ui, sans-serif;
-    letter-spacing: -0.02em;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.022em;
+    color: var(--text-primary);
   }
 
-  /* Keyboard focus is visible everywhere; pointer clicks stay clean. */
   :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
     border-radius: 6px;
   }
 
-  ::selection {
-    background: var(--accent);
-    color: #06201C;
-  }
+  ::selection { background: var(--gold); color: var(--text-primary); }
 
-  /* Scrollbars that match the surface rather than the OS default */
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,.15) transparent;
-  }
+  * { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
   *::-webkit-scrollbar { width: 10px; height: 10px; }
   *::-webkit-scrollbar-track { background: transparent; }
   *::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,.13);
+    background: var(--border-strong);
     border-radius: 99px;
     border: 3px solid transparent;
     background-clip: content-box;
   }
-  *::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.22); background-clip: content-box; }
+}
+
+/* Anton for display headings only — it is a heavy condensed face and
+   becomes unreadable at body sizes. */
+.font-heading,
+.display {
+  font-family: 'Anton', 'Inter', system-ui, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  text-transform: none;
 }
 
 /* ── Components ──────────────────────────────────────────── */
 
 .card {
-  background: var(--surface-raised);
+  background: var(--surface-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius);
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-soft);
 }
 
 .card-interactive {
-  background: var(--surface-raised);
-  border: 1px solid var(--border-subtle);
+  background: var(--surface-card);
+  border: 2px solid var(--text-primary);
   border-radius: var(--radius);
-  box-shadow: var(--shadow-card);
-  transition: transform .18s cubic-bezier(.4,0,.2,1),
-              border-color .18s, box-shadow .18s, background .18s;
+  box-shadow: var(--shadow-hard);
+  transition: transform .16s cubic-bezier(.4,0,.2,1), box-shadow .16s;
   cursor: pointer;
 }
-
 .card-interactive:hover {
-  background: var(--surface-overlay);
-  border-color: var(--border-default);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lift);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 0 var(--text-primary);
+}
+.card-interactive:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 0 var(--text-primary);
 }
 
-.card-interactive:active { transform: translateY(0); }
-
-/* Retained: several views still reference it. */
+/* Legacy name still referenced by a few views. */
 .glass-panel {
-  background: var(--surface-raised);
+  background: var(--surface-card);
   border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
 }
-
-.glass-panel-hover { transition: all .18s cubic-bezier(.4,0,.2,1); }
+.glass-panel-hover { transition: all .16s cubic-bezier(.4,0,.2,1); }
 .glass-panel-hover:hover {
-  background: var(--surface-overlay);
-  border-color: var(--border-default);
+  border-color: var(--border-strong);
   transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-sand);
 }
 
-.text-gradient {
-  background: linear-gradient(120deg, var(--accent) 0%, var(--accent-2) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.text-gold {
-  background: linear-gradient(120deg, #FCD34D 0%, #FB923C 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+.text-gradient { color: var(--accent); }
+.text-gold { color: var(--gold-ink); }
 
 .btn-primary {
-  background: linear-gradient(120deg, var(--accent), var(--accent-2));
-  color: #08131A;
+  background: var(--accent);
+  color: var(--text-on-accent);
   font-weight: 700;
-  border-radius: 12px;
-  transition: filter .18s, transform .18s;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--text-primary);
+  box-shadow: var(--shadow-hard);
+  transition: transform .14s, box-shadow .14s, background .14s;
 }
-.btn-primary:hover { filter: brightness(1.1); }
-.btn-primary:active { transform: scale(.98); }
+.btn-primary:hover {
+  background: var(--accent-hover);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 0 var(--text-primary);
+}
+.btn-primary:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 0 var(--text-primary);
+}
 
 .btn-ghost {
-  background: var(--surface-hover);
-  border: 1px solid var(--border-default);
+  background: var(--surface-card);
+  border: 2px solid var(--text-primary);
   color: var(--text-primary);
-  border-radius: 10px;
-  transition: background .18s, border-color .18s;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  transition: background .16s, transform .14s;
 }
-.btn-ghost:hover {
-  background: rgba(255,255,255,.09);
-  border-color: var(--border-strong);
+.btn-ghost:hover { background: var(--surface-sunken); }
+.btn-ghost:active { transform: scale(.97); }
+
+.field {
+  background: var(--surface-card);
+  border: 2px solid var(--border-default);
+  color: var(--text-primary);
+  border-radius: 12px;
+  transition: border-color .16s, box-shadow .16s;
+}
+.field::placeholder { color: var(--text-muted); }
+.field:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(23, 104, 69, .15);
 }
 
-/* Progress track */
+/* Pill chip */
+.chip {
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  border: 1.5px solid transparent;
+}
+
 .track {
-  background: rgba(255,255,255,.07);
-  border-radius: 99px;
+  background: var(--surface-sunken);
+  border: 1.5px solid var(--text-primary);
+  border-radius: var(--radius-pill);
   overflow: hidden;
 }
 .track > div {
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  background: var(--accent);
   height: 100%;
-  border-radius: 99px;
+  border-radius: var(--radius-pill);
   transition: width .5s cubic-bezier(.4,0,.2,1);
 }
-
-@keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 5px rgba(45,212,191,.2); }
-  50%      { box-shadow: 0 0 20px rgba(45,212,191,.5); }
-}
-.pulse-glow { animation: pulseGlow 2s ease-in-out infinite; }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
@@ -181,12 +228,16 @@
 }
 .fade-up { animation: fadeUp .3s cubic-bezier(.4,0,.2,1) both; }
 
-/* Respect users who ask for less motion. */
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(23,104,69,.25); }
+  50%      { box-shadow: 0 0 0 6px rgba(23,104,69,.10); }
+}
+.pulse-glow { animation: pulseGlow 2s ease-in-out infinite; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
-    scroll-behavior: auto !important;
   }
 }

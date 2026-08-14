@@ -78,21 +78,21 @@ export default function DifferencesGame({ differences = [], onComplete, giveHint
   return (
     <div className="w-full max-w-4xl mx-auto p-4 flex flex-col items-center gap-6">
       {/* Score bar */}
-      <div className="flex items-center justify-between w-full glass-panel px-4 py-2.5 rounded-xl border border-white/10 text-sm">
-        <span className="font-semibold text-gray-300">Spot 5 Microscopic Differences</span>
-        <span className="font-bold text-teal-400">Found: {found.length} / {activeDiffs.length}</span>
+      <div className="flex items-center justify-between w-full glass-panel px-4 py-2.5 rounded-xl border border-[var(--border-subtle)] text-sm">
+        <span className="font-semibold text-[var(--text-secondary)]">Spot 5 Microscopic Differences</span>
+        <span className="font-bold text-[var(--accent-ink)]">Found: {found.length} / {activeDiffs.length}</span>
       </div>
 
       {/* Side-by-side Image Container */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
         {/* Left Image (Normal Tissue) */}
         <div className="flex flex-col gap-2">
-          <div className="text-xs uppercase tracking-wider font-semibold text-gray-400 text-center">
+          <div className="text-xs uppercase tracking-wider font-semibold text-[var(--text-muted)] text-center">
             Normal Tissue Specimen
           </div>
           <div 
             onClick={(e) => handleImageClick(e, false)}
-            className="relative aspect-[4/3] w-full rounded-2xl overflow-hidden border border-white/10 bg-slate-900 cursor-crosshair shadow-lg select-none"
+            className="relative aspect-[4/3] w-full rounded-2xl overflow-hidden border border-[var(--border-subtle)] bg-[var(--surface-sunken)] cursor-crosshair shadow-lg select-none"
           >
             {/* SVG Histology Illustration */}
             <svg className="w-full h-full" viewBox="0 0 400 300">
@@ -134,7 +134,7 @@ export default function DifferencesGame({ differences = [], onComplete, giveHint
               return (
                 <div 
                   key={`left-found-${diffIdx}`}
-                  className="absolute w-8 h-8 rounded-full border-2 border-emerald-400 bg-emerald-500/20 shadow-lg shadow-emerald-500/50 -translate-x-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center text-emerald-300 font-bold text-xs"
+                  className="absolute w-8 h-8 rounded-full border-2 border-[var(--success)]/40 bg-[var(--success-soft)] shadow-lg  -translate-x-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center text-[var(--success-ink)] font-bold text-xs"
                   style={{ left: `${diff.x}%`, top: `${diff.y}%` }}
                 >
                   ✓
@@ -146,12 +146,12 @@ export default function DifferencesGame({ differences = [], onComplete, giveHint
 
         {/* Right Image (Pathological Specimen with Differences) */}
         <div className="flex flex-col gap-2">
-          <div className="text-xs uppercase tracking-wider font-semibold text-gray-400 text-center">
+          <div className="text-xs uppercase tracking-wider font-semibold text-[var(--text-muted)] text-center">
             Modified / Altered Specimen
           </div>
           <div 
             onClick={(e) => handleImageClick(e, true)}
-            className="relative aspect-[4/3] w-full rounded-2xl overflow-hidden border border-white/10 bg-slate-900 cursor-crosshair shadow-lg select-none"
+            className="relative aspect-[4/3] w-full rounded-2xl overflow-hidden border border-[var(--border-subtle)] bg-[var(--surface-sunken)] cursor-crosshair shadow-lg select-none"
           >
             {/* SVG Histology Illustration with 5 variations */}
             <svg className="w-full h-full" viewBox="0 0 400 300">
@@ -187,7 +187,7 @@ export default function DifferencesGame({ differences = [], onComplete, giveHint
               return (
                 <div 
                   key={`right-found-${diffIdx}`}
-                  className="absolute w-8 h-8 rounded-full border-2 border-emerald-400 bg-emerald-500/20 shadow-lg shadow-emerald-500/50 -translate-x-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center text-emerald-300 font-bold text-xs"
+                  className="absolute w-8 h-8 rounded-full border-2 border-[var(--success)]/40 bg-[var(--success-soft)] shadow-lg  -translate-x-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center text-[var(--success-ink)] font-bold text-xs"
                   style={{ left: `${diff.x}%`, top: `${diff.y}%` }}
                 >
                   ✓
@@ -198,7 +198,7 @@ export default function DifferencesGame({ differences = [], onComplete, giveHint
             {/* Hint Marker */}
             {hintCoords && (
               <div 
-                className="absolute w-12 h-12 rounded-full border-2 border-amber-400 shadow-xl shadow-amber-500/60 -translate-x-1/2 -translate-y-1/2 pointer-events-none animate-ping"
+                className="absolute w-12 h-12 rounded-full border-2 border-[var(--gold)]/40 shadow-xl shadow-amber-500/60 -translate-x-1/2 -translate-y-1/2 pointer-events-none animate-ping"
                 style={{ left: `${hintCoords.x}%`, top: `${hintCoords.y}%` }}
               />
             )}

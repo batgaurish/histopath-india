@@ -6,7 +6,7 @@ import { TOPICS } from '../data/topics';
 function InfoCard({ icon: Icon, tint, title, children }) {
   return (
     <div className="card p-4 flex flex-col gap-2">
-      <h3 className="font-bold text-sm text-white flex items-center gap-2">
+      <h3 className="font-bold text-sm text-[var(--text-primary)] flex items-center gap-2">
         <Icon className="w-4 h-4" style={{ color: tint }} /> {title}
       </h3>
       <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
@@ -22,10 +22,10 @@ export default function AboutView() {
   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-8 md:py-12 flex flex-col gap-8">
       <header className="text-center flex flex-col items-center gap-3">
-        <span className="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-400 to-fuchsia-500 flex items-center justify-center text-slate-950 shadow-xl">
+        <span className="w-16 h-16 rounded-2xl bg-[var(--accent)] flex items-center justify-center text-[var(--text-primary)] shadow-xl">
           <Microscope className="w-8 h-8" />
         </span>
-        <h1 className="font-heading font-extrabold text-3xl text-white">
+        <h1 className="font-heading font-extrabold text-3xl text-[var(--text-primary)]">
           About <span className="text-gradient">HistoPath India</span>
         </h1>
         <p className="text-sm max-w-xl" style={{ color: 'var(--text-secondary)' }}>
@@ -49,7 +49,7 @@ export default function AboutView() {
       </div>
 
       <section className="card p-6 md:p-7 flex flex-col gap-5">
-        <h2 className="flex items-center gap-2.5 font-heading font-bold text-lg" style={{ color: 'var(--accent)' }}>
+        <h2 className="flex items-center gap-2.5 font-heading font-bold text-lg" style={{ color: 'var(--accent-ink)' }}>
           <BookOpen className="w-5 h-5" /> How it works
         </h2>
 

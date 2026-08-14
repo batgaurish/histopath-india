@@ -14,7 +14,7 @@ export default function MobileNav({ currentView, navigateTo }) {
     <nav
       className="md:hidden fixed bottom-0 inset-x-0 z-50 border-t backdrop-blur-xl"
       style={{
-        background: 'rgba(11,13,20,.94)',
+        background: 'rgba(255,255,255,.94)',
         borderColor: 'var(--border-subtle)',
         // Clear the iOS home indicator.
         paddingBottom: 'env(safe-area-inset-bottom)',
@@ -30,12 +30,12 @@ export default function MobileNav({ currentView, navigateTo }) {
               aria-current={active ? 'page' : undefined}
               // 56px keeps every target above the 44px minimum.
               className="relative flex flex-col items-center justify-center gap-1 flex-1 min-w-0 min-h-[56px] rounded-xl transition-colors cursor-pointer"
-              style={{ color: active ? 'var(--accent)' : 'var(--text-muted)' }}
+              style={{ color: active ? 'var(--accent-ink)' : 'var(--text-muted)' }}
             >
               {active && (
                 <span
                   className="absolute top-0 w-8 h-0.5 rounded-full"
-                  style={{ background: 'var(--accent)' }}
+                  style={{ background: 'var(--accent-ink)' }}
                 />
               )}
               <Icon className="w-5 h-5" strokeWidth={active ? 2.4 : 2} />

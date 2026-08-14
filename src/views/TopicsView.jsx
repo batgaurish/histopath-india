@@ -14,11 +14,11 @@ export default function TopicsView({ onSelectTopic }) {
       <header className="flex flex-col gap-2">
         <span
           className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest"
-          style={{ color: 'var(--accent)' }}
+          style={{ color: 'var(--accent-ink)' }}
         >
           <BookOpen className="w-4 h-4" /> Curriculum
         </span>
-        <h1 className="font-heading font-extrabold text-3xl sm:text-4xl text-white">
+        <h1 className="font-heading font-extrabold text-3xl sm:text-4xl text-[var(--text-primary)]">
           Oral &amp; Maxillofacial Pathology
         </h1>
         <p className="text-sm max-w-2xl" style={{ color: 'var(--text-secondary)' }}>
@@ -54,7 +54,7 @@ export default function TopicsView({ onSelectTopic }) {
               <div className="flex items-start justify-between gap-3">
                 <span
                   className="w-11 h-11 shrink-0 rounded-xl flex items-center justify-center text-xl transition-transform group-hover:scale-110"
-                  style={{ background: 'var(--surface-overlay)', border: '1px solid var(--border-subtle)' }}
+                  style={{ background: 'var(--surface-sunken)', border: '1px solid var(--border-subtle)' }}
                 >
                   {topic.icon}
                 </span>
@@ -62,12 +62,12 @@ export default function TopicsView({ onSelectTopic }) {
                 {isDone ? (
                   <span
                     className="flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-lg"
-                    style={{ background: 'rgba(52,211,153,.12)', color: 'var(--success)' }}
+                    style={{ background: 'rgba(52,211,153,.12)', color: 'var(--success-ink)' }}
                   >
                     <CheckCircle2 className="w-3.5 h-3.5" /> Complete
                   </span>
                 ) : (
-                  <span className="flex items-center gap-1 text-xs font-bold" style={{ color: 'var(--gold)' }}>
+                  <span className="flex items-center gap-1 text-xs font-bold" style={{ color: 'var(--gold-ink)' }}>
                     <Star className="w-3.5 h-3.5 fill-current" />
                     <span className="tabular-nums">{stars}/{maxStars}</span>
                   </span>
@@ -75,7 +75,7 @@ export default function TopicsView({ onSelectTopic }) {
               </div>
 
               <div className="flex-1">
-                <h2 className="font-heading font-bold text-lg text-white group-hover:text-teal-300 transition-colors">
+                <h2 className="font-heading font-bold text-lg text-[var(--text-primary)] group-hover:text-[var(--accent-ink)] transition-colors">
                   {topic.title}
                 </h2>
                 <p className="text-xs mt-1 line-clamp-2 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
@@ -86,7 +86,7 @@ export default function TopicsView({ onSelectTopic }) {
               <div className="flex flex-col gap-2 pt-3" style={{ borderTop: '1px solid var(--border-subtle)' }}>
                 <div className="flex items-center justify-between text-[11px] font-semibold">
                   <span style={{ color: 'var(--text-muted)' }}>{topic.textbookRef}</span>
-                  <span className="tabular-nums" style={{ color: 'var(--accent)' }}>
+                  <span className="tabular-nums" style={{ color: 'var(--accent-ink)' }}>
                     {completed}/{totalMissions}
                   </span>
                 </div>
@@ -97,7 +97,7 @@ export default function TopicsView({ onSelectTopic }) {
 
                 <span
                   className="flex items-center justify-end gap-0.5 text-xs font-bold pt-0.5 transition-transform group-hover:translate-x-1"
-                  style={{ color: 'var(--accent)' }}
+                  style={{ color: 'var(--accent-ink)' }}
                 >
                   {completed > 0 ? 'Continue' : 'Start'} <ChevronRight className="w-4 h-4" />
                 </span>

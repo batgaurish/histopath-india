@@ -71,10 +71,10 @@ export default function MissionView({ missionId, onBack, onCompleteMission }) {
           </button>
 
           <div>
-            <span className="text-xs font-bold tracking-widest uppercase" style={{ color: 'var(--accent)' }}>
+            <span className="text-xs font-bold tracking-widest uppercase" style={{ color: 'var(--accent-ink)' }}>
               {topic.title}
             </span>
-            <h2 className="font-heading font-extrabold text-xl md:text-2xl text-white">
+            <h2 className="font-heading font-extrabold text-xl md:text-2xl text-[var(--text-primary)]">
               {mission.title}
             </h2>
           </div>
@@ -82,8 +82,8 @@ export default function MissionView({ missionId, onBack, onCompleteMission }) {
 
         {/* Timer & Hint Toolbar */}
         <div className="flex items-center gap-3 self-end md:self-auto">
-          <div className="btn-ghost flex items-center gap-2 px-3 py-2 text-xs font-mono font-bold" style={{ color: 'var(--gold)' }}>
-            <Clock className="w-4 h-4 text-amber-400" />
+          <div className="btn-ghost flex items-center gap-2 px-3 py-2 text-xs font-mono font-bold" style={{ color: 'var(--gold-ink)' }}>
+            <Clock className="w-4 h-4 text-[var(--gold-ink)]" />
             <span>{Timer.format(seconds)}</span>
           </div>
 
@@ -91,20 +91,20 @@ export default function MissionView({ missionId, onBack, onCompleteMission }) {
             <button
               onClick={handleHintClick}
               className="flex items-center gap-2 px-3.5 py-2 rounded-lg font-semibold text-xs cursor-pointer transition-all active:scale-95"
-              style={{ background: 'rgba(251,191,36,.12)', border: '1px solid rgba(251,191,36,.3)', color: 'var(--gold)' }}
+              style={{ background: 'rgba(251,191,36,.12)', border: '1px solid rgba(251,191,36,.3)', color: 'var(--gold-ink)' }}
             >
-              <Lightbulb className="w-4 h-4 text-amber-400 animate-pulse" /> Hint
+              <Lightbulb className="w-4 h-4 text-[var(--gold-ink)] animate-pulse" /> Hint
             </button>
           )}
         </div>
       </div>
 
       {/* Mission Mode Tabs */}
-      <div className="flex items-center gap-1 p-1 rounded-xl w-fit" style={{ background: 'var(--surface-raised)', border: '1px solid var(--border-subtle)' }}>
+      <div className="flex items-center gap-1 p-1 rounded-xl w-fit" style={{ background: 'var(--surface-card)', border: '1px solid var(--border-subtle)' }}>
         <button
           onClick={() => setActiveTab('game')}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition-all cursor-pointer ${
-            activeTab === 'game' ? 'btn-primary' : 'hover:text-white'
+            activeTab === 'game' ? 'btn-primary' : 'hover:text-[var(--text-primary)]'
           }`}
           style={activeTab !== 'game' ? { color: 'var(--text-secondary)' } : undefined}
         >
@@ -114,7 +114,7 @@ export default function MissionView({ missionId, onBack, onCompleteMission }) {
         <button
           onClick={() => setActiveTab('quiz')}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition-all cursor-pointer ${
-            activeTab === 'quiz' ? 'btn-primary' : 'hover:text-white'
+            activeTab === 'quiz' ? 'btn-primary' : 'hover:text-[var(--text-primary)]'
           }`}
           style={activeTab !== 'quiz' ? { color: 'var(--text-secondary)' } : undefined}
         >

@@ -420,25 +420,25 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
     <div className="w-full max-w-6xl mx-auto p-2 md:p-4 flex flex-col lg:flex-row gap-4 items-start relative">
       {/* Victory Modal */}
       {isCompleted && (
-        <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="glass-panel border border-emerald-500/40 p-8 rounded-3xl max-w-md w-full flex flex-col items-center gap-6 text-center animate-in zoom-in-95 duration-300">
-            <div className="w-16 h-16 rounded-2xl bg-emerald-500/20 border border-emerald-400/50 flex items-center justify-center text-emerald-300 text-3xl shadow-xl shadow-emerald-500/30">
+        <div className="fixed inset-0 z-50 bg-[var(--surface-sunken)] backdrop-blur-md flex items-center justify-center p-4">
+          <div className="glass-panel border border-[var(--success)]/40 p-8 rounded-3xl max-w-md w-full flex flex-col items-center gap-6 text-center animate-in zoom-in-95 duration-300">
+            <div className="w-16 h-16 rounded-2xl bg-[var(--success-soft)] border border-[var(--success)]/40 flex items-center justify-center text-[var(--success-ink)] text-3xl shadow-xl ">
               <Trophy className="w-8 h-8" />
             </div>
             <div>
               <h3 className="font-heading font-extrabold text-2xl text-gradient">
                 Crossword Mastered!
               </h3>
-              <p className="text-xs text-gray-300 mt-1">
+              <p className="text-xs text-[var(--text-secondary)] mt-1">
                 All {words.length} pathology terms correctly identified — excellent clinical vocabulary!
               </p>
             </div>
-            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-400/10 border border-amber-400/30 text-amber-300 font-bold text-sm">
+            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--gold-soft)] border border-[var(--gold)]/40 text-[var(--gold-ink)] font-bold text-sm">
               <Sparkles className="w-4 h-4" /> +300 EXP Earned
             </div>
             <button
               onClick={handleFinish}
-              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-teal-400 to-purple-600 text-slate-950 font-extrabold text-sm shadow-xl shadow-teal-500/20 cursor-pointer hover:scale-[1.02] transition-transform"
+              className="w-full py-3.5 rounded-xl bg-[var(--accent)] text-[var(--text-on-accent)] font-extrabold text-sm shadow-xl  cursor-pointer hover:scale-[1.02] transition-transform"
             >
               Proceed to Neville's MCQs Quiz →
             </button>
@@ -450,18 +450,18 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
       <div className="flex-1 w-full flex flex-col items-center gap-3">
         {/* Active Word Clue Header Banner */}
         {activeWord && (
-          <div className="w-full max-w-[500px] px-4 py-2.5 rounded-xl bg-amber-400/10 border border-amber-400/30 text-amber-300 text-xs font-bold flex items-center justify-between gap-2">
+          <div className="w-full max-w-[500px] px-4 py-2.5 rounded-xl bg-[var(--gold-soft)] border border-[var(--gold)]/40 text-[var(--gold-ink)] text-xs font-bold flex items-center justify-between gap-2">
             <span className="flex-1">#{activeWord.number} {activeWord.direction.toUpperCase()}: {activeWord.clue}</span>
-            <span className="text-[10px] text-amber-400/80 font-mono shrink-0">({selectedWordCharIdx + 1}/{activeWord.word.length})</span>
+            <span className="text-[10px] text-[var(--text-primary)] font-mono shrink-0">({selectedWordCharIdx + 1}/{activeWord.word.length})</span>
           </div>
         )}
 
         {/* Progress indicator */}
-        <div className="flex items-center gap-2 text-[10px] font-bold text-gray-400">
+        <div className="flex items-center gap-2 text-[10px] font-bold text-[var(--text-secondary)]">
           <span>{solvedWords.size} / {words.length} words solved</span>
-          <div className="w-24 h-1.5 rounded-full bg-slate-800 overflow-hidden">
+          <div className="w-24 h-1.5 rounded-full bg-[var(--surface-sunken)] overflow-hidden">
             <div 
-              className="h-full bg-gradient-to-r from-teal-400 to-emerald-400 rounded-full transition-all duration-500"
+              className="h-full bg-[var(--accent)] rounded-full transition-all duration-500"
               style={{ width: `${words.length > 0 ? (solvedWords.size / words.length) * 100 : 0}%` }}
             />
           </div>
@@ -469,7 +469,7 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
 
         {/* Crossword Grid */}
         <div 
-          className="grid gap-[2px] p-2 glass-panel border border-white/10 rounded-2xl w-full max-w-[500px] shadow-2xl"
+          className="grid gap-[2px] p-2 glass-panel border border-[var(--border-subtle)] rounded-2xl w-full max-w-[500px] shadow-2xl"
           style={{ 
             gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
             aspectRatio: '1 / 1',
@@ -489,7 +489,7 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
 
             if (!cellData) {
               return (
-                <div key={key} className="bg-slate-950/90 rounded-[3px]" style={{ aspectRatio: '1' }} />
+                <div key={key} className="bg-[var(--surface-sunken)] rounded-[3px]" style={{ aspectRatio: '1' }} />
               );
             }
 
@@ -499,21 +499,21 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
                 onClick={() => handleCellClick(r, c)}
                 className={`rounded-[3px] border flex flex-col items-center justify-center relative font-extrabold text-[11px] md:text-sm cursor-pointer transition-all ${
                   isCurrentCell
-                    ? 'border-amber-400 bg-amber-400/40 text-white ring-2 ring-amber-400/60 shadow-lg scale-[1.03] z-10'
+                    ? 'border-[var(--gold)]/40 bg-[var(--gold-soft)] text-[var(--text-primary)] ring-2 ring-[var(--gold)] shadow-lg scale-[1.03] z-10'
                     : isWordMember
-                    ? 'border-teal-400/80 bg-teal-500/20 text-teal-100 ring-1 ring-teal-400/30'
+                    ? 'border-[var(--accent-border)] bg-[var(--accent-soft)] text-[var(--accent-ink)] ring-1 ring-[var(--accent-border)]'
                     : isSolvedWordCell
-                    ? 'border-emerald-500/60 bg-emerald-950/40 text-emerald-300'
+                    ? 'border-[var(--success)]/40 bg-[var(--success-soft)] text-[var(--success-ink)]'
                     : isRevealed
-                    ? 'border-emerald-500/80 bg-emerald-950/60 text-emerald-300'
+                    ? 'border-[var(--success)]/40 bg-[var(--success-soft)] text-[var(--success-ink)]'
                     : userChar
-                    ? 'border-teal-400/60 bg-slate-900 text-teal-200'
-                    : 'border-white/20 bg-slate-900 text-white hover:border-teal-400/60'
+                    ? 'border-[var(--accent-border)] bg-[var(--surface-sunken)] text-[var(--accent-ink)]'
+                    : 'border-[var(--border-subtle)] bg-[var(--surface-sunken)] text-[var(--text-primary)] hover:border-[var(--accent-border)]'
                 }`}
                 style={{ aspectRatio: '1' }}
               >
                 {cellData.number && (
-                  <span className="absolute top-[1px] left-[3px] text-[7px] md:text-[8px] text-amber-300 font-bold leading-none">
+                  <span className="absolute top-[1px] left-[3px] text-[7px] md:text-[8px] text-[var(--text-primary)] font-bold leading-none">
                     {cellData.number}
                   </span>
                 )}
@@ -524,24 +524,24 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
         </div>
 
         {/* Touch Keyboard */}
-        <div ref={keyboardRef} className="w-full max-w-[500px] flex flex-col gap-1 glass-panel p-2 rounded-xl border border-white/10">
+        <div ref={keyboardRef} className="w-full max-w-[500px] flex flex-col gap-1 glass-panel p-2 rounded-xl border border-[var(--border-subtle)]">
           <div className="grid grid-cols-10 gap-1 text-center">
             {['Q','W','E','R','T','Y','U','I','O','P'].map(l => (
-              <button key={l} onClick={() => handleKeyPress(l)} className="p-1.5 md:p-2 rounded bg-slate-800 hover:bg-teal-600 active:scale-90 text-[10px] md:text-xs font-bold text-white border border-white/10 transition-transform cursor-pointer">{l}</button>
+              <button key={l} onClick={() => handleKeyPress(l)} className="p-1.5 md:p-2 rounded bg-[var(--surface-sunken)] hover:bg-[var(--accent)] active:scale-90 text-[10px] md:text-xs font-bold text-[var(--text-primary)] border border-[var(--border-subtle)] transition-transform cursor-pointer">{l}</button>
             ))}
           </div>
           <div className="grid grid-cols-9 gap-1 text-center px-2">
             {['A','S','D','F','G','H','J','K','L'].map(l => (
-              <button key={l} onClick={() => handleKeyPress(l)} className="p-1.5 md:p-2 rounded bg-slate-800 hover:bg-teal-600 active:scale-90 text-[10px] md:text-xs font-bold text-white border border-white/10 transition-transform cursor-pointer">{l}</button>
+              <button key={l} onClick={() => handleKeyPress(l)} className="p-1.5 md:p-2 rounded bg-[var(--surface-sunken)] hover:bg-[var(--accent)] active:scale-90 text-[10px] md:text-xs font-bold text-[var(--text-primary)] border border-[var(--border-subtle)] transition-transform cursor-pointer">{l}</button>
             ))}
           </div>
           <div className="grid grid-cols-8 gap-1 text-center px-4">
             {['Z','X','C','V','B','N','M'].map(l => (
-              <button key={l} onClick={() => handleKeyPress(l)} className="p-1.5 md:p-2 rounded bg-slate-800 hover:bg-teal-600 active:scale-90 text-[10px] md:text-xs font-bold text-white border border-white/10 transition-transform cursor-pointer">{l}</button>
+              <button key={l} onClick={() => handleKeyPress(l)} className="p-1.5 md:p-2 rounded bg-[var(--surface-sunken)] hover:bg-[var(--accent)] active:scale-90 text-[10px] md:text-xs font-bold text-[var(--text-primary)] border border-[var(--border-subtle)] transition-transform cursor-pointer">{l}</button>
             ))}
             <button 
               onClick={handleBackspace}
-              className="p-1.5 md:p-2 rounded bg-rose-600/80 hover:bg-rose-500 active:scale-90 text-xs font-bold text-white border border-white/10 flex items-center justify-center cursor-pointer"
+              className="p-1.5 md:p-2 rounded bg-[var(--danger-soft)] hover:bg-[var(--danger)] active:scale-90 text-xs font-bold text-[var(--text-primary)] border border-[var(--border-subtle)] flex items-center justify-center cursor-pointer"
             >
               <Delete className="w-3.5 h-3.5" />
             </button>
@@ -552,8 +552,8 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
       {/* Clues Column — Separated into Across & Down */}
       <div className="w-full lg:w-80 flex flex-col gap-4">
         {/* Across Clues */}
-        <div className="glass-panel border border-white/10 p-4 rounded-2xl flex flex-col gap-3">
-          <h3 className="font-heading font-bold text-sm text-teal-400 uppercase tracking-wider flex items-center gap-2">
+        <div className="glass-panel border border-[var(--border-subtle)] p-4 rounded-2xl flex flex-col gap-3">
+          <h3 className="font-heading font-bold text-sm text-[var(--accent-ink)] uppercase tracking-wider flex items-center gap-2">
             → Across
           </h3>
           <div className="flex flex-col gap-2 max-h-48 overflow-y-auto pr-1">
@@ -566,17 +566,17 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
                   onClick={() => handleClueClick(w)}
                   className={`p-2.5 rounded-xl border text-xs flex flex-col gap-0.5 cursor-pointer transition-all ${
                     isSolved
-                      ? 'border-emerald-500/50 bg-emerald-950/40 text-emerald-300 opacity-70'
+                      ? 'border-[var(--success)]/40 bg-[var(--success-soft)] text-[var(--success-ink)] opacity-70'
                       : isSelectedWord
-                      ? 'border-amber-400 bg-amber-400/20 text-white ring-2 ring-amber-400/50 shadow-md'
-                      : 'bg-slate-900/70 border-white/5 text-gray-300 hover:border-teal-400/40'
+                      ? 'border-[var(--gold)]/40 bg-[var(--gold-soft)] text-[var(--text-primary)] ring-2 ring-[var(--gold)] shadow-md'
+                      : 'bg-[var(--surface-sunken)]/70 border-[var(--border-subtle)] text-[var(--text-secondary)] hover:border-[var(--accent-border)]'
                   }`}
                 >
-                  <div className="font-bold text-amber-300 flex items-center justify-between">
+                  <div className="font-bold text-[var(--text-primary)] flex items-center justify-between">
                     <span>{w.number}. {isSolved ? '✓' : ''}</span>
-                    <span className="text-[9px] text-gray-400 font-mono">({w.word.length})</span>
+                    <span className="text-[9px] text-[var(--text-secondary)] font-mono">({w.word.length})</span>
                   </div>
-                  <div className={`leading-relaxed ${isSolved ? 'line-through opacity-60' : 'text-gray-200'}`}>{w.clue}</div>
+                  <div className={`leading-relaxed ${isSolved ? 'line-through opacity-60' : 'text-[var(--text-secondary)]'}`}>{w.clue}</div>
                 </div>
               );
             })}
@@ -584,8 +584,8 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
         </div>
 
         {/* Down Clues */}
-        <div className="glass-panel border border-white/10 p-4 rounded-2xl flex flex-col gap-3">
-          <h3 className="font-heading font-bold text-sm text-purple-400 uppercase tracking-wider flex items-center gap-2">
+        <div className="glass-panel border border-[var(--border-subtle)] p-4 rounded-2xl flex flex-col gap-3">
+          <h3 className="font-heading font-bold text-sm text-[var(--accent-2-ink)] uppercase tracking-wider flex items-center gap-2">
             ↓ Down
           </h3>
           <div className="flex flex-col gap-2 max-h-48 overflow-y-auto pr-1">
@@ -598,17 +598,17 @@ export default function CrosswordGame({ puzzleData, onComplete, giveHintRef }) {
                   onClick={() => handleClueClick(w)}
                   className={`p-2.5 rounded-xl border text-xs flex flex-col gap-0.5 cursor-pointer transition-all ${
                     isSolved
-                      ? 'border-emerald-500/50 bg-emerald-950/40 text-emerald-300 opacity-70'
+                      ? 'border-[var(--success)]/40 bg-[var(--success-soft)] text-[var(--success-ink)] opacity-70'
                       : isSelectedWord
-                      ? 'border-amber-400 bg-amber-400/20 text-white ring-2 ring-amber-400/50 shadow-md'
-                      : 'bg-slate-900/70 border-white/5 text-gray-300 hover:border-teal-400/40'
+                      ? 'border-[var(--gold)]/40 bg-[var(--gold-soft)] text-[var(--text-primary)] ring-2 ring-[var(--gold)] shadow-md'
+                      : 'bg-[var(--surface-sunken)]/70 border-[var(--border-subtle)] text-[var(--text-secondary)] hover:border-[var(--accent-border)]'
                   }`}
                 >
-                  <div className="font-bold text-purple-300 flex items-center justify-between">
+                  <div className="font-bold text-[var(--accent-2-ink)] flex items-center justify-between">
                     <span>{w.number}. {isSolved ? '✓' : ''}</span>
-                    <span className="text-[9px] text-gray-400 font-mono">({w.word.length})</span>
+                    <span className="text-[9px] text-[var(--text-secondary)] font-mono">({w.word.length})</span>
                   </div>
-                  <div className={`leading-relaxed ${isSolved ? 'line-through opacity-60' : 'text-gray-200'}`}>{w.clue}</div>
+                  <div className={`leading-relaxed ${isSolved ? 'line-through opacity-60' : 'text-[var(--text-secondary)]'}`}>{w.clue}</div>
                 </div>
               );
             })}

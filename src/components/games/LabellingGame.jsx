@@ -110,13 +110,13 @@ export default function LabellingGame({ missionId, exercise: exProp, onComplete,
   if (!isPlayable(exercise)) {
     return (
       <div className="w-full max-w-md mx-auto flex flex-col items-center gap-3 py-14 text-center">
-        <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400">
+        <div className="w-12 h-12 rounded-xl bg-[var(--surface-sunken)] border border-[var(--border-subtle)] flex items-center justify-center text-[var(--text-muted)]">
           <ImageOff className="w-6 h-6" />
         </div>
-        <h3 className="font-heading font-bold text-base text-white">No labelling exercise yet</h3>
-        <p className="text-sm text-slate-400 max-w-sm">
+        <h3 className="font-heading font-bold text-base text-[var(--text-primary)]">No labelling exercise yet</h3>
+        <p className="text-sm text-[var(--text-muted)] max-w-sm">
           This mission needs a slide and at least two labelled markers. Build one
-          in <span className="text-teal-300 font-semibold">Admin → Slide Labeller</span>,
+          in <span className="text-[var(--accent-ink)] font-semibold">Admin → Slide Labeller</span>,
           then it appears here automatically.
         </p>
       </div>
@@ -130,25 +130,25 @@ export default function LabellingGame({ missionId, exercise: exProp, onComplete,
     <div className="w-full max-w-3xl mx-auto flex flex-col gap-4">
       {/* Progress */}
       <div className="flex items-center gap-3">
-        <div className="flex-1 h-2 rounded-full bg-white/8 overflow-hidden">
+        <div className="flex-1 h-2 rounded-full bg-[var(--surface-sunken)] overflow-hidden">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-teal-400 to-fuchsia-500 transition-[width] duration-300"
+            className="h-full rounded-full bg-[var(--accent)] transition-[width] duration-300"
             style={{ width: `${progress}%` }}
           />
         </div>
-        <span className="text-xs font-semibold text-slate-300 tabular-nums shrink-0">
+        <span className="text-xs font-semibold text-[var(--text-secondary)] tabular-nums shrink-0">
           {Object.keys(solved).length}/{markers.length}
         </span>
         <button
           onClick={reset}
-          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-300 text-xs font-semibold hover:bg-white/10 cursor-pointer"
+          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[var(--surface-sunken)] border border-[var(--border-subtle)] text-[var(--text-secondary)] text-xs font-semibold hover:bg-[var(--surface-sunken)] cursor-pointer"
         >
           <RotateCcw className="w-3.5 h-3.5" /> Reset
         </button>
       </div>
 
       {/* Slide with marker overlay */}
-      <div className="relative rounded-xl overflow-hidden border border-white/12 bg-slate-950 shadow-2xl select-none">
+      <div className="relative rounded-xl overflow-hidden border border-[var(--border-subtle)] bg-[var(--surface-sunken)] shadow-2xl select-none">
         <img
           src={exercise.image}
           alt={exercise.caption || 'Histopathology slide'}
@@ -180,14 +180,14 @@ export default function LabellingGame({ missionId, exercise: exProp, onComplete,
               <div
                 className={`flex items-center justify-center rounded-full font-bold transition-all duration-200 ${
                   hot && !isSolved && !armed
-                    ? 'w-9 h-9 bg-transparent ring-2 ring-white/25'
+                    ? 'w-9 h-9 bg-transparent ring-2 ring-[var(--border-default)]'
                     : isSolved
-                    ? 'w-7 h-7 bg-emerald-400 text-slate-950 text-xs ring-2 ring-emerald-200/60 shadow-lg'
+                    ? 'w-7 h-7 bg-[var(--success)] text-[var(--text-primary)] text-xs ring-2 ring-[var(--accent-border)] shadow-lg'
                     : isWrong
-                    ? 'w-9 h-9 bg-rose-500 text-white text-xs ring-4 ring-rose-400/40 animate-pulse'
+                    ? 'w-9 h-9 bg-[var(--danger)] text-[var(--text-primary)] text-xs ring-4 ring-[var(--danger)] animate-pulse'
                     : armed
-                    ? 'w-9 h-9 bg-teal-400/25 text-teal-100 text-xs ring-2 ring-dashed ring-teal-300 cursor-pointer'
-                    : 'w-7 h-7 bg-amber-400 text-slate-950 text-xs ring-2 ring-amber-200/50 shadow-lg'
+                    ? 'w-9 h-9 bg-[var(--accent-soft)] text-[var(--accent-ink)] text-xs ring-2 ring-dashed ring-[var(--accent-border)] cursor-pointer'
+                    : 'w-7 h-7 bg-[var(--gold)] text-[var(--text-primary)] text-xs ring-2 ring-[var(--gold)] shadow-lg'
                 }`}
               >
                 {isSolved ? <Check className="w-4 h-4" /> : hot && !armed ? '' : i + 1}
@@ -195,7 +195,7 @@ export default function LabellingGame({ missionId, exercise: exProp, onComplete,
 
               {/* Answer, revealed on the slide once correct */}
               {isSolved && (
-                <span className="absolute left-1/2 top-full mt-1 -translate-x-1/2 whitespace-nowrap px-2 py-0.5 rounded-md bg-slate-950/90 border border-emerald-400/40 text-emerald-200 text-[11px] font-semibold shadow-lg">
+                <span className="absolute left-1/2 top-full mt-1 -translate-x-1/2 whitespace-nowrap px-2 py-0.5 rounded-md bg-[var(--surface-sunken)] border border-[var(--success)]/40 text-[var(--success-ink)] text-[11px] font-semibold shadow-lg">
                   {labelOf(m.id)}
                 </span>
               )}
@@ -205,13 +205,13 @@ export default function LabellingGame({ missionId, exercise: exProp, onComplete,
       </div>
 
       {exercise.caption && (
-        <p className="text-xs text-slate-400 text-center -mt-1">{exercise.caption}</p>
+        <p className="text-xs text-[var(--text-muted)] text-center -mt-1">{exercise.caption}</p>
       )}
 
       {/* Label tray */}
       {remaining.length > 0 ? (
         <div className="flex flex-col gap-2.5">
-          <p className="text-xs text-slate-400 text-center">
+          <p className="text-xs text-[var(--text-muted)] text-center">
             Drag each term onto its marker — or tap the term, then tap the marker.
           </p>
           <div className="flex flex-wrap justify-center gap-2">
@@ -233,8 +233,8 @@ export default function LabellingGame({ missionId, exercise: exProp, onComplete,
                   }}
                   className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-grab active:cursor-grabbing max-w-[280px] text-left ${
                     isSel
-                      ? 'bg-amber-400 text-slate-950 ring-2 ring-amber-300 scale-105 shadow-lg'
-                      : 'bg-white/6 border border-white/12 text-slate-100 hover:border-teal-400/60 hover:bg-white/10'
+                      ? 'bg-[var(--gold)] text-[var(--text-primary)] ring-2 ring-[var(--gold)] scale-105 shadow-lg'
+                      : 'bg-[var(--surface-sunken)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:border-[var(--accent-border)] hover:bg-[var(--surface-sunken)]'
                   } ${dragging === id ? 'opacity-40' : ''}`}
                 >
                   {labelOf(id)}
@@ -244,18 +244,18 @@ export default function LabellingGame({ missionId, exercise: exProp, onComplete,
           </div>
         </div>
       ) : !done && (
-        <p className="text-center text-sm text-teal-300 font-semibold">All labels placed.</p>
+        <p className="text-center text-sm text-[var(--accent-ink)] font-semibold">All labels placed.</p>
       )}
 
       {/* Completion */}
       {done && (
-        <div className="rounded-2xl bg-gradient-to-br from-teal-500/15 to-fuchsia-500/15 border border-teal-400/30 p-5 flex flex-col sm:flex-row items-center gap-4">
-          <div className="w-12 h-12 shrink-0 rounded-xl bg-teal-400/20 border border-teal-300/40 flex items-center justify-center text-teal-300">
+        <div className="rounded-2xl bg-[var(--accent-soft)] border border-[var(--accent-border)] p-5 flex flex-col sm:flex-row items-center gap-4">
+          <div className="w-12 h-12 shrink-0 rounded-xl bg-[var(--accent-soft)] border border-[var(--accent-border)] flex items-center justify-center text-[var(--accent-ink)]">
             <Trophy className="w-6 h-6" />
           </div>
           <div className="flex-1 text-center sm:text-left">
-            <h3 className="font-heading font-bold text-lg text-white">Slide fully labelled</h3>
-            <p className="text-xs text-slate-300 mt-0.5">
+            <h3 className="font-heading font-bold text-lg text-[var(--text-primary)]">Slide fully labelled</h3>
+            <p className="text-xs text-[var(--text-secondary)] mt-0.5">
               {mistakes === 0 && hints === 0
                 ? 'Flawless — every structure identified first time.'
                 : `${mistakes} misidentification${mistakes === 1 ? '' : 's'}, ${hints} hint${hints === 1 ? '' : 's'}.`}
@@ -263,7 +263,7 @@ export default function LabellingGame({ missionId, exercise: exProp, onComplete,
           </div>
           <button
             onClick={() => onComplete && onComplete({ hintsUsed: hints, mistakes })}
-            className="w-full sm:w-auto shrink-0 px-5 py-3 rounded-xl bg-gradient-to-r from-teal-400 to-fuchsia-500 text-slate-950 font-bold text-sm shadow-lg hover:brightness-110 transition-all cursor-pointer flex items-center justify-center gap-2"
+            className="w-full sm:w-auto shrink-0 px-5 py-3 rounded-xl bg-[var(--accent)] text-[var(--text-on-accent)] font-bold text-sm shadow-lg hover:brightness-110 transition-all cursor-pointer flex items-center justify-center gap-2"
           >
             <Sparkles className="w-4 h-4" /> Continue to MCQs
           </button>
@@ -271,7 +271,7 @@ export default function LabellingGame({ missionId, exercise: exProp, onComplete,
       )}
 
       {exercise.credit && (
-        <p className="text-[11px] text-slate-500 text-center">Image: {exercise.credit}</p>
+        <p className="text-[11px] text-[var(--text-muted)] text-center">Image: {exercise.credit}</p>
       )}
     </div>
   );

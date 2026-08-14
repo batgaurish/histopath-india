@@ -1,6 +1,6 @@
 {
   "short_name": "HistoPath",
-  "name": "HistoPath India — Oral Histology Educational Game",
+  "name": "HistoPath India — Oral & Maxillofacial Pathology Game",
   "icons": [
     {
       "src": "favicon.ico",
@@ -10,7 +10,7 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#0d0f17",
-  "background_color": "#0d0f17",
+  "theme_color": "#F6EFE2",
+  "background_color": "#F6EFE2",
   "orientation": "portrait-primary"
 }

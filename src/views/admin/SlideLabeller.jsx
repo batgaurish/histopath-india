@@ -199,22 +199,22 @@ export default function SlideLabeller() {
       {/* Target mission */}
       <div className="grid sm:grid-cols-2 gap-3">
         <label className="flex flex-col gap-1.5">
-          <span className="text-xs font-semibold text-slate-300">Topic</span>
+          <span className="text-xs font-semibold text-[var(--text-secondary)]">Topic</span>
           <select
             value={topicId}
             onChange={(e) => setTopicId(e.target.value)}
-            className="px-3 py-2.5 rounded-lg bg-slate-900 border border-white/12 text-white text-sm cursor-pointer focus:outline-none focus:border-teal-400"
+            className="px-3 py-2.5 rounded-lg bg-[var(--surface-sunken)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-sm cursor-pointer focus:outline-none focus:border-[var(--accent-border)]"
           >
             {TOPICS.map(t => <option key={t.id} value={t.id}>{t.title}</option>)}
           </select>
         </label>
 
         <label className="flex flex-col gap-1.5">
-          <span className="text-xs font-semibold text-slate-300">Mission</span>
+          <span className="text-xs font-semibold text-[var(--text-secondary)]">Mission</span>
           <select
             value={missionId}
             onChange={(e) => setMissionId(e.target.value)}
-            className="px-3 py-2.5 rounded-lg bg-slate-900 border border-white/12 text-white text-sm cursor-pointer focus:outline-none focus:border-teal-400"
+            className="px-3 py-2.5 rounded-lg bg-[var(--surface-sunken)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-sm cursor-pointer focus:outline-none focus:border-[var(--accent-border)]"
           >
             {missions.map(m => (
               <option key={m.id} value={m.id}>
@@ -230,7 +230,7 @@ export default function SlideLabeller() {
         <button
           onClick={() => fileRef.current?.click()}
           disabled={busy}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-teal-500/15 border border-teal-400/40 text-teal-200 text-sm font-semibold hover:bg-teal-500/25 disabled:opacity-50 cursor-pointer transition-colors"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[var(--accent-soft)] border border-[var(--accent-border)] text-[var(--accent-ink)] text-sm font-semibold hover:bg-[var(--accent-soft)] disabled:opacity-50 cursor-pointer transition-colors"
         >
           <Upload className="w-4 h-4" /> {image ? 'Replace slide' : 'Upload slide'}
         </button>
@@ -238,27 +238,27 @@ export default function SlideLabeller() {
 
         <button
           onClick={handleExport}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/5 border border-white/12 text-slate-200 text-sm font-semibold hover:bg-white/10 cursor-pointer transition-colors"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[var(--surface-sunken)] border border-[var(--border-subtle)] text-[var(--text-secondary)] text-sm font-semibold hover:bg-[var(--surface-sunken)] cursor-pointer transition-colors"
         >
           <Download className="w-4 h-4" /> Export all
         </button>
 
         <button
           onClick={() => importRef.current?.click()}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white/5 border border-white/12 text-slate-200 text-sm font-semibold hover:bg-white/10 cursor-pointer transition-colors"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[var(--surface-sunken)] border border-[var(--border-subtle)] text-[var(--text-secondary)] text-sm font-semibold hover:bg-[var(--surface-sunken)] cursor-pointer transition-colors"
         >
           <FileJson className="w-4 h-4" /> Import
         </button>
         <input ref={importRef} type="file" accept="application/json" onChange={handleImport} className="hidden" />
 
-        <span className="text-xs text-slate-500 ml-auto">Stored: {footprintKb} KB</span>
+        <span className="text-xs text-[var(--text-muted)] ml-auto">Stored: {footprintKb} KB</span>
       </div>
 
       {status && (
         <div className={`flex items-start gap-2 px-3.5 py-2.5 rounded-lg text-xs border ${
           status.type === 'ok'
-            ? 'bg-emerald-500/10 border-emerald-400/30 text-emerald-200'
-            : 'bg-rose-500/10 border-rose-400/30 text-rose-200'
+            ? 'bg-[var(--success-soft)] border-[var(--success)]/40 text-[var(--success-ink)]'
+            : 'bg-[var(--danger-soft)] border-[var(--danger)]/40 text-[var(--danger-ink)]'
         }`}>
           {status.type === 'ok' ? <Check className="w-4 h-4 shrink-0" /> : <AlertTriangle className="w-4 h-4 shrink-0" />}
           {status.text}
@@ -266,7 +266,7 @@ export default function SlideLabeller() {
       )}
 
       {footprintKb > 3500 && (
-        <div className="flex items-start gap-2 px-3.5 py-2.5 rounded-lg bg-amber-500/10 border border-amber-400/30 text-amber-200 text-xs">
+        <div className="flex items-start gap-2 px-3.5 py-2.5 rounded-lg bg-[var(--gold-soft)] border border-[var(--gold)]/40 text-[var(--gold-ink)] text-xs">
           <AlertTriangle className="w-4 h-4 shrink-0" />
           Stored slides are approaching the browser's ~5 MB limit. Export your work,
           then move the images into <code className="font-mono">public/histology/</code> to ship them.
@@ -277,15 +277,15 @@ export default function SlideLabeller() {
       {image ? (
         <div className="grid lg:grid-cols-[1fr_300px] gap-5 items-start">
           <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2 text-xs text-slate-400">
-              <MousePointerClick className="w-3.5 h-3.5 text-teal-400" />
+            <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
+              <MousePointerClick className="w-3.5 h-3.5 text-[var(--accent-ink)]" />
               Click the slide to drop a marker. Drag a marker to reposition it.
             </div>
 
             <div
               ref={imgWrapRef}
               onClick={handleImageClick}
-              className="relative rounded-xl overflow-hidden border border-white/12 cursor-crosshair select-none bg-slate-950"
+              className="relative rounded-xl overflow-hidden border border-[var(--border-subtle)] cursor-crosshair select-none bg-[var(--surface-sunken)]"
             >
               <img src={image} alt="Slide being labelled" className="w-full block" draggable={false} />
 
@@ -297,10 +297,10 @@ export default function SlideLabeller() {
                   style={{ left: `${m.x}%`, top: `${m.y}%` }}
                   className={`absolute -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold cursor-move transition-all ${
                     activeMarker === m.id
-                      ? 'bg-amber-400 text-slate-950 ring-4 ring-amber-400/40 scale-110 z-20'
+                      ? 'bg-[var(--gold)] text-[var(--text-primary)] ring-4 ring-[var(--gold)] scale-110 z-20'
                       : m.label.trim()
-                      ? 'bg-teal-400 text-slate-950 ring-2 ring-teal-200/50 z-10'
-                      : 'bg-rose-500 text-white ring-2 ring-rose-300/50 z-10'
+                      ? 'bg-[var(--accent)] text-[var(--text-on-accent)] ring-2 ring-[var(--accent-border)] z-10'
+                      : 'bg-[var(--danger)] text-[var(--text-primary)] ring-2 ring-[var(--danger)] z-10'
                   }`}
                 >
                   {i + 1}
@@ -310,21 +310,21 @@ export default function SlideLabeller() {
 
             <div className="grid sm:grid-cols-2 gap-3">
               <label className="flex flex-col gap-1.5">
-                <span className="text-xs font-semibold text-slate-300">Caption (optional)</span>
+                <span className="text-xs font-semibold text-[var(--text-secondary)]">Caption (optional)</span>
                 <input
                   value={caption}
                   onChange={(e) => setCaption(e.target.value)}
                   placeholder="e.g. Pleomorphic adenoma, H&E ×100"
-                  className="px-3 py-2 rounded-lg bg-slate-900 border border-white/12 text-white text-sm focus:outline-none focus:border-teal-400"
+                  className="px-3 py-2 rounded-lg bg-[var(--surface-sunken)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-sm focus:outline-none focus:border-[var(--accent-border)]"
                 />
               </label>
               <label className="flex flex-col gap-1.5">
-                <span className="text-xs font-semibold text-slate-300">Image credit / licence</span>
+                <span className="text-xs font-semibold text-[var(--text-secondary)]">Image credit / licence</span>
                 <input
                   value={credit}
                   onChange={(e) => setCredit(e.target.value)}
                   placeholder="e.g. Dept. of Oral Pathology, own slide"
-                  className="px-3 py-2 rounded-lg bg-slate-900 border border-white/12 text-white text-sm focus:outline-none focus:border-teal-400"
+                  className="px-3 py-2 rounded-lg bg-[var(--surface-sunken)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-sm focus:outline-none focus:border-[var(--accent-border)]"
                 />
               </label>
             </div>
@@ -334,11 +334,11 @@ export default function SlideLabeller() {
                 type="checkbox"
                 checked={markerStyle === 'hotspot'}
                 onChange={(e) => setMarkerStyle(e.target.checked ? 'hotspot' : 'numbered')}
-                className="w-4 h-4 accent-teal-400 cursor-pointer"
+                className="w-4 h-4 accent-[var(--accent)] cursor-pointer"
               />
-              <span className="text-xs text-slate-300">
+              <span className="text-xs text-[var(--text-secondary)]">
                 My slide already has arrows and numbers drawn on it
-                <span className="block text-slate-500">
+                <span className="block text-[var(--text-muted)]">
                   Hides the app's pins so students read your annotations instead.
                 </span>
               </span>
@@ -348,16 +348,16 @@ export default function SlideLabeller() {
           {/* Marker list */}
           <div className="flex flex-col gap-3 lg:sticky lg:top-4">
             <div className="flex items-center justify-between">
-              <h4 className="font-heading font-bold text-sm text-white flex items-center gap-2">
-                <Crosshair className="w-4 h-4 text-teal-400" /> Markers
+              <h4 className="font-heading font-bold text-sm text-[var(--text-primary)] flex items-center gap-2">
+                <Crosshair className="w-4 h-4 text-[var(--accent-ink)]" /> Markers
               </h4>
-              <span className={`text-xs font-semibold ${ready ? 'text-emerald-300' : 'text-slate-400'}`}>
+              <span className={`text-xs font-semibold ${ready ? 'text-[var(--success-ink)]' : 'text-[var(--text-muted)]'}`}>
                 {named}/{markers.length} labelled
               </span>
             </div>
 
             {markers.length === 0 ? (
-              <p className="text-xs text-slate-500 py-6 text-center border border-dashed border-white/12 rounded-lg">
+              <p className="text-xs text-[var(--text-muted)] py-6 text-center border border-dashed border-[var(--border-subtle)] rounded-lg">
                 No markers yet — click the slide to add one.
               </p>
             ) : (
@@ -368,11 +368,11 @@ export default function SlideLabeller() {
                     onClick={() => setActiveMarker(m.id)}
                     className={`flex items-center gap-2 p-2 rounded-lg border transition-colors ${
                       activeMarker === m.id
-                        ? 'border-amber-400/60 bg-amber-400/10'
-                        : 'border-white/10 bg-white/[0.03]'
+                        ? 'border-[var(--gold)]/40 bg-[var(--gold-soft)]'
+                        : 'border-[var(--border-subtle)] bg-[var(--surface-sunken)]'
                     }`}
                   >
-                    <span className="w-6 h-6 shrink-0 rounded-full bg-teal-400/20 border border-teal-400/40 text-teal-300 text-[11px] font-bold flex items-center justify-center">
+                    <span className="w-6 h-6 shrink-0 rounded-full bg-[var(--accent-soft)] border border-[var(--accent-border)] text-[var(--accent-ink)] text-[11px] font-bold flex items-center justify-center">
                       {i + 1}
                     </span>
                     <input
@@ -380,11 +380,11 @@ export default function SlideLabeller() {
                       onChange={(e) => updateMarker(m.id, { label: e.target.value })}
                       onFocus={() => setActiveMarker(m.id)}
                       placeholder="Structure name…"
-                      className="flex-1 min-w-0 px-2 py-1.5 rounded-md bg-slate-900 border border-white/10 text-white text-xs focus:outline-none focus:border-teal-400"
+                      className="flex-1 min-w-0 px-2 py-1.5 rounded-md bg-[var(--surface-sunken)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-xs focus:outline-none focus:border-[var(--accent-border)]"
                     />
                     <button
                       onClick={(e) => { e.stopPropagation(); removeMarker(m.id); }}
-                      className="p-1.5 rounded-md text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 cursor-pointer shrink-0"
+                      className="p-1.5 rounded-md text-[var(--text-muted)] hover:text-[var(--danger-ink)] hover:bg-[var(--danger-soft)] cursor-pointer shrink-0"
                       aria-label={`Remove marker ${i + 1}`}
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -397,7 +397,7 @@ export default function SlideLabeller() {
             <button
               onClick={handleSave}
               disabled={!ready}
-              className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-gradient-to-r from-teal-400 to-fuchsia-500 text-slate-950 text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:brightness-110 transition-all"
+              className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[var(--accent)] text-[var(--text-on-accent)] text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:brightness-110 transition-all"
             >
               <Save className="w-4 h-4" /> Save exercise
             </button>
@@ -405,7 +405,7 @@ export default function SlideLabeller() {
             {isPlayable(getExercise(missionId)) && (
               <a
                 href={`#mission/${missionId}`}
-                className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-white/5 border border-white/12 text-slate-200 text-xs font-semibold hover:bg-white/10 transition-colors"
+                className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[var(--surface-sunken)] border border-[var(--border-subtle)] text-[var(--text-secondary)] text-xs font-semibold hover:bg-[var(--surface-sunken)] transition-colors"
               >
                 <Play className="w-3.5 h-3.5" /> Play this mission
               </a>
@@ -413,7 +413,7 @@ export default function SlideLabeller() {
 
             <button
               onClick={handleDelete}
-              className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-rose-300/80 text-xs font-semibold hover:bg-rose-500/10 cursor-pointer transition-colors"
+              className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-[var(--danger-ink)]/80 text-xs font-semibold hover:bg-[var(--danger-soft)] cursor-pointer transition-colors"
             >
               <Trash2 className="w-3.5 h-3.5" /> Delete this exercise
             </button>
@@ -422,11 +422,11 @@ export default function SlideLabeller() {
       ) : (
         <button
           onClick={() => fileRef.current?.click()}
-          className="flex flex-col items-center justify-center gap-3 py-16 rounded-xl border-2 border-dashed border-white/15 text-slate-400 hover:border-teal-400/50 hover:text-teal-300 cursor-pointer transition-colors"
+          className="flex flex-col items-center justify-center gap-3 py-16 rounded-xl border-2 border-dashed border-[var(--border-subtle)] text-[var(--text-muted)] hover:border-[var(--accent-border)] hover:text-[var(--accent-ink)] cursor-pointer transition-colors"
         >
           <Upload className="w-8 h-8" />
           <span className="text-sm font-semibold">Upload a slide to start labelling</span>
-          <span className="text-xs text-slate-500">JPG or PNG — resized automatically</span>
+          <span className="text-xs text-[var(--text-muted)]">JPG or PNG — resized automatically</span>
         </button>
       )}
     </div>
