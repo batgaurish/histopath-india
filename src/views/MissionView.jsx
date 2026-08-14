@@ -6,7 +6,7 @@ import { Timer } from '../utils/timer';
 import { ArrowLeft, Lightbulb, Gamepad2, FileText, Clock, RotateCcw } from 'lucide-react';
 
 import MatchingGame from '../components/games/MatchingGame';
-import JigsawGame from '../components/games/JigsawGame';
+import LabellingGame from '../components/games/LabellingGame';
 import DifferencesGame from '../components/games/DifferencesGame';
 import CrosswordGame from '../components/games/CrosswordGame';
 import Quiz from '../components/Quiz';
@@ -135,10 +135,10 @@ export default function MissionView({ missionId, onBack, onCompleteMission }) {
               />
             )}
 
-            {mission.gameType === 'jigsaw' && (
-              <JigsawGame
-                gridSize={3}
-                imageDesc={mission.subtitle}
+            {(mission.gameType === 'labelling' || mission.gameType === 'jigsaw') && (
+              <LabellingGame
+                missionId={missionId}
+                exercise={mission.labelling}
                 onComplete={handleGameComplete}
                 giveHintRef={giveHintRef}
               />

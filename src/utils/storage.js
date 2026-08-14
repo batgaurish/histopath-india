@@ -6,7 +6,62 @@ const KEYS = {
   VERSION: 'histopath_version',
 };
 
-const CURRENT_VERSION = 1;
+const CURRENT_VERSION = 2;
+
+export const DEFAULT_AVATAR = {
+  skinTone: 0,
+  hairStyle: 0,
+  hairColor: 0,
+  eyeStyle: 0,
+  eyeColor: 0,
+  brows: 0,
+  mouth: 0,
+  facialHair: 0,
+  accessory: 0,
+  outfit: 0,
+  background: 0,
+};
+
+export const DEFAULT_ROLE = '3rd Year BDS Student';
+
+/** Total missions in the curriculum, derived rather than hardcoded. */
+export function getTotalMissions() {
+  let n = 0;
+  for (const t of TOPICS || []) {
+    for (const s of t.stages || []) n += (s.missions || []).length;
+  }
+  return n || 36;
+}
+
+// ── Change notification ───────────────────────────────────────────────
+// Views subscribe so a profile edit is reflected everywhere immediately
+// instead of only after a remount.
+
+const listeners = new Set();
+
+export function subscribe(fn) {
+  listeners.add(fn);
+  return () => listeners.delete(fn);
+}
+
+function notify() {
+  for (const fn of listeners) {
+    try {
+      fn();
+    } catch (e) {
+      console.warn('Storage listener failed', e);
+    }
+  }
+}
+
+// Reflect edits made in another tab.
+if (typeof window !== 'undefined') {
+  window.addEventListener('storage', (e) => {
+    if (e.key === KEYS.PLAYERS || e.key === KEYS.CURRENT_PLAYER) notify();
+  });
+}
+
+// ── Raw access ────────────────────────────────────────────────────────
 
 function _get(key) {
   try {
@@ -21,8 +76,10 @@ function _get(key) {
 function _set(key, value) {
   try {
     localStorage.setItem(key, JSON.stringify(value));
+    return true;
   } catch (e) {
     console.error(`Storage: failed to write ${key}`, e);
+    return false;
   }
 }
 
@@ -31,22 +88,57 @@ function _getPlayers() {
 }
 
 function _savePlayers(players) {
-  _set(KEYS.PLAYERS, players);
+  const ok = _set(KEYS.PLAYERS, players);
+  if (ok) notify();
+  return ok;
 }
 
-export function createPlayer(name) {
+// ── Migration ─────────────────────────────────────────────────────────
+
+/**
+ * v1 stored the hair style under `avatar.hair`, while the editor read and
+ * wrote `avatar.hairStyle`. Every saved hairstyle was therefore silently
+ * dropped on reload. Migrate the old key forward and backfill new fields.
+ */
+function _migrate() {
+  const stored = _get(KEYS.VERSION) || 1;
+  if (stored >= CURRENT_VERSION) return;
+
   const players = _getPlayers();
-  const id = 'player_' + Date.now();
+  let changed = false;
+
+  for (const p of Object.values(players)) {
+    if (!p || typeof p !== 'object') continue;
+
+    const avatar = { ...DEFAULT_AVATAR, ...(p.avatar || {}) };
+    if (p.avatar && p.avatar.hair !== undefined && p.avatar.hairStyle === undefined) {
+      avatar.hairStyle = p.avatar.hair;
+    }
+    delete avatar.hair;
+    delete avatar.face;
+    p.avatar = avatar;
+
+    if (!p.role) p.role = DEFAULT_ROLE;
+    if (!p.progress) p.progress = {};
+    changed = true;
+  }
+
+  if (changed) _set(KEYS.PLAYERS, players);
+  _set(KEYS.VERSION, CURRENT_VERSION);
+}
+
+_migrate();
+
+// ── Players ───────────────────────────────────────────────────────────
+
+export function createPlayer(name, role = DEFAULT_ROLE) {
+  const players = _getPlayers();
+  const id = 'player_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
   players[id] = {
     id,
     name: name || 'Student',
-    avatar: {
-      face: 0,
-      skinTone: 0,
-      hair: 0,
-      hairColor: 0,
-      accessory: 0,
-    },
+    role,
+    avatar: { ...DEFAULT_AVATAR },
     progress: {},
     totalStars: 0,
     missionsCompleted: 0,
@@ -59,13 +151,30 @@ export function createPlayer(name) {
 }
 
 export function getPlayer(id) {
-  const players = _getPlayers();
-  return players[id] || null;
+  const p = _getPlayers()[id];
+  return p ? _hydrate(p) : null;
+}
+
+/** Guarantee every field the UI reads exists, whatever vintage the record is. */
+function _hydrate(p) {
+  return {
+    ...p,
+    role: p.role || DEFAULT_ROLE,
+    progress: p.progress || {},
+    totalStars: p.totalStars || 0,
+    missionsCompleted: p.missionsCompleted || 0,
+    avatar: { ...DEFAULT_AVATAR, ...(p.avatar || {}) },
+  };
 }
 
 export function getAllPlayers() {
-  const players = _getPlayers();
-  return Object.values(players).sort((a, b) => b.totalStars - a.totalStars);
+  return Object.values(_getPlayers())
+    .map(_hydrate)
+    .sort((a, b) =>
+      b.totalStars - a.totalStars ||
+      b.missionsCompleted - a.missionsCompleted ||
+      a.createdAt - b.createdAt
+    );
 }
 
 export function updatePlayer(id, updates) {
@@ -74,21 +183,22 @@ export function updatePlayer(id, updates) {
   Object.assign(players[id], updates);
   players[id].lastPlayed = Date.now();
   _savePlayers(players);
-  return players[id];
+  return _hydrate(players[id]);
 }
 
 export function deletePlayer(id) {
   const players = _getPlayers();
   delete players[id];
   _savePlayers(players);
-  const current = getCurrentPlayerId();
-  if (current === id) {
+  if (getCurrentPlayerId() === id) {
     localStorage.removeItem(KEYS.CURRENT_PLAYER);
+    notify();
   }
 }
 
 export function setCurrentPlayer(id) {
   _set(KEYS.CURRENT_PLAYER, id);
+  notify();
 }
 
 export function getCurrentPlayerId() {
@@ -97,34 +207,54 @@ export function getCurrentPlayerId() {
 
 export function getCurrentPlayer() {
   const id = getCurrentPlayerId();
-  let player = id ? getPlayer(id) : null;
-  if (!player) {
-    player = createPlayer('Dental Student');
+  const existing = id ? getPlayer(id) : null;
+  if (existing) return existing;
+
+  // Reuse an orphaned record before minting a duplicate.
+  const all = getAllPlayers();
+  if (all.length > 0) {
+    setCurrentPlayer(all[0].id);
+    return all[0];
   }
-  if (!player.progress) player.progress = {};
-  return player;
+  return createPlayer('Dental Student');
 }
+
+// ── Avatar ────────────────────────────────────────────────────────────
 
 export function saveAvatar(avatarData) {
   const player = getCurrentPlayer();
-  if (!player) return;
-  updatePlayer(player.id, { avatar: avatarData });
+  if (!player) return null;
+  return updatePlayer(player.id, {
+    avatar: { ...DEFAULT_AVATAR, ...avatarData },
+  });
 }
 
 export function getAvatar() {
   const player = getCurrentPlayer();
-  return player ? player.avatar : null;
+  return player ? player.avatar : { ...DEFAULT_AVATAR };
 }
 
+/** Persist identity and appearance together so they can't drift apart. */
+export function saveProfile({ name, role, avatar }) {
+  const player = getCurrentPlayer();
+  if (!player) return null;
+  const updates = {};
+  if (name !== undefined) updates.name = name.trim() || 'Student';
+  if (role !== undefined) updates.role = role;
+  if (avatar !== undefined) updates.avatar = { ...DEFAULT_AVATAR, ...avatar };
+  return updatePlayer(player.id, updates);
+}
+
+// ── Progress ──────────────────────────────────────────────────────────
+
 export function saveMissionResult(topicId, missionId, stars, timeMs = 0) {
-  let player = getCurrentPlayer();
+  const player = getCurrentPlayer();
   const players = _getPlayers();
-  const p = players[player.id] || player;
+  const p = players[player.id];
+  if (!p) return null;
 
   if (!p.progress) p.progress = {};
-  if (!p.progress[topicId]) {
-    p.progress[topicId] = {};
-  }
+  if (!p.progress[topicId]) p.progress[topicId] = {};
 
   const existing = p.progress[topicId][missionId];
   const prevStars = existing ? existing.stars : 0;
@@ -133,20 +263,24 @@ export function saveMissionResult(topicId, missionId, stars, timeMs = 0) {
   p.progress[topicId][missionId] = {
     completed: true,
     stars: newStars,
-    bestTime: existing && existing.bestTime ? Math.min(existing.bestTime, timeMs) : timeMs,
+    // Only record a best time when one was actually measured.
+    bestTime:
+      timeMs > 0
+        ? existing && existing.bestTime > 0
+          ? Math.min(existing.bestTime, timeMs)
+          : timeMs
+        : existing?.bestTime || 0,
     lastPlayed: Date.now(),
   };
 
   let totalStars = 0;
   let missionsCompleted = 0;
   for (const tid of Object.keys(p.progress)) {
-    if (p.progress[tid]) {
-      for (const mid of Object.keys(p.progress[tid])) {
-        const m = p.progress[tid][mid];
-        if (m && m.completed) {
-          missionsCompleted++;
-          totalStars += (m.stars || 0);
-        }
+    for (const mid of Object.keys(p.progress[tid] || {})) {
+      const m = p.progress[tid][mid];
+      if (m && m.completed) {
+        missionsCompleted++;
+        totalStars += m.stars || 0;
       }
     }
   }
@@ -159,48 +293,53 @@ export function saveMissionResult(topicId, missionId, stars, timeMs = 0) {
 
 export function saveMissionProgress(missionId, data = {}) {
   const topicId = data.topicId || _findTopicForMission(missionId);
-  return saveMissionResult(topicId, missionId, data.stars || 0, data.score || 0);
+  // v1 passed `data.score` as the time argument, recording quiz scores as
+  // milliseconds. Use the real elapsed time.
+  return saveMissionResult(topicId, missionId, data.stars || 0, data.timeMs || 0);
 }
 
 function _findTopicForMission(missionId) {
-  if (TOPICS) {
-    for (const t of TOPICS) {
-      for (const s of t.stages) {
-        if (s.missions.some(m => m.id === missionId)) return t.id;
-      }
+  for (const t of TOPICS || []) {
+    for (const s of t.stages || []) {
+      if ((s.missions || []).some(m => m.id === missionId)) return t.id;
     }
   }
-  return missionId.split('_')[0];
+  return String(missionId).split('_')[0];
 }
 
 export function getMissionProgress(topicId, missionId) {
   const player = getCurrentPlayer();
-  if (!player || !player.progress || !player.progress[topicId]) return null;
-  return player.progress[topicId][missionId] || null;
+  return player?.progress?.[topicId]?.[missionId] || null;
 }
 
 export function getTopicProgress(topicId) {
   const player = getCurrentPlayer();
-  if (!player || !player.progress || !player.progress[topicId]) return {};
-  return player.progress[topicId];
+  return player?.progress?.[topicId] || {};
 }
 
 export function getOverallStats() {
   const player = getCurrentPlayer();
-  if (!player) return { totalStars: 0, missionsCompleted: 0, totalMissions: 36 };
+  const totalMissions = getTotalMissions();
+  if (!player) return { totalStars: 0, missionsCompleted: 0, totalMissions, percent: 0 };
   return {
     totalStars: player.totalStars || 0,
     missionsCompleted: player.missionsCompleted || 0,
-    totalMissions: 36,
+    totalMissions,
+    percent: totalMissions ? Math.round((player.missionsCompleted / totalMissions) * 100) : 0,
   };
 }
 
 export function getLeaderboard() {
+  const currentId = getCurrentPlayerId();
   return getAllPlayers().map((p, i) => ({
     rank: i + 1,
+    id: p.id,
     name: p.name,
+    role: p.role,
+    avatar: p.avatar,
     totalStars: p.totalStars,
     missionsCompleted: p.missionsCompleted,
-    isCurrentPlayer: p.id === getCurrentPlayerId(),
+    lastPlayed: p.lastPlayed,
+    isCurrentPlayer: p.id === currentId,
   }));
 }

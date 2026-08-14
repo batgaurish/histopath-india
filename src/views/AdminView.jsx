@@ -10,7 +10,8 @@ import {
   getCustomData 
 } from '../utils/customContent';
 import { Audio } from '../utils/audio';
-import { Settings, PlusCircle, Upload, Check, FileText, Image as ImageIcon, Sparkles, BookOpen, Lock, ShieldCheck, LogOut } from 'lucide-react';
+import { Settings, PlusCircle, Upload, Check, FileText, Image as ImageIcon, Sparkles, BookOpen, Lock, ShieldCheck, LogOut, Crosshair } from 'lucide-react';
+import SlideLabeller from './admin/SlideLabeller';
 
 const ADMIN_PASSPHRASE = 'histopath-admin-2026';
 
@@ -265,10 +266,27 @@ export default function AdminView({ navigateTo }) {
         >
           <Upload className="w-4 h-4" /> 2. Auto-Document Importer
         </button>
+
+        <button
+          onClick={() => setActiveTab('labeller')}
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all cursor-pointer ${
+            activeTab === 'labeller'
+              ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/25'
+              : 'text-gray-400 hover:text-white hover:bg-white/5'
+          }`}
+        >
+          <Crosshair className="w-4 h-4" /> 3. Slide Labeller
+        </button>
       </div>
 
-      {/* Target Mission Selector */}
-      <div className="glass-panel border border-white/10 p-5 rounded-2xl flex flex-col md:flex-row gap-4 items-center justify-between">
+      {activeTab === 'labeller' && (
+        <div className="glass-panel border border-white/10 p-5 rounded-2xl">
+          <SlideLabeller />
+        </div>
+      )}
+
+      {/* Target Mission Selector — the Slide Labeller carries its own. */}
+      <div className={`glass-panel border border-white/10 p-5 rounded-2xl flex-col md:flex-row gap-4 items-center justify-between ${activeTab === 'labeller' ? 'hidden' : 'flex'}`}>
         <div className="flex flex-col md:flex-row gap-4 items-center w-full">
           <div className="flex flex-col gap-1 flex-1 w-full">
             <label className="text-xs font-semibold text-gray-300">Target Topic</label>
