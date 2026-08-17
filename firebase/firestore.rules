@@ -1,0 +1,91 @@
+rules_version = '2';
+
+// ═══════════════════════════════════════════════════════════
+// HistoPath India — Firestore rules
+//
+// Model: anyone may request an account; a new account is `pending` and can
+// publish nothing. An owner approves it. Published exercises are readable by
+// everyone (students are not signed in) and writable only by approved staff.
+//
+// Paste into: Firebase console → Firestore Database → Rules → Publish
+// ═══════════════════════════════════════════════════════════
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function staffDoc(uid) {
+      return get(/databases/$(database)/documents/staff/$(uid)).data;
+    }
+
+    function staffExists(uid) {
+      return exists(/databases/$(database)/documents/staff/$(uid));
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isApprovedStaff() {
+      return isSignedIn()
+        && staffExists(request.auth.uid)
+        && staffDoc(request.auth.uid).status == 'approved';
+    }
+
+    function isOwner() {
+      return isApprovedStaff() && staffDoc(request.auth.uid).role == 'owner';
+    }
+
+    // ── Staff records ─────────────────────────────────────────────────
+    match /staff/{uid} {
+
+      // You can always read your own record, so the app can show your status.
+      // Owners can read every record in order to review requests.
+      allow read: if isSignedIn() && (request.auth.uid == uid || isOwner());
+
+      // Self sign-up. Pinned to pending/staff so registering can never grant
+      // approval or ownership, whatever the client sends.
+      allow create: if isSignedIn()
+        && request.auth.uid == uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.role == 'staff'
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.keys().hasOnly(
+             ['email', 'name', 'status', 'role', 'requestedAt']);
+
+      // Only an owner decides status, and only ever to these three values.
+      // `role` is deliberately immutable here: promoting an owner is done in
+      // the console, so a compromised owner account cannot mint more owners.
+      allow update: if isOwner()
+        && request.resource.data.role == resource.data.role
+        && request.resource.data.email == resource.data.email
+        && request.resource.data.status in ['pending', 'approved', 'rejected'];
+
+      // Records are kept for audit; removal happens in the console.
+      allow delete: if false;
+    }
+
+    // ── Published labelling exercises ─────────────────────────────────
+    match /exercises/{missionId} {
+
+      // Students are anonymous, so reads must be open.
+      allow read: if true;
+
+      allow create, update: if isApprovedStaff()
+        && request.resource.data.markers is list
+        && request.resource.data.markers.size() >= 2
+        && request.resource.data.markers.size() <= 40
+        && request.resource.data.image is string
+        // Large enough for an inlined slide when Cloud Storage is not
+        // enabled; a Storage download URL is only a few hundred bytes.
+        && request.resource.data.image.size() < 800000
+        && request.resource.data.markerStyle in ['numbered', 'hotspot'];
+
+      allow delete: if isApprovedStaff();
+    }
+
+    // Anything not named above is closed.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

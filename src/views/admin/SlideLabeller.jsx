@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import {
   Upload, Trash2, Save, Download, FileJson, Crosshair,
-  MousePointerClick, AlertTriangle, Check, Play,
+  MousePointerClick, AlertTriangle, Check, Play, Globe, CloudOff,
 } from 'lucide-react';
 import { TOPICS } from '../../data/topics';
+import { publishExercise, unpublishExercise, isPublished } from '../../lib/publish';
+import { friendlyError } from '../../lib/firebase';
 import {
   getExercise, saveExercise, deleteExercise, moveExercise, isPlayable,
   processImageFile, exportExercises, importExercises,
@@ -91,7 +93,7 @@ function OrphanRow({ orphanId, missions, onMove }) {
   );
 }
 
-export default function SlideLabeller() {
+export default function SlideLabeller({ canPublish = false, user = null }) {
   const [topicId, setTopicId] = useState(TOPICS[0].id);
   const missions = useMemo(() => missionsOf(topicId), [topicId]);
   const [missionId, setMissionId] = useState(missions[0]?.id || '');
@@ -216,6 +218,38 @@ export default function SlideLabeller() {
       flash('ok', `Saved to ${missionId}. Stored exercises now ${kb} KB.`);
     } catch (err) {
       flash('err', `Save failed: ${err.message}`);
+    }
+  };
+
+  const handlePublish = async () => {
+    if (!missionId) return flash('err', 'Pick a mission first.');
+    if (!ready) return flash('err', 'Add a slide and label every marker first.');
+    setBusy(true);
+    try {
+      // Save locally first so the work survives a failed upload.
+      saveExercise(missionId, { image, markerStyle, caption, credit, markers });
+      await publishExercise(
+        missionId,
+        { image, markerStyle, caption, credit, markers },
+        { author: user?.email }
+      );
+      flash('ok', `Published to ${missionId}. Every student sees it now.`);
+    } catch (err) {
+      flash('err', `Publish failed: ${friendlyError(err)}`);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleUnpublish = async () => {
+    setBusy(true);
+    try {
+      await unpublishExercise(missionId);
+      flash('ok', `Removed ${missionId} from the live site.`);
+    } catch (err) {
+      flash('err', `Could not unpublish: ${friendlyError(err)}`);
+    } finally {
+      setBusy(false);
     }
   };
 
@@ -507,13 +541,32 @@ export default function SlideLabeller() {
               </div>
             )}
 
-            <button
-              onClick={handleSave}
-              disabled={!ready}
-              className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[var(--accent)] text-[var(--text-on-accent)] text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:brightness-110 transition-all"
-            >
-              <Save className="w-4 h-4" /> Save exercise
-            </button>
+            {canPublish ? (
+              <>
+                <button
+                  onClick={handlePublish}
+                  disabled={!ready || busy}
+                  className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[var(--accent)] text-[var(--text-on-accent)] text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:brightness-110 transition-all"
+                >
+                  <Globe className="w-4 h-4" /> {busy ? 'Publishing…' : 'Publish to students'}
+                </button>
+                <button
+                  onClick={handleSave}
+                  disabled={!ready || busy}
+                  className="btn-ghost flex items-center justify-center gap-2 px-4 py-2.5 text-xs cursor-pointer disabled:opacity-40"
+                >
+                  <Save className="w-3.5 h-3.5" /> Save draft on this device
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={handleSave}
+                disabled={!ready}
+                className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[var(--accent)] text-[var(--text-on-accent)] text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer hover:brightness-110 transition-all"
+              >
+                <Save className="w-4 h-4" /> Save exercise
+              </button>
+            )}
 
             {isPlayable(getExercise(missionId)) && (
               <a

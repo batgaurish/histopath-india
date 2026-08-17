@@ -10,8 +10,12 @@ import {
   getCustomData 
 } from '../utils/customContent';
 import { Audio } from '../utils/audio';
-import { Settings, PlusCircle, Upload, Check, FileText, Image as ImageIcon, Sparkles, BookOpen, Lock, ShieldCheck, LogOut, Crosshair } from 'lucide-react';
+import { Settings, PlusCircle, Upload, Check, FileText, Image as ImageIcon, Sparkles, BookOpen, Lock, ShieldCheck, LogOut, Crosshair, Users, Globe } from 'lucide-react';
 import SlideLabeller from './admin/SlideLabeller';
+import StaffGate from './admin/StaffGate';
+import StaffApprovals from './admin/StaffApprovals';
+import { isFirebaseConfigured } from '../lib/firebase';
+import { isOwner, signOut as staffSignOut } from '../lib/staff';
 
 const ADMIN_PASSPHRASE = 'histopath-admin-2026';
 
@@ -76,8 +80,7 @@ function AdminLogin({ onLogin }) {
   );
 }
 
-export default function AdminView({ navigateTo }) {
-  const [isAuthed, setIsAuthed] = useState(() => sessionStorage.getItem('adminAuthed') === 'true');
+function AdminPortal({ navigateTo, user, staff, canPublish }) {
   const [activeTab, setActiveTab] = useState('creator');
   const [selectedTopicId, setSelectedTopicId] = useState(TOPICS[0].id);
   const missions = getTopicMissions(selectedTopicId);
@@ -105,15 +108,11 @@ export default function AdminView({ navigateTo }) {
     setTimeout(() => setStatusMessage(''), 3000);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     sessionStorage.removeItem('adminAuthed');
-    setIsAuthed(false);
+    if (isFirebaseConfigured()) await staffSignOut();
+    window.location.reload();
   };
-
-  // ——— If not authenticated, show login gate ———
-  if (!isAuthed) {
-    return <AdminLogin onLogin={() => setIsAuthed(true)} />;
-  }
 
   const handleAddMcq = (e) => {
     e.preventDefault();
@@ -225,8 +224,24 @@ export default function AdminView({ navigateTo }) {
       {/* Portal Header */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <div className="inline-flex items-center gap-2 text-xs font-semibold text-[var(--accent-2-ink)] uppercase tracking-wider">
-            <Settings className="w-4 h-4" /> Professor & Admin Game Creator Portal
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="inline-flex items-center gap-2 text-xs font-semibold text-[var(--accent-2-ink)] uppercase tracking-wider">
+              <Settings className="w-4 h-4" /> Staff Portal
+            </span>
+            {canPublish ? (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold"
+                    style={{ background: 'var(--accent-soft)', color: 'var(--accent-ink)' }}>
+                <Globe className="w-3 h-3" /> Publishing live
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold"
+                    style={{ background: 'var(--gold-soft)', color: 'var(--gold-ink)' }}>
+                This browser only
+              </span>
+            )}
+            {user?.email && (
+              <span className="text-[11px] font-mono text-[var(--text-muted)]">{user.email}</span>
+            )}
           </div>
           <button
             onClick={handleLogout}
@@ -277,16 +292,35 @@ export default function AdminView({ navigateTo }) {
         >
           <Crosshair className="w-4 h-4" /> 3. Slide Labeller
         </button>
+
+        {isOwner(staff) && (
+          <button
+            onClick={() => setActiveTab('staff')}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all cursor-pointer ${
+              activeTab === 'staff'
+                ? 'bg-[var(--accent-2)] text-[var(--text-on-accent)] shadow-sm'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+            }`}
+          >
+            <Users className="w-4 h-4" /> Staff access
+          </button>
+        )}
       </div>
+
+      {activeTab === 'staff' && (
+        <div className="glass-panel border border-[var(--border-subtle)] p-5 rounded-2xl">
+          <StaffApprovals staff={staff} user={user} />
+        </div>
+      )}
 
       {activeTab === 'labeller' && (
         <div className="glass-panel border border-[var(--border-subtle)] p-5 rounded-2xl">
-          <SlideLabeller />
+          <SlideLabeller canPublish={canPublish} user={user} />
         </div>
       )}
 
       {/* Target Mission Selector — the Slide Labeller carries its own. */}
-      <div className={`glass-panel border border-[var(--border-subtle)] p-5 rounded-2xl flex-col md:flex-row gap-4 items-center justify-between ${activeTab === 'labeller' ? 'hidden' : 'flex'}`}>
+      <div className={`glass-panel border border-[var(--border-subtle)] p-5 rounded-2xl flex-col md:flex-row gap-4 items-center justify-between ${activeTab === 'labeller' || activeTab === 'staff' ? 'hidden' : 'flex'}`}>
         <div className="flex flex-col md:flex-row gap-4 items-center w-full">
           <div className="flex flex-col gap-1 flex-1 w-full">
             <label className="text-xs font-semibold text-[var(--text-secondary)]">Target Topic</label>
@@ -580,5 +614,20 @@ export default function AdminView({ navigateTo }) {
         </div>
       )}
     </div>
+  );
+}
+
+export default function AdminView({ navigateTo }) {
+  return (
+    <StaffGate>
+      {({ user, staff, canPublish }) => (
+        <AdminPortal
+          navigateTo={navigateTo}
+          user={user}
+          staff={staff}
+          canPublish={canPublish}
+        />
+      )}
+    </StaffGate>
   );
 }

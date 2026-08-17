@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import MobileNav from './components/MobileNav';
+import { watchPublished } from './lib/publish';
 
 import HomeView from './views/HomeView';
 import TopicsView from './views/TopicsView';
@@ -62,7 +63,13 @@ class ErrorBoundary extends React.Component {
 }
 
 export default function App() {
-  const [currentView, setCurrentView] = useState('home'); 
+  const [currentView, setCurrentView] = useState('home');
+  // Mirror published exercises into the local cache so students receive
+  // staff uploads, and the games keep reading from one place.
+  const [publishedAt, setPublishedAt] = useState(0);
+
+  useEffect(() => watchPublished(() => setPublishedAt(Date.now())), []);
+
   const [selectedTopicId, setSelectedTopicId] = useState('odontogenic_tumors_cysts');
   const [selectedMissionId, setSelectedMissionId] = useState('otc_m1');
 
@@ -137,6 +144,7 @@ export default function App() {
 
           {currentView === 'mission' && (
             <MissionView
+              key={`${selectedMissionId}-${publishedAt}`}
               missionId={selectedMissionId}
               onBack={() => navigateTo('topic', selectedTopicId)}
               onCompleteMission={() => navigateTo('topic', selectedTopicId)}
