@@ -14,12 +14,19 @@
 // ═══════════════════════════════════════════════════════════
 
 export const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FB_API_KEY || '',
-  authDomain: import.meta.env.VITE_FB_AUTH_DOMAIN || '',
-  projectId: import.meta.env.VITE_FB_PROJECT_ID || '',
+  apiKey: import.meta.env.VITE_FB_API_KEY || 'AIzaSyAS2UOqABaAnUoa3MC6GbueqaOnfL5uW0U',
+  authDomain: import.meta.env.VITE_FB_AUTH_DOMAIN || 'histopath-india.firebaseapp.com',
+  projectId: import.meta.env.VITE_FB_PROJECT_ID || 'histopath-india',
+
+  // Left empty on purpose: Cloud Storage needs the paid Blaze plan on new
+  // projects, so slides are stored inside their Firestore document instead
+  // (~700 KB ceiling each). To switch to Storage later, enable it in the
+  // console and put the bucket back:
+  //   'histopath-india.firebasestorage.app'
   storageBucket: import.meta.env.VITE_FB_STORAGE_BUCKET || '',
-  messagingSenderId: import.meta.env.VITE_FB_SENDER_ID || '',
-  appId: import.meta.env.VITE_FB_APP_ID || '',
+
+  messagingSenderId: import.meta.env.VITE_FB_SENDER_ID || '433372382892',
+  appId: import.meta.env.VITE_FB_APP_ID || '1:433372382892:web:b14cd93bef4ad8263d8109',
 };
 
 /**
